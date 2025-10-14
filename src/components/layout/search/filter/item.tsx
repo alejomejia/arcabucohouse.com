@@ -1,7 +1,7 @@
 'use client'
 
-import type { SortFilterItem } from '@/lib/constants'
-import { createUrl } from '@/lib/utils'
+import type { SortFilterItem } from '@/integrations/constants'
+import { createUrl } from '@/integrations/utils'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'

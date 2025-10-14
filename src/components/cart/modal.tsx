@@ -2,8 +2,8 @@
 
 import LoadingDots from '@/components/loading-dots'
 import Price from '@/components/price'
-import { DEFAULT_OPTION } from '@/lib/constants'
-import { createUrl } from '@/lib/utils'
+import { DEFAULT_OPTION } from '@/integrations/constants'
+import { createUrl } from '@/integrations/utils'
 import { Dialog, Transition } from '@headlessui/react'
 import { ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'

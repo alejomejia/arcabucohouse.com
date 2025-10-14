@@ -1,6 +1,6 @@
 import { GridTileImage } from '@/components/grid/tile'
-import { getCollectionProducts } from '@/lib/shopify'
-import type { Product } from '@/lib/shopify/types'
+import { getCollectionProducts } from '@/integrations/shopify'
+import type { Product } from '@/integrations/shopify/types'
 import Link from 'next/link'
 
 function ThreeItemGridItem({ item, size, priority }: { item: Product; size: 'full' | 'half'; priority?: boolean }) {

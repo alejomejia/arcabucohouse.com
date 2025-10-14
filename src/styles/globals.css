@@ -8,7 +8,19 @@
 @import './utilities.css';
 
 :root {
+  --scrollbar-width: calc(var(--spacing) * 2);
   --ease-cubic-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --color-neutral-10: #f7f7f7;
+  --color-neutral-20: #efefef;
+  --color-neutral-30: #d9d8db;
+  --color-neutral-40: #c8c7cc;
+  --color-neutral-50: #aaa9b0;
+  --color-neutral-60: #73747d;
+  --color-neutral-70: #63636e;
+  --color-neutral-80: #4a4b54;
+  --color-neutral-90: #39383d;
+  --color-neutral-100: #242426;
 }
 
 @media (prefers-color-scheme: dark) {

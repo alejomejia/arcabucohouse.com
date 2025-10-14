@@ -1,7 +1,7 @@
 'use client'
 
 import { removeItem } from '@/components/cart/actions'
-import type { CartItem } from '@/lib/shopify/types'
+import type { CartItem } from '@/integrations/shopify/types'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useActionState } from 'react'
 

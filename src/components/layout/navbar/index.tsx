@@ -3,9 +3,9 @@ import { Suspense } from 'react'
 
 import CartModal from '@/components/cart/modal'
 import LogoSquare from '@/components/logo-square'
-import { getMenu } from '@/lib/shopify'
-import { SHOPIFY_MENU_HANDLERS } from '@/lib/shopify/const'
-import { Menu } from '@/lib/shopify/types'
+import { getMenu } from '@/integrations/shopify'
+import { SHOPIFY_MENU_HANDLERS } from '@/integrations/shopify/const'
+import { Menu } from '@/integrations/shopify/types'
 
 import { UnderlineLink } from '@/shared/ui/link'
 import MobileMenu from './mobile-menu'
