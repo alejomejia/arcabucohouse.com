@@ -1,0 +1,38 @@
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+  }
+
+  input,
+  button {
+    @apply focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 dark:focus-visible:ring-neutral-600 dark:focus-visible:ring-offset-neutral-900;
+  }
+
+  /* Scrollbar styles */
+  ::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+    height: var(--scrollbar-width);
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-neutral-80);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-neutral-60);
+    border-radius: var(--scrollbar-width);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-neutral-40);
+  }
+}

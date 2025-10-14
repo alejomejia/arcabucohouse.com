@@ -1,0 +1,19 @@
+@custom-variant first-child {
+  & > *:first-child {
+    @slot;
+  }
+}
+
+@custom-variant last-child {
+  & > *:last-child {
+    @slot;
+  }
+}
+
+@custom-variant bafter {
+  &:before,
+  &:after {
+    content: '';
+    @slot;
+  }
+}

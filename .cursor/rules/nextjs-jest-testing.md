@@ -1,0 +1,78 @@
+# NextJS Jest Testing Best Practices
+
+When generating unit or integration tests for this project, always follow these guidelines:
+
+## Naming & Structure
+
+- Each test file should match the file it tests:
+  -- component.tsx → component.test.tsx
+  -- apiClient.ts → apiClient.test.ts
+- Use describe blocks to group related tests (per function, per component, or per behavior).
+- Test names must be descriptive sentences of behavior, e.g.:
+  -- ✅ it("renders the hello message from the API")
+  -- ❌ it("works")
+
+## Readability
+
+- Prefer AAA (Arrange – Act – Assert) pattern inside each test.
+- Keep test bodies short and focused — one behavior per test.
+- Use constants or helpers for repeated setup to avoid duplication.
+- Mock external dependencies (e.g. fetch, API calls) instead of hitting real endpoints.
+
+## Performance
+
+- Use beforeAll, beforeEach, afterEach, afterAll properly to avoid repeated setup/teardown.
+- Reset mocks between tests (jest.clearAllMocks() or jest.resetAllMocks() as appropriate).
+- Avoid setTimeout or artificial delays — instead use promises.
+- Keep mocks lightweight — only mock what is necessary for the test.
+
+## Best Practices
+
+- Test behavior and outcomes, not implementation details.
+- Prefer screen.getByRole / getByText over querying DOM by class names.
+- For async code, always use await with waitFor or findBy queries to avoid flaky tests.
+- Ensure each test is independent — no reliance on previous test state.
+- Coverage is important, but clarity and maintainability take priority over 100% coverage.
+
+## Examples
+
+```ts
+// Example for utility function
+describe("getHelloMessage", () => {
+  it("returns the message when fetch succeeds", async () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ message: "Hello World" }),
+    });
+
+    const result = await getHelloMessage();
+
+    expect(result).toEqual({ message: "Hello World" });
+  });
+
+  it("throws an error when fetch fails", async () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({ ok: false });
+
+    await expect(getHelloMessage()).rejects.toThrow("Failed to fetch data");
+  });
+});
+
+// Example for component
+describe("<Hello />", () => {
+  it("renders message from API", async () => {
+    jest.spyOn(apiClient, "getHelloMessage").mockResolvedValue({ message: "Hi!" });
+
+    render(<Hello />);
+
+    expect(await screen.findByText("Hi!")).toBeInTheDocument();
+  });
+});
+```
+
+## TLDR
+
+- Write clear, behavior-driven test names.
+- Use AAA structure.
+- Keep tests fast, isolated, and deterministic.
+- Mock dependencies instead of real calls.
+- Focus on readability and maintainability over coverage tricks.
