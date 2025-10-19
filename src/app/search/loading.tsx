@@ -1,4 +1,4 @@
-import Grid from '@/components/grid'
+import Grid from '@/components/from-template/grid'
 
 export default function Loading() {
   return (

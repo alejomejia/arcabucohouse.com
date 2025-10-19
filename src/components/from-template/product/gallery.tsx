@@ -1,7 +1,7 @@
 'use client'
 
-import { GridTileImage } from '@/components/grid/tile'
-import { useProduct, useUpdateURL } from '@/components/product/product-context'
+import { GridTileImage } from '@/components/from-template/grid/tile'
+import { useProduct, useUpdateURL } from '@/components/from-template/product/product-context'
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 

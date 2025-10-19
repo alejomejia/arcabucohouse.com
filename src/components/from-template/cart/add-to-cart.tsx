@@ -1,7 +1,7 @@
 'use client'
 
-import { addItem } from '@/components/cart/actions'
-import { useProduct } from '@/components/product/product-context'
+import { addItem } from '@/components/from-template/cart/actions'
+import { useProduct } from '@/components/from-template/product/product-context'
 import { Product, ProductVariant } from '@/integrations/shopify/types'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'

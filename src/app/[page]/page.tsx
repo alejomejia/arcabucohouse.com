@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import Prose from '@/components/prose'
+import Prose from '@/components/from-template/prose'
 import { getPage } from '@/integrations/shopify'
 import { notFound } from 'next/navigation'
 

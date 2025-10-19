@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { Suspense } from 'react'
 
-import CartModal from '@/components/cart/modal'
-import LogoSquare from '@/components/logo-square'
+import CartModal from '@/components/from-template/cart/modal'
+import LogoSquare from '@/components/from-template/logo-square'
 import { getMenu } from '@/integrations/shopify'
 import { SHOPIFY_MENU_HANDLERS } from '@/integrations/shopify/const'
 import { Menu } from '@/integrations/shopify/types'

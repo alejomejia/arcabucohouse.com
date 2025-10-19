@@ -1,6 +1,6 @@
 'use client'
 
-import { useProduct, useUpdateURL } from '@/components/product/product-context'
+import { useProduct, useUpdateURL } from '@/components/from-template/product/product-context'
 import { ProductOption, ProductVariant } from '@/integrations/shopify/types'
 import clsx from 'clsx'
 
