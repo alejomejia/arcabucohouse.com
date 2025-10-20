@@ -7,7 +7,8 @@ import { Navbar } from '@/components/from-template/layout/navbar'
 import { WelcomeToast } from '@/components/from-template/welcome-toast'
 import { getCart } from '@/integrations/shopify'
 import { baseUrl } from '@/integrations/utils'
-import { SmoothScroll } from '@/shared/ui/providers/smooth-scroll'
+
+import { Lenis } from '@/components/lenis'
 import '@/styles/globals.css'
 
 const { SITE_NAME } = process.env
@@ -32,15 +33,14 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang="en" className={GeistSans.variable}>
       <body className="antialiased bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
         <CartProvider cartPromise={cart}>
-          <SmoothScroll>
-            <Navbar />
-            <main>
-              {children}
-              <Toaster closeButton />
-              <WelcomeToast />
-            </main>
-          </SmoothScroll>
+          <Navbar />
+          <main>
+            {children}
+            <Toaster closeButton />
+            <WelcomeToast />
+          </main>
         </CartProvider>
+        <Lenis root options={{}} />
       </body>
     </html>
   )
