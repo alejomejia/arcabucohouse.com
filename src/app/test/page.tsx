@@ -1,3 +1,4 @@
+import { StaggeredImageReveal } from '@/components/staggered-image-reveal'
 import { TextAnimation } from '@/components/text-animation'
 
 export default function TestPage() {
@@ -26,6 +27,55 @@ export default function TestPage() {
           <TextAnimation type="words" stagger={0.1}>
             <h1 className="text-9xl font-bold">We craft identities and experiences for the bold.</h1>
           </TextAnimation>
+        </div>
+      </section>
+
+      <section id="hero" className="min-h-screen bg-neutral-500">
+        <div className="grid grid-cols-12 grid-rows-12 gap-16">
+          <div id="header" className="size-96 aspect-1/1">
+            <StaggeredImageReveal
+              images={[
+                {
+                  src: '/img1.jpg',
+                  alt: 'Image 1'
+                },
+                {
+                  src: '/img2.jpg',
+                  alt: 'Image 2'
+                },
+                {
+                  src: '/img3.jpg',
+                  alt: 'Image 3'
+                },
+                {
+                  src: '/img4.jpg',
+                  alt: 'Image 4'
+                }
+              ]}
+            />
+          </div>
+          <div id="header" className="size-96 aspect-1/1">
+            <StaggeredImageReveal
+              images={[
+                {
+                  src: '/img1.jpg',
+                  alt: 'Image 1'
+                },
+                {
+                  src: '/img2.jpg',
+                  alt: 'Image 2'
+                },
+                {
+                  src: '/img3.jpg',
+                  alt: 'Image 3'
+                },
+                {
+                  src: '/img4.jpg',
+                  alt: 'Image 4'
+                }
+              ]}
+            />
+          </div>
         </div>
       </section>
 

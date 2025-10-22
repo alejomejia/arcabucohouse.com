@@ -180,123 +180,121 @@ export function TextAnimation({
     onStart?.()
   }, [onStart])
 
-  useGSAP(
-    () => {
-      // Early return if container not available (SSR safety)
-      if (!containerRef.current) return
+  const createAnimation = useCallback(() => {
+    // Early return if container not available (SSR safety)
+    if (!containerRef.current) return
 
-      // Reset refs arrays for clean state
-      // This ensures no stale references from previous renders
+    // Reset refs arrays for clean state
+    // This ensures no stale references from previous renders
+    splitsRef.current = []
+    elementsRef.current = []
+    animatedElementsRef.current = []
+
+    let elements = []
+
+    // Determine if we're animating multiple elements or a single element
+    // The data-multiple attribute indicates multiple child elements
+    if (containerRef.current.hasAttribute('data-multiple')) {
+      elements = Array.from(containerRef.current.children) as HTMLElement[]
+    } else {
+      elements = [containerRef.current]
+    }
+
+    // Process each element for text splitting and animation setup
+    elements.forEach((element: HTMLElement) => {
+      elementsRef.current.push(element)
+
+      // Create SplitText instance based on split type
+      // SplitText.create is more efficient than new SplitText() constructor
+      const split = SplitText.create(element, {
+        type: TYPES[type] === 'chars' ? 'words, chars' : TYPES[type], // Split by lines, words, or characters
+        mask: TYPES[type], // Mask elements for clean animation
+        [`${type}Class`]: `${type}++`, // Add incremental CSS classes
+        tag: 'span' // Wrap each element in span elements
+      })
+
+      splitsRef.current.push(split)
+
+      // Handle text-indent preservation (only for lines)
+      // Convert text-indent to padding-left on first line to maintain visual consistency
+      if (type === 'lines') {
+        const computedStyle = window.getComputedStyle(element)
+        const textIndent = computedStyle.textIndent
+
+        if (textIndent && textIndent !== '0px') {
+          if (split.lines && split.lines.length > 0) {
+            // Apply text-indent as padding to first line
+            ;(split.lines[0] as HTMLElement).style.setProperty('paddingLeft', textIndent)
+          }
+
+          // Remove text-indent from parent to prevent double indentation
+          element.style.setProperty('textIndent', '0')
+        }
+      }
+
+      // Collect animated elements based on split type
+      const animatedElements =
+        type === 'lines'
+          ? (split.lines as HTMLElement[])
+          : type === 'words'
+            ? (split.words as HTMLElement[])
+            : (split.chars as HTMLElement[])
+
+      animatedElementsRef.current.push(...animatedElements)
+    })
+
+    // Set initial state - lines start below their final position
+    // This creates the "reveal from bottom" effect
+    gsap.set(animatedElementsRef.current, { y: '100%' })
+
+    // Build animation properties object
+    const animationProps = {
+      y: '0%', // Animate to final position
+      duration: animationConfig.duration,
+      stagger: animationConfig.stagger,
+      ease: animationConfig.ease,
+      delay: animationConfig.delay,
+      onComplete: handleComplete,
+      onStart: handleStart
+    }
+
+    // Apply animation based on scroll trigger preference
+    if (animateOnScroll) {
+      gsap.to(animatedElementsRef.current, {
+        ...animationProps,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: animationConfig.scrollStart,
+          once, // Whether to run animation only once
+          // Additional ScrollTrigger options for better performance
+          invalidateOnRefresh: true,
+          refreshPriority: -1
+        }
+      })
+    } else {
+      // Immediate animation without scroll trigger
+      gsap.to(animatedElementsRef.current, animationProps)
+    }
+
+    // Cleanup function - critical for preventing memory leaks
+    // SplitText instances must be properly reverted to restore original DOM state
+    return () => {
+      splitsRef.current.forEach((split) => {
+        if (split) {
+          split.revert() // Restores original text and removes split elements
+        }
+      })
+
+      // Clear refs to prevent memory leaks
       splitsRef.current = []
       elementsRef.current = []
       animatedElementsRef.current = []
-
-      let elements = []
-
-      // Determine if we're animating multiple elements or a single element
-      // The data-multiple attribute indicates multiple child elements
-      if (containerRef.current.hasAttribute('data-multiple')) {
-        elements = Array.from(containerRef.current.children) as HTMLElement[]
-      } else {
-        elements = [containerRef.current]
-      }
-
-      // Process each element for text splitting and animation setup
-      elements.forEach((element: HTMLElement) => {
-        elementsRef.current.push(element)
-
-        // Create SplitText instance based on split type
-        // SplitText.create is more efficient than new SplitText() constructor
-        const split = SplitText.create(element, {
-          type: TYPES[type] === 'chars' ? 'words, chars' : TYPES[type], // Split by lines, words, or characters
-          mask: TYPES[type], // Mask elements for clean animation
-          [`${type}Class`]: `${type}++`, // Add incremental CSS classes
-          tag: 'span' // Wrap each element in span elements
-        })
-
-        splitsRef.current.push(split)
-
-        // Handle text-indent preservation (only for lines)
-        // Convert text-indent to padding-left on first line to maintain visual consistency
-        if (type === 'lines') {
-          const computedStyle = window.getComputedStyle(element)
-          const textIndent = computedStyle.textIndent
-
-          if (textIndent && textIndent !== '0px') {
-            if (split.lines && split.lines.length > 0) {
-              // Apply text-indent as padding to first line
-              ;(split.lines[0] as HTMLElement).style.setProperty('paddingLeft', textIndent)
-            }
-
-            // Remove text-indent from parent to prevent double indentation
-            element.style.setProperty('textIndent', '0')
-          }
-        }
-
-        // Collect animated elements based on split type
-        const animatedElements =
-          type === 'lines'
-            ? (split.lines as HTMLElement[])
-            : type === 'words'
-              ? (split.words as HTMLElement[])
-              : (split.chars as HTMLElement[])
-
-        animatedElementsRef.current.push(...animatedElements)
-      })
-
-      // Set initial state - lines start below their final position
-      // This creates the "reveal from bottom" effect
-      gsap.set(animatedElementsRef.current, { y: '100%' })
-
-      // Build animation properties object
-      const animationProps = {
-        y: '0%', // Animate to final position
-        duration: animationConfig.duration,
-        stagger: animationConfig.stagger,
-        ease: animationConfig.ease,
-        delay: animationConfig.delay,
-        onComplete: handleComplete,
-        onStart: handleStart
-      }
-
-      // Apply animation based on scroll trigger preference
-      if (animateOnScroll) {
-        gsap.to(animatedElementsRef.current, {
-          ...animationProps,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: animationConfig.scrollStart,
-            once, // Whether to run animation only once
-            // Additional ScrollTrigger options for better performance
-            invalidateOnRefresh: true,
-            refreshPriority: -1
-          }
-        })
-      } else {
-        // Immediate animation without scroll trigger
-        gsap.to(animatedElementsRef.current, animationProps)
-      }
-
-      // Cleanup function - critical for preventing memory leaks
-      // SplitText instances must be properly reverted to restore original DOM state
-      return () => {
-        splitsRef.current.forEach((split) => {
-          if (split) {
-            split.revert() // Restores original text and removes split elements
-          }
-        })
-
-        // Clear refs to prevent memory leaks
-        splitsRef.current = []
-        elementsRef.current = []
-        animatedElementsRef.current = []
-      }
-    },
-    {
-      scope: containerRef,
-      dependencies: [animateOnScroll, animationConfig, handleComplete, handleStart, once, type]
     }
-  )
+  }, [animateOnScroll, animationConfig, handleComplete, handleStart, once, type])
+
+  useGSAP(createAnimation, {
+    scope: containerRef
+  })
 
   // Render logic for single vs multiple children
   // Single child: clone element and attach ref directly

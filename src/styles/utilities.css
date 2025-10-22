@@ -21,6 +21,16 @@
     }
   }
 
+  .arc-images-animation {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    will-change: clip-path;
+
+    .arc-images-animation__wrapper {
+      clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+      will-change: clip-path;
+    }
+  }
+
   .transition-translate-ease {
     transition: translate 300ms cubic-bezier(0.76, 0, 0.24, 1);
   }

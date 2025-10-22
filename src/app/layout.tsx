@@ -8,7 +8,7 @@ import { WelcomeToast } from '@/components/from-template/welcome-toast'
 import { getCart } from '@/integrations/shopify'
 import { baseUrl } from '@/integrations/utils'
 
-import { GSAPRuntime } from '@/components/gsap/runtime'
+import { GSAPRuntime } from '@/components/gsap'
 import { Lenis } from '@/components/lenis'
 import '@/styles/globals.css'
 
