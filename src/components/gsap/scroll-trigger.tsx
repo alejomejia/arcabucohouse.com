@@ -1,9 +1,9 @@
 'use client'
 
 import gsap from 'gsap'
-import { ScrollTrigger as GSAPScrollTrigger } from 'gsap/all'
+import { ScrollTrigger as GSAPScrollTrigger } from 'gsap/ScrollTrigger'
 import { useLenis } from 'lenis/react'
-import { useEffect, useEffectEvent } from 'react'
+import { useEffect } from 'react'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(GSAPScrollTrigger)
@@ -13,14 +13,15 @@ if (typeof window !== 'undefined') {
   })
 }
 
+// @TODO: Move handlers to useEffectEvent hook when ready
 export function ScrollTrigger() {
-  const handleUpdate = useEffectEvent(() => {
+  const handleUpdate = () => {
     GSAPScrollTrigger.update()
-  })
+  }
 
-  const handleRefresh = useEffectEvent(() => {
+  const handleRefresh = () => {
     GSAPScrollTrigger.refresh()
-  })
+  }
 
   const lenis = useLenis(handleUpdate)
 

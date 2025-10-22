@@ -1,19 +1,5 @@
-import NextLink, { LinkProps as NextLinkProps } from 'next/link'
-
 import { cn } from '@/shared/utils/helpers'
-
-export type LinkProps = NextLinkProps & {
-  className?: string
-  children: React.ReactNode
-}
-
-export function Link({ className, children, ...props }: LinkProps) {
-  return (
-    <NextLink className={className} {...props}>
-      {children}
-    </NextLink>
-  )
-}
+import { Link, type LinkProps } from '.'
 
 const underlineLinkSharedClassname = 'inline-block transition-transform duration-300 ease-cubic-in-out'
 

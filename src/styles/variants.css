@@ -17,3 +17,9 @@
     @slot;
   }
 }
+
+@custom-variant all-children-span {
+  & span {
+    @slot;
+  }
+}

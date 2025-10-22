@@ -4,7 +4,7 @@ import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 import { type AnchorHTMLAttributes, type ComponentProps, type MouseEvent, useEffect, useState } from 'react'
 
-type LinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof ComponentProps<typeof NextLink> | 'href'> &
+export type LinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof ComponentProps<typeof NextLink> | 'href'> &
   Omit<ComponentProps<typeof NextLink>, 'href'> & {
     href: string
     onClick?: (e: MouseEvent<HTMLElement>) => void

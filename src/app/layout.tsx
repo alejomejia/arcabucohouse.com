@@ -8,6 +8,7 @@ import { WelcomeToast } from '@/components/from-template/welcome-toast'
 import { getCart } from '@/integrations/shopify'
 import { baseUrl } from '@/integrations/utils'
 
+import { GSAPRuntime } from '@/components/gsap/runtime'
 import { Lenis } from '@/components/lenis'
 import '@/styles/globals.css'
 
@@ -40,6 +41,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             <WelcomeToast />
           </main>
         </CartProvider>
+
+        <GSAPRuntime />
         <Lenis root options={{}} />
       </body>
     </html>

@@ -1,16 +1,7 @@
 'use client'
 
-import dynamic from 'next/dynamic'
-
-// Split GSAP runtimes out of the main bundle and ensure client-only execution
-const GSAP = dynamic(() => import('./index').then((m) => m.GSAP), {
-  ssr: false,
-})
-
-const ScrollTrigger = dynamic(
-  () => import('./scroll-trigger').then((m) => m.ScrollTrigger),
-  { ssr: false }
-)
+import { GSAP } from './index'
+import { ScrollTrigger } from './scroll-trigger'
 
 export function GSAPRuntime() {
   return (

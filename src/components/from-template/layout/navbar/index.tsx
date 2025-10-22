@@ -7,7 +7,7 @@ import { getMenu } from '@/integrations/shopify'
 import { SHOPIFY_MENU_HANDLERS } from '@/integrations/shopify/const'
 import { Menu } from '@/integrations/shopify/types'
 
-import { UnderlineLink } from '@/shared/ui/link'
+import { UnderlineLink } from '@/components/link/underline-link'
 import MobileMenu from './mobile-menu'
 import Search, { SearchSkeleton } from './search'
 
