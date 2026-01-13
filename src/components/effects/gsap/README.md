@@ -4,20 +4,21 @@
 
 ### Basic Installation
 
-Satūs comes with GSAP pre-installed. To enable GSAP and ScrollTrigger in your project, add the `<GSAPRuntime />` component in `app/layout.tsx` (it wires GSAP to Tempus and registers ScrollTrigger with Lenis):
+GSAP comes pre-installed. To enable GSAP animations in your project, add the `<GSAPRuntime />` component in `app/layout.tsx`:
 
 ```jsx
 // app/layout.tsx
-import { GSAPRuntime } from '~/components/gsap/runtime'
+import { GSAPRuntime } from '@/components/effects/gsap'
 
 // inside <body>
-;<GSAPRuntime />
+<GSAPRuntime />
 ```
 
 This will:
 
 - Synchronize GSAP's ticker with [Tempus](https://www.npmjs.com/package/tempus) for better performance
-- Register and configure ScrollTrigger with [Lenis](https://www.npmjs.com/package/lenis)
+- Register the CustomEase plugin and used to create a custom easing curves
+- Configure GSAP defaults (ease: "none", lagSmoothing: 0)
 
 ## Usage
 
@@ -41,9 +42,9 @@ export function Component() {
 
 ### ScrollTrigger
 
-When using ScrollTrigger, make sure you've enabled it in the GSAP component:
+ScrollTrigger sync with Lenis is handled automatically when you use the `<Lenis root />` component in your layout. The `LenisScrollTriggerSync` component is included automatically and handles the synchronization.
 
-`GSAPRuntime` already initializes ScrollTrigger and syncs with Lenis. In your component you can use it directly:
+You can use ScrollTrigger directly in your components:
 
 ```jsx
 useGSAP(() => {
@@ -61,9 +62,21 @@ useGSAP(() => {
 
 ## Advanced Features
 
+### Custom Easing
+
+The `GSAPRuntime` component automatically registers a custom "hop" easing curve that you can use in your animations and extend:
+
+```jsx
+gsap.to('.target', {
+  x: 100,
+  duration: 1,
+  ease: 'hop' // Custom easing curve
+})
+```
+
 ### Integration with Tempus
 
-GSAP's ticker is automatically synchronized with Tempus through the `<GSAP>` component, providing:
+GSAP's ticker is automatically synchronized with Tempus through the `<GSAPRuntime />` component, providing:
 
 - Consistent frame timing
 - Better performance
@@ -72,6 +85,5 @@ GSAP's ticker is automatically synchronized with Tempus through the `<GSAP>` com
 ## References
 
 - [GSAP Documentation](https://gsap.com/docs/v3/)
-- [GSAP Business](https://gsap.com/pricing/)
 - [ScrollTrigger Documentation](https://gsap.com/docs/v3/Plugins/ScrollTrigger/)
 - [Tempus Documentation](https://www.npmjs.com/package/tempus)
