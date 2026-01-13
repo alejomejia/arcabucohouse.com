@@ -4,8 +4,8 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { useCallback, useRef } from 'react'
 
-import { cn } from '@/shared/utils/helpers'
-import { Image, type ImageProps } from '../image'
+import { Image, type ImageProps } from '@/components/ui/image'
+import { cn } from '@/lib/utils/helpers'
 
 interface StaggeredImageRevealProps {
   images: ImageProps[]

@@ -26,7 +26,7 @@ const images = [
   className="my-custom-class"
   animationDelay={0.5}
   staggerDelay={0.8}
-  onAnimationComplete={() => console.log('Animation complete!')}
+  onComplete={() => console.log('Animation complete!')}
 />
 ```
 
@@ -38,7 +38,7 @@ const images = [
 | `className`           | `string`      | `''`    | Additional CSS classes                      |
 | `animationDelay`      | `number`      | `0.25`  | Initial delay before animation starts       |
 | `staggerDelay`        | `number`      | `0.75`  | Delay between each image animation          |
-| `onAnimationComplete` | `() => void`  | -       | Callback when animation finishes            |
+| `onComplete` | `() => void`  | -       | Callback when animation finishes            |
 
 ## Animation Configuration
 
@@ -77,15 +77,3 @@ The component includes comprehensive error handling:
 - Fallback CSS is applied if GSAP fails
 - Image loading errors are logged with warnings
 - Empty image arrays are handled gracefully
-
-## Migration from Previous Version
-
-If migrating from the previous `values` prop:
-
-```tsx
-// Before
-<StaggeredImageReveal values={images} />
-
-// After
-<StaggeredImageReveal images={images} />
-```
