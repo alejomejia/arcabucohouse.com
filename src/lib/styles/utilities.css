@@ -1,26 +1,4 @@
 @layer utilities {
-  .arc-underline-link {
-    &:before {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: calc(var(--spacing) * -0.5);
-      width: 100%;
-      height: calc(var(--spacing) * 0.25);
-      background-color: currentColor;
-      transform: scaleX(0);
-      transform-origin: 100% 50%;
-      transition: transform 300ms var(--ease-in-out);
-    }
-
-    &:hover {
-      &:before {
-        transform: scaleX(1);
-        transform-origin: 0 50%;
-      }
-    }
-  }
-
   .arc-images-animation {
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
     will-change: clip-path;
