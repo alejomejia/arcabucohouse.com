@@ -15,7 +15,7 @@ export default async function OpengraphImage(props?: Props): Promise<ImageRespon
     ...props
   }
 
-  const file = await readFile(join(process.cwd(), './src/fonts/Inter-Bold.ttf'))
+  const file = await readFile(join(process.cwd(), './src/lib/styles/fonts/Inter-Bold.ttf'))
   const font = Uint8Array.from(file).buffer
 
   return new ImageResponse(

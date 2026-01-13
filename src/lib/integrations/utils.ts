@@ -11,9 +11,6 @@ export const createUrl = (pathname: string, params: URLSearchParams | ReadonlyUR
   return `${pathname}${queryString}`
 }
 
-export const ensureStartsWith = (stringToCheck: string, startsWith: string) =>
-  stringToCheck.startsWith(startsWith) ? stringToCheck : `${startsWith}${stringToCheck}`
-
 export const validateEnvironmentVariables = () => {
   const requiredEnvironmentVariables = ['SHOPIFY_STORE_DOMAIN', 'SHOPIFY_STOREFRONT_ACCESS_API_TOKEN']
   const missingEnvironmentVariables = [] as string[]
