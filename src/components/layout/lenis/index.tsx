@@ -10,7 +10,7 @@ import { LenisScrollTriggerSync } from "./scroll-trigger";
 
 interface LenisProps extends Omit<ReactLenisProps, "ref"> {
   root: boolean;
-  options: LenisOptions;
+  options?: LenisOptions;
 }
 
 export function Lenis({

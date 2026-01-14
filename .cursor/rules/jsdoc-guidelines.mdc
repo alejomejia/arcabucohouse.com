@@ -1,8 +1,7 @@
 ---
 description: "This rule provides indications to document the code using JS Docs"
-alwaysApply: true
+alwaysApply: false
 ---
-
 # JSDoc Guidelines for Next.js/React
 
 Standards for writing JSDoc comments in this Next.js/React codebase.
