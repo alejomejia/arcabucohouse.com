@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 import Prose from '@/components/from-template/prose'
-import { getPage } from '@/integrations/shopify'
+import { getPage } from '@/lib/integrations/shopify'
 import { notFound } from 'next/navigation'
 
 export async function generateMetadata(props: { params: Promise<{ page: string }> }): Promise<Metadata> {

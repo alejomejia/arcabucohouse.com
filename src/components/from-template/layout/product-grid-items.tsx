@@ -1,6 +1,6 @@
 import Grid from '@/components/from-template/grid'
 import { GridTileImage } from '@/components/from-template/grid/tile'
-import { Product } from '@/integrations/shopify/types'
+import { Product } from '@/lib/integrations/shopify/types'
 import Link from 'next/link'
 
 export default function ProductGridItems({ products }: { products: Product[] }) {

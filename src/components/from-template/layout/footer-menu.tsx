@@ -1,6 +1,6 @@
 'use client'
 
-import { Menu } from '@/integrations/shopify/types'
+import { Menu } from '@/lib/integrations/shopify/types'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'

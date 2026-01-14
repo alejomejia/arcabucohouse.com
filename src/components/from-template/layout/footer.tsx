@@ -2,8 +2,8 @@ import Link from 'next/link'
 
 import FooterMenu from '@/components/from-template/layout/footer-menu'
 import LogoSquare from '@/components/from-template/logo-square'
-import { getMenu } from '@/integrations/shopify'
-import { SHOPIFY_MENU_HANDLERS } from '@/integrations/shopify/const'
+import { getMenu } from '@/lib/integrations/shopify'
+import { SHOPIFY_MENU_HANDLERS } from '@/lib/integrations/shopify/const'
 import { Suspense } from 'react'
 
 const { COMPANY_NAME, SITE_NAME } = process.env

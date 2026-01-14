@@ -1,7 +1,7 @@
 'use client'
 
 import { updateItemQuantity } from '@/components/from-template/cart/actions'
-import type { CartItem } from '@/integrations/shopify/types'
+import type { CartItem } from '@/lib/integrations/shopify/types'
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import { useActionState } from 'react'

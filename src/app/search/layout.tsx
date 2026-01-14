@@ -1,7 +1,7 @@
 import Footer from '@/components/from-template/layout/footer'
 import Collections from '@/components/from-template/layout/search/collections'
 import FilterList from '@/components/from-template/layout/search/filter'
-import { sorting } from '@/integrations/constants'
+import { sorting } from '@/lib/integrations/constants'
 import { Suspense } from 'react'
 import ChildrenWrapper from './children-wrapper'
 

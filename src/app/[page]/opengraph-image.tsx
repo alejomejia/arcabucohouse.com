@@ -1,5 +1,5 @@
 import OpengraphImage from '@/components/from-template/opengraph-image'
-import { getPage } from '@/integrations/shopify'
+import { getPage } from '@/lib/integrations/shopify'
 
 export default async function Image({ params }: { params: { page: string } }) {
   const page = await getPage(params.page)

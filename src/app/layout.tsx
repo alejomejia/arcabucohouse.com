@@ -5,12 +5,12 @@ import { Toaster } from 'sonner'
 import { CartProvider } from '@/components/from-template/cart/cart-context'
 import { Navbar } from '@/components/from-template/layout/navbar'
 import { WelcomeToast } from '@/components/from-template/welcome-toast'
-import { getCart } from '@/integrations/shopify'
-import { baseUrl } from '@/integrations/utils'
+import { getCart } from '@/lib/integrations/shopify'
+import { baseUrl } from '@/lib/integrations/utils'
 
-import { GSAPRuntime } from '@/components/gsap'
-import { Lenis } from '@/components/lenis'
-import '@/styles/globals.css'
+import { GSAPRuntime } from '@/components/effects/gsap'
+import { Lenis } from '@/components/layout/lenis'
+import '@/lib/styles/globals.css'
 
 const { SITE_NAME } = process.env
 

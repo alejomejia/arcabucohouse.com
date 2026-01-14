@@ -2,7 +2,7 @@
 
 import { addItem } from '@/components/from-template/cart/actions'
 import { useProduct } from '@/components/from-template/product/product-context'
-import { Product, ProductVariant } from '@/integrations/shopify/types'
+import { Product, ProductVariant } from '@/lib/integrations/shopify/types'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import { useActionState } from 'react'

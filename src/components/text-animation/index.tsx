@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@/shared/utils/helpers'
+import { cn } from '@/lib/utils/helpers'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { SplitText } from 'gsap/SplitText'

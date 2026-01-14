@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { Suspense } from 'react'
 
-import { getCollections } from '@/integrations/shopify'
+import { getCollections } from '@/lib/integrations/shopify'
 import FilterList from './filter'
 
 async function CollectionList() {

@@ -1,7 +1,7 @@
 'use server'
 
-import { TAGS } from '@/integrations/constants'
-import { addToCart, createCart, getCart, removeFromCart, updateCart } from '@/integrations/shopify'
+import { TAGS } from '@/lib/integrations/constants'
+import { addToCart, createCart, getCart, removeFromCart, updateCart } from '@/lib/integrations/shopify'
 import { revalidateTag } from 'next/cache'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'

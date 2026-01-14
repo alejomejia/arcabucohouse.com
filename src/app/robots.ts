@@ -1,4 +1,4 @@
-import { baseUrl } from '@/integrations/utils'
+import { baseUrl } from '@/lib/integrations/utils'
 
 export default function robots() {
   return {

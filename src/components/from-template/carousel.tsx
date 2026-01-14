@@ -1,4 +1,4 @@
-import { getCollectionProducts } from '@/integrations/shopify'
+import { getCollectionProducts } from '@/lib/integrations/shopify'
 import Link from 'next/link'
 import { GridTileImage } from './grid/tile'
 

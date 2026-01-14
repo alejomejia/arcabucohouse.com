@@ -1,4 +1,4 @@
-import { SortFilterItem } from '@/integrations/constants'
+import { SortFilterItem } from '@/lib/integrations/constants'
 import { Suspense } from 'react'
 import FilterItemDropdown from './dropdown'
 import { FilterItem } from './item'

@@ -3,11 +3,11 @@ import { Suspense } from 'react'
 
 import CartModal from '@/components/from-template/cart/modal'
 import LogoSquare from '@/components/from-template/logo-square'
-import { getMenu } from '@/integrations/shopify'
-import { SHOPIFY_MENU_HANDLERS } from '@/integrations/shopify/const'
-import { Menu } from '@/integrations/shopify/types'
+import { getMenu } from '@/lib/integrations/shopify'
+import { SHOPIFY_MENU_HANDLERS } from '@/lib/integrations/shopify/const'
+import { Menu } from '@/lib/integrations/shopify/types'
 
-import { UnderlineLink } from '@/components/link/underline-link'
+import { UnderlineLink } from '@/components/effects/underline-link'
 import MobileMenu from './mobile-menu'
 import Search, { SearchSkeleton } from './search'
 
@@ -39,6 +39,11 @@ export async function Navbar() {
                   </UnderlineLink>
                 </li>
               ))}
+              <li>
+                <UnderlineLink href="/test" prefetch={true}>
+                  Test
+                </UnderlineLink>
+              </li>
             </ul>
           ) : null}
         </div>

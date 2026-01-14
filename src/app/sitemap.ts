@@ -1,5 +1,5 @@
-import { getCollections, getPages, getProducts } from '@/integrations/shopify'
-import { baseUrl, validateEnvironmentVariables } from '@/integrations/utils'
+import { getCollections, getPages, getProducts } from '@/lib/integrations/shopify'
+import { baseUrl, validateEnvironmentVariables } from '@/lib/integrations/utils'
 import { MetadataRoute } from 'next'
 
 type Route = {
