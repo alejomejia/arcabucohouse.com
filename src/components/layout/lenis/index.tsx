@@ -4,16 +4,9 @@ import type { LenisOptions } from "lenis";
 import "lenis/dist/lenis.css";
 import type { LenisRef, LenisProps as ReactLenisProps } from "lenis/react";
 import { ReactLenis } from "lenis/react";
-import dynamic from "next/dynamic";
 import { useRef } from "react";
 import { useTempus } from "tempus/react";
-
-const LenisScrollTriggerSync = dynamic(
-  () => import("./scroll-trigger").then((mod) => mod.LenisScrollTriggerSync),
-  {
-    ssr: false,
-  },
-);
+import { LenisScrollTriggerSync } from "./scroll-trigger";
 
 interface LenisProps extends Omit<ReactLenisProps, "ref"> {
   root: boolean;
