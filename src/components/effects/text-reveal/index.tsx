@@ -64,7 +64,7 @@ const SCROLL_POSITIONS = {
 
 type ScrollPosition = keyof typeof SCROLL_POSITIONS
 
-interface TextAnimationProps {
+interface TextRevealProps {
   /** React children to animate - can be single element or multiple elements */
   children: React.ReactNode
   /** How to split the text for animation - lines, words, or characters */
@@ -97,28 +97,28 @@ interface TextAnimationProps {
  * Usage Examples:
  * ```tsx
  * // Basic usage (lines)
- * <TextAnimation>
+ * <TextReveal>
  *   <h1>Animated heading</h1>
- * </TextAnimation>
+ * </TextReveal>
  *
  * // Word-by-word animation
- * <TextAnimation type="words" stagger={0.1}>
+ * <TextReveal type="words" stagger={0.1}>
  *   <h1>Animated word by word</h1>
- * </TextAnimation>
+ * </TextReveal>
  *
  * // Character-by-character animation
- * <TextAnimation type="chars" stagger={0.05}>
+ * <TextReveal type="chars" stagger={0.05}>
  *   <h1>Typewriter effect</h1>
- * </TextAnimation>
+ * </TextReveal>
  *
  * // Multiple elements
- * <TextAnimation>
+ * <TextReveal>
  *   <h1>Title</h1>
  *   <p>Subtitle</p>
- * </TextAnimation>
+ * </TextReveal>
  *
  * // Custom animation
- * <TextAnimation
+ * <TextReveal
  *   type="words"
  *   duration="fast"
  *   ease="bouncy"
@@ -126,10 +126,10 @@ interface TextAnimationProps {
  *   onComplete={() => console.log('Done!')}
  * >
  *   <h1>Custom animated text</h1>
- * </TextAnimation>
+ * </TextReveal>
  * ```
  */
-export function TextAnimation({
+export function TextReveal({
   children,
   type = 'lines',
   animateOnScroll = true,
@@ -142,7 +142,7 @@ export function TextAnimation({
   className,
   onComplete,
   onStart
-}: TextAnimationProps) {
+}: TextRevealProps) {
   // Refs for DOM elements and GSAP instances
   // Using separate refs for better organization and cleanup
   const containerRef = useRef<HTMLDivElement>(null)

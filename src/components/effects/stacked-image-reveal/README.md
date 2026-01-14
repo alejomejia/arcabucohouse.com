@@ -1,4 +1,4 @@
-# StaggeredImageReveal Component
+# StackedImageReveal Component
 
 A performant, accessible React component for creating staggered image animations using GSAP.
 
@@ -13,7 +13,7 @@ A performant, accessible React component for creating staggered image animations
 ## Usage
 
 ```tsx
-import { StaggeredImageReveal } from '@/components/images-animation'
+import { StackedImageReveal } from '@/components/effects/stacked-image-reveal'
 
 const images = [
   { src: '/img1.jpg', alt: 'Description 1' },
@@ -21,7 +21,7 @@ const images = [
   { src: '/img3.jpg', alt: 'Description 3' },
 ]
 
-<StaggeredImageReveal
+<StackedImageReveal
   images={images}
   className="my-custom-class"
   animationDelay={0.5}

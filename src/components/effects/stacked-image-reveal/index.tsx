@@ -7,8 +7,9 @@ import { useCallback, useRef } from 'react'
 import { Image, type ImageProps } from '@/components/ui/image'
 import { cn } from '@/lib/utils/helpers'
 
-interface StaggeredImageRevealProps {
+interface StackedImageRevealProps {
   images: ImageProps[]
+  priority?: boolean
   className?: string
   delay?: number
   once?: boolean
@@ -18,8 +19,9 @@ interface StaggeredImageRevealProps {
   onComplete?: () => void
 }
 
-export function StaggeredImageReveal({
+export function StackedImageReveal({
   images,
+  priority = false,
   className,
   delay = 0,
   once = true,
@@ -27,7 +29,7 @@ export function StaggeredImageReveal({
   animateOnScroll = true,
   onStart,
   onComplete
-}: StaggeredImageRevealProps) {
+}: StackedImageRevealProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const wrapperRefs = useRef<HTMLDivElement[]>([])
   const imageRefs = useRef<HTMLImageElement[]>([])
@@ -108,7 +110,7 @@ export function StaggeredImageReveal({
               }}
               className="relative w-full h-full scale-200 will-change-transform"
               fill
-              priority
+              priority={priority}
               {...img}
             />
           </div>
