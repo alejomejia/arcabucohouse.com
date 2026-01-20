@@ -444,11 +444,11 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
   }
 
   if (isCollectionUpdate) {
-    revalidateTag(TAGS.collections)
+    revalidateTag(TAGS.collections, "noStore")
   }
 
   if (isProductUpdate) {
-    revalidateTag(TAGS.products)
+    revalidateTag(TAGS.products, "noStore")
   }
 
   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() })

@@ -1,8 +1,17 @@
-export default {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   experimental: {
     ppr: true,
     inlineCss: true,
-    useCache: true
+    useCache: true,
+    cacheLife: {
+      noStore: {
+        stale: 0,
+        revalidate: 0,
+        expire: 0,
+      },
+    }
   },
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -16,3 +25,5 @@ export default {
     ]
   }
 };
+
+export default nextConfig;
