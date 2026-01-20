@@ -11,9 +11,14 @@ import { Wrapper } from '@/components/layout/wrapper'
 import { PORTAL_IDS } from '@/lib/styles/const'
 import { sans, serif } from '@/lib/styles/fonts'
 import '@/lib/styles/globals.css'
+import { assertRequiredEnvVars } from '@/lib/utils/config'
 import { cn } from '@/lib/utils/helpers'
 
 const { SITE_NAME } = process.env
+
+// Validate required environment variables at application startup
+// This will fail fast during build or at runtime if any are missing
+assertRequiredEnvVars()
 
 export const metadata = {
   metadataBase: new URL(baseUrl),

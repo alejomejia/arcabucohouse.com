@@ -6,8 +6,8 @@ import { Fragment, useRef } from "react"
 
 import { SplitText, type SplitTextRef } from "@/components/effects/split-text"
 import { UnderlineLink } from "@/components/effects/underline/underline-link"
+import { POLICIES_LINKS, SOCIAL_MEDIA_LINKS } from "@/lib/constants/links"
 import { orchestraMenuOverlay } from "@/lib/orchestra"
-import { POLICIES_LINKS, SOCIAL_LINKS } from "@/lib/utils/config"
 import { cn } from "@/lib/utils/helpers"
 
 
@@ -60,7 +60,7 @@ export function OverlayFooter() {
         <div className="flex items-center gap-2">
           <span>Socials — </span>
           <div className="flex items-center gap-2">
-            {SOCIAL_LINKS.map(({ id, href, label }) => (
+            {SOCIAL_MEDIA_LINKS.map(({ id, href, label }) => (
               <div key={id}>
                 [<UnderlineLink key={id} href={href}>{label}</UnderlineLink>]
               </div>
