@@ -2,7 +2,8 @@
 
 import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
-import { useCallback, useRef, useState, type RefObject } from "react"
+import { usePathname } from "next/navigation"
+import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
 
 import type { SplitTextRef } from "@/components/effects/split-text"
 import { useDisableScroll } from "@/lib/hooks/use-disable-scroll"
@@ -32,6 +33,7 @@ export interface UseNavigationToggleReturn {
  * @returns Object containing refs, toggle function, and state
  */
 export function useNavigationToggle(): UseNavigationToggleReturn {
+  const pathname = usePathname()
   const { navState, isNavOpen, openNav, openingNav, closingNav } = useNavigation()
   const [disabled, setDisabled] = useState(true)
 
@@ -42,6 +44,11 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
   const isAnimatingRef = useRef(false)
 
   useDisableScroll(isNavOpen)
+
+  useEffect(() => {
+    closingNav()
+    closeAnimation()
+  }, [pathname])
 
   // Debounce setDisabled to prevent rapid clicking bugs
   const debouncedSetDisabled = useCallback(() => {
