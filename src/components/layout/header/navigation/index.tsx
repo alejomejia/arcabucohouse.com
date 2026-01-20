@@ -5,6 +5,7 @@ import { SHOPIFY_MENU_HANDLERS } from '@/lib/integrations/shopify/const';
 
 import { NavigationOverlay } from './navigation-overlay';
 import { OverlayContent } from './navigation-overlay/overlay-content';
+import { OverlayImagePreloader } from './navigation-overlay/overlay-image-preloader';
 import { NavigationToggle } from './navigation-toggle';
 
 export async function Navigation() {
@@ -12,6 +13,7 @@ export async function Navigation() {
 
   return (
     <>
+      <OverlayImagePreloader />
       <NavigationToggle />
       <NavigationOverlay>
         <Suspense fallback={"Loading menu..."}>
