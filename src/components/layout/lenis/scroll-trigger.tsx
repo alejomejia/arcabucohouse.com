@@ -1,4 +1,3 @@
-import { isDev } from "@/lib/utils/config";
 import gsap from "gsap";
 import { ScrollTrigger as GSAPScrollTrigger } from "gsap/all";
 import { useLenis } from "lenis/react";
@@ -9,7 +8,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(GSAPScrollTrigger);
 
   GSAPScrollTrigger.defaults({
-    markers: isDev,
+    // markers: isDev,
   });
 }
 

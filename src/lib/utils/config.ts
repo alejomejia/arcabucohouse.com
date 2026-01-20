@@ -18,3 +18,34 @@ export const config = {
 
 export const isDev = config.env === "development";
 export const isProd = config.env === "production";
+
+export const SOCIAL_LINKS = [
+  {
+    id: "instagram",
+    label: "Instagram",
+    href: "https://www.instagram.com/arcabuco.house/",
+  },
+  {
+    id: "pinterest",
+    label: "Pinterest",
+    href: "https://www.pinterest.com/arcabucohouse/",
+  },
+]
+
+export const POLICIES_LINKS = [
+  {
+    id: "shipping",
+    label: "Shipping",
+    href: "/shipping-policy",
+  },
+  {
+    id: "privacy",
+    label: "Privacy",
+    href: "/privacy-policy",
+  },
+  {
+    id: "terms",
+    label: "Terms",
+    href: "/terms-of-service",
+  }
+]

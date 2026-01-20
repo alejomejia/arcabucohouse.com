@@ -1,16 +1,17 @@
-import { GeistSans } from 'geist/font/sans'
 import { ReactNode } from 'react'
 import { Toaster } from 'sonner'
 
-import { CartProvider } from '@/components/from-template/cart/cart-context'
-import { Navbar } from '@/components/from-template/layout/navbar'
-import { WelcomeToast } from '@/components/toast/welcome-toast'
+import { CartProvider } from '@/components/features/cart/cart-context'
 import { getCart } from '@/lib/integrations/shopify'
 import { baseUrl } from '@/lib/integrations/utils'
 
 import { GSAPRuntime } from '@/components/effects/gsap'
 import { Lenis } from '@/components/layout/lenis'
+import { Wrapper } from '@/components/layout/wrapper'
+import { PORTAL_IDS } from '@/lib/styles/const'
+import { sans, serif } from '@/lib/styles/fonts'
 import '@/lib/styles/globals.css'
+import { cn } from '@/lib/utils/helpers'
 
 const { SITE_NAME } = process.env
 
@@ -31,20 +32,20 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const cart = getCart()
 
   return (
-    <html lang="en" className={GeistSans.variable}>
-      <body className="antialiased bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
+    <html lang="en" className={cn(sans.variable, serif.variable)}>
+      <body className="font-sans antialiased bg-neutral-50 text-black">
+        <div id={PORTAL_IDS.bodyTop} />
         <Toaster closeButton />
-        
+
         <CartProvider cartPromise={cart}>
-          <Navbar />
-          <main>
+          <Wrapper>
             {children}
-            <WelcomeToast />
-          </main>
+          </Wrapper>
         </CartProvider>
 
         <GSAPRuntime />
         <Lenis root />
+        <div id={PORTAL_IDS.bodyBottom} />
       </body>
     </html>
   )

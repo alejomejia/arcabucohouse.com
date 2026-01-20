@@ -3,10 +3,8 @@
 import { useLenis } from "lenis/react"
 import { useEffect, useRef } from "react"
 
-const OVERFLOW_HIDDEN_CLASS = 'overflow-hidden'
-
 /**
- * Disables or enables scroll for both Lenis and the document element.
+ * Disables or enables Lenis scroll in the document.
  * 
  * @param disabledScroll - Whether to disable scroll (true) or enable it (false)
  * 
@@ -23,39 +21,22 @@ export function useDisableScroll(disabledScroll: boolean) {
   const wasDisabledRef = useRef(false)
 
   useEffect(() => {
-    // SSR safety check
-    if (typeof window === 'undefined') {
-      return
-    }
-
-    const htmlElement = document.documentElement
-    const hasOverflowHidden = htmlElement.classList.contains(OVERFLOW_HIDDEN_CLASS)
+    if (!lenis) return
 
     if (disabledScroll) {
-      // Disable scroll
-      lenis?.stop()
-      
-      if (!hasOverflowHidden) {
-        htmlElement.classList.add(OVERFLOW_HIDDEN_CLASS)
-      }
+      lenis.stop()
       wasDisabledRef.current = true
     } else {
-      // Enable scroll
-      lenis?.start()
-      if (hasOverflowHidden) {
-        htmlElement.classList.remove(OVERFLOW_HIDDEN_CLASS)
-      }
+      lenis.start()
       wasDisabledRef.current = false
     }
 
     // Cleanup: restore scroll state on unmount only if we disabled it
     return () => {
-      if (wasDisabledRef.current && typeof window !== 'undefined') {
-        lenis?.start()
-        const htmlElement = document.documentElement
-        if (htmlElement.classList.contains(OVERFLOW_HIDDEN_CLASS)) {
-          htmlElement.classList.remove(OVERFLOW_HIDDEN_CLASS)
-        }
+      if (!lenis) return
+
+      if (wasDisabledRef.current) {
+        lenis.start()
         wasDisabledRef.current = false
       }
     }

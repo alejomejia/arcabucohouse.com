@@ -14,7 +14,7 @@
   --custom-ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
 
   /* Theme colors */
-  --color-neutral-10: #f7f7f7;
+  /* --color-neutral-10: #f7f7f7;
   --color-neutral-20: #efefef;
   --color-neutral-30: #d9d8db;
   --color-neutral-40: #c8c7cc;
@@ -23,7 +23,7 @@
   --color-neutral-70: #63636e;
   --color-neutral-80: #4a4b54;
   --color-neutral-90: #39383d;
-  --color-neutral-100: #242426;
+  --color-neutral-100: #242426; */
 }
 
 /* Safari-specific fix for lazy loading image rendering issues */

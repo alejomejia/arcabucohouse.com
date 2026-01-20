@@ -19,6 +19,7 @@ className="before:content-[''] text-blue-500 hover:scale-105 relative px-4 befor
 ```
 
 **Good:**
+Ignore the comments when making changes, used here to explain better the rule.
 ```tsx
 className={cn(
   // Layout
@@ -37,25 +38,7 @@ className={cn(
 )}
 ```
 
-### 2. Use Comments to Describe Sections
-
-Add brief comments above each group of classes to explain their purpose.
-
-```tsx
-className={cn(
-  // Base container styles
-  'flex items-center justify-between p-4',
-  
-  // Visual styling
-  'bg-white rounded-lg shadow-md',
-  
-  // Interactive states
-  'hover:shadow-lg transition-shadow',
-  'focus-within:ring-2 focus-within:ring-blue-500'
-)}
-```
-
-### 3. Extract Complex Patterns to Constants
+### 2. Extract Complex Patterns to Constants
 
 When you have repeated or complex class combinations, extract them to named constants.
 
@@ -85,7 +68,7 @@ export const GRADIENT_OVERLAY = [
 <div className={GRADIENT_OVERLAY} />
 ```
 
-### 4. Recommended Class Grouping Order
+### 3. Recommended Class Grouping Order
 
 Follow this order for consistency across your codebase:
 
@@ -127,7 +110,7 @@ className={cn(
 )}
 ```
 
-### 5. Break Down Complex Components
+### 4. Break Down Complex Components
 
 For components with many variant states or complex styling, consider these patterns:
 
@@ -178,7 +161,7 @@ import { focusRing, disabledState } from '@/utils/classNames'
 <button className={cn('px-4 py-2', focusRing, disabledState)} />
 ```
 
-### 6. Handle Pseudo-elements Clearly
+### 5. Handle Pseudo-elements Clearly
 
 Pseudo-elements often create the longest class strings. Group them separately and add comments.
 
@@ -205,7 +188,7 @@ className={cn(
 )}
 ```
 
-### 7. Use Tailwind v4 Dynamic Numeric Values with `var(--spacing)`
+### 6. Use Tailwind v4 Dynamic Numeric Values with `var(--spacing)`
 
 TailwindCSS v4 multiplies numeric values by `var(--spacing)` automatically. You can use **any numeric value** directly without arbitrary brackets - Tailwind will calculate it for you in rem instead of px.
 
@@ -288,7 +271,7 @@ className={cn(
 )}
 ```
 
-### 8. Conditional Classes
+### 7. Conditional Classes
 
 For conditional classes, keep each condition on its own line for clarity.
 
@@ -312,7 +295,7 @@ className={cn(
 )}
 ```
 
-### 9. Responsive Design
+### 8. Responsive Design
 
 Group responsive variants together, progressing from smallest to largest.
 
@@ -332,7 +315,7 @@ className={cn(
 )}
 ```
 
-### 10. Custom Properties Integration
+### 9. Custom Properties Integration
 
 When using CSS custom properties, group them and add context.
 

@@ -1,4 +1,4 @@
-import { AddToCart } from '@/components/from-template/cart/add-to-cart'
+import { AddToCart } from '@/components/features/cart/add-to-cart'
 import Price from '@/components/from-template/price'
 import Prose from '@/components/from-template/prose'
 import { Product } from '@/lib/integrations/shopify/types'

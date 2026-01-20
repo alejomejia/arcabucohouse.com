@@ -42,7 +42,7 @@ export function Link({
 
   useEffect(() => {
     // For relative URLs, check if they're actually external
-    if (!isExternalByPattern && typeof window !== 'undefined') {
+    if (!isExternalByPattern) {
       try {
         const url = new URL(href, window.location.href)
         setIsExternal(url.host !== window.location.host)

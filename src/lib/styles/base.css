@@ -12,22 +12,20 @@
     font-weight: 400;
   }
 
-  /* Scrollbar styles */
-  ::-webkit-scrollbar {
-    width: var(--scrollbar-width);
-    height: var(--scrollbar-width);
+  a {
+    display: block;
   }
 
-  ::-webkit-scrollbar-track {
-    background: var(--color-neutral-80);
+  button {
+    cursor: pointer;
   }
 
-  ::-webkit-scrollbar-thumb {
-    background: var(--color-neutral-60);
-    border-radius: var(--scrollbar-width);
+  .word-mask {
+    display: inline-block;
   }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-neutral-40);
+  /* Avoid cropping characters in Split Text on x axys (sides) */
+  .char-mask {
+    overflow-x: visible !important;
   }
 }
