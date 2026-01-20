@@ -1,5 +1,6 @@
 import { HIDDEN_PRODUCT_TAG, SHOPIFY_GRAPHQL_API_ENDPOINT, TAGS } from '@/lib/integrations/constants'
 import { isShopifyError } from '@/lib/integrations/type-guards'
+import { isDev } from '@/lib/utils/config'
 import { ensureStartsWith } from '@/lib/utils/strings'
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag, revalidateTag } from 'next/cache'
 import { cookies, headers } from 'next/headers'
@@ -325,19 +326,28 @@ export async function getMenu(handle: string): Promise<Menu[]> {
   cacheTag(TAGS.collections)
   cacheLife('days')
 
-  const res = await shopifyFetch<ShopifyMenuOperation>({
-    query: getMenuQuery,
-    variables: {
-      handle
-    }
-  })
+  try {
+    const res = await shopifyFetch<ShopifyMenuOperation>({
+      query: getMenuQuery,
+      variables: {
+        handle
+      }
+    })
 
-  return (
-    res.body?.data?.menu?.items.map((item: { title: string; url: string }) => ({
-      title: item.title,
-      path: item.url.replace(domain, '').replace('/collections', '/search').replace('/pages', '')
-    })) || []
-  )
+    return (
+      res.body?.data?.menu?.items.map((item: { title: string; url: string }) => ({
+        title: item.title,
+        path: item.url.replace(domain, '').replace('/collections', '/search').replace('/pages', '')
+      })) || []
+    )
+  } catch (error) {
+    // Log error in development but don't fail the build
+    if (isDev) {
+      console.error(`Failed to fetch menu with handle "${handle}":`, error)
+    }
+
+    return []
+  }
 }
 
 export async function getPage(handle: string): Promise<Page> {

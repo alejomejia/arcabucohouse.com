@@ -16,7 +16,6 @@ export function OverlayTopText() {
   const splitTextRef = useRef<SplitTextRef>(null)
   const prevNavStateRef = useRef<typeof navState>(null)
 
-
   // Initialize text split and set initial state
   useGSAP(() => {
     if (!splitTextRef.current || isMobile) return
@@ -45,7 +44,7 @@ export function OverlayTopText() {
     }
 
     checkReady()
-  }, { scope: splitTextRef })
+  }, { scope: splitTextRef, dependencies: [isMobile] })
 
   // Animate text in/out based on navigation state
   useGSAP(() => {
@@ -104,7 +103,7 @@ export function OverlayTopText() {
     }
 
     prevNavStateRef.current = navState
-  }, { scope: splitTextRef, dependencies: [navState] })
+  }, { scope: splitTextRef, dependencies: [navState, isMobile] })
 
   return (
     <SplitText
