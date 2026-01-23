@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react"
 import { useCallback, useMemo, useRef } from "react"
 
 import { ImageStack, type ImageStackRef, type StackImage } from "@/components/effects/image-stack"
-import { OVERLAY_IMAGES_COLLECTION } from "@/lib/integrations/shopify/config"
+import { OVERLAY_IMAGES_SHAPE } from "@/lib/integrations/shopify/config"
 import type { Menu } from "@/lib/integrations/shopify/types"
 import { orchestraMenuOverlay } from "@/lib/orchestra"
 import { cn } from "@/lib/utils/helpers"
@@ -41,7 +41,7 @@ function normalizeMenuTitle(title: string): string {
  * Get image source from config based on normalized menu title, fallback to default
  */
 function getImageSrc(normalizedTitle: string): string {
-  return OVERLAY_IMAGES_COLLECTION[normalizedTitle as keyof typeof OVERLAY_IMAGES_COLLECTION] || OVERLAY_IMAGES_COLLECTION.default
+  return OVERLAY_IMAGES_SHAPE[normalizedTitle as keyof typeof OVERLAY_IMAGES_SHAPE] || OVERLAY_IMAGES_SHAPE.default
 }
 
 /**
@@ -61,7 +61,7 @@ export function OverlayContent({ menu }: OverlayContentProps) {
     const images: StackImage[] = [
       {
         id: "default",
-        src: OVERLAY_IMAGES_COLLECTION.default,
+        src: OVERLAY_IMAGES_SHAPE.default,
         alt: "default image"
       }
     ]
