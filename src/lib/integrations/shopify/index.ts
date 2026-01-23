@@ -250,7 +250,7 @@ export async function getCart(): Promise<Cart | undefined> {
 export async function getCollection(handle: string): Promise<Collection | undefined> {
   'use cache'
   cacheTag(TAGS.collections)
-  cacheLife('days')
+  cacheLife('shopify')
 
   const res = await shopifyFetch<ShopifyCollectionOperation>({
     query: getCollectionQuery,
@@ -273,7 +273,7 @@ export async function getCollectionProducts({
 }): Promise<Product[]> {
   'use cache'
   cacheTag(TAGS.collections, TAGS.products)
-  cacheLife('days')
+  cacheLife('shopify')
 
   const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
     query: getCollectionProductsQuery,
@@ -295,7 +295,7 @@ export async function getCollectionProducts({
 export async function getCollections(): Promise<Collection[]> {
   'use cache'
   cacheTag(TAGS.collections)
-  cacheLife('days')
+  cacheLife('shopify')
 
   const res = await shopifyFetch<ShopifyCollectionsOperation>({
     query: getCollectionsQuery
@@ -324,7 +324,7 @@ export async function getCollections(): Promise<Collection[]> {
 export async function getMenu(handle: string): Promise<Menu[]> {
   'use cache'
   cacheTag(TAGS.collections)
-  cacheLife('days')
+  cacheLife('shopify')
 
   try {
     const res = await shopifyFetch<ShopifyMenuOperation>({
@@ -370,7 +370,7 @@ export async function getPages(): Promise<Page[]> {
 export async function getProduct(handle: string): Promise<Product | undefined> {
   'use cache'
   cacheTag(TAGS.products)
-  cacheLife('days')
+  cacheLife('shopify')
 
   const res = await shopifyFetch<ShopifyProductOperation>({
     query: getProductQuery,
@@ -385,7 +385,7 @@ export async function getProduct(handle: string): Promise<Product | undefined> {
 export async function getProductRecommendations(productId: string): Promise<Product[]> {
   'use cache'
   cacheTag(TAGS.products)
-  cacheLife('days')
+  cacheLife('shopify')
 
   const res = await shopifyFetch<ShopifyProductRecommendationsOperation>({
     query: getProductRecommendationsQuery,
@@ -408,7 +408,7 @@ export async function getProducts({
 }): Promise<Product[]> {
   'use cache'
   cacheTag(TAGS.products)
-  cacheLife('days')
+  cacheLife('shopify')
 
   const res = await shopifyFetch<ShopifyProductsOperation>({
     query: getProductsQuery,
@@ -444,11 +444,11 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
   }
 
   if (isCollectionUpdate) {
-    revalidateTag(TAGS.collections, "noStore")
+    revalidateTag(TAGS.collections, "shopify")
   }
 
   if (isProductUpdate) {
-    revalidateTag(TAGS.products, "noStore")
+    revalidateTag(TAGS.products, "shopify")
   }
 
   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() })

@@ -13,7 +13,7 @@ export async function addItem(prevState: any, selectedVariantId: string | undefi
 
   try {
     await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }])
-    revalidateTag(TAGS.cart, "noStore")
+    revalidateTag(TAGS.cart, "noCache")
   } catch (e) {
     return 'Error adding item to cart'
   }
@@ -31,7 +31,7 @@ export async function removeItem(prevState: any, merchandiseId: string) {
 
     if (lineItem && lineItem.id) {
       await removeFromCart([lineItem.id])
-      revalidateTag(TAGS.cart, "noStore")
+      revalidateTag(TAGS.cart, "noCache")
     } else {
       return 'Item not found in cart'
     }
@@ -75,7 +75,7 @@ export async function updateItemQuantity(
       await addToCart([{ merchandiseId, quantity }])
     }
 
-    revalidateTag(TAGS.cart, "noStore")
+    revalidateTag(TAGS.cart, "noCache")
   } catch (e) {
     console.error(e)
     return 'Error updating item quantity'

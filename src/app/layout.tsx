@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { ReactNode } from 'react'
 import { Toaster } from 'sonner'
 
@@ -20,7 +21,7 @@ const { SITE_NAME } = process.env
 // This will fail fast during build or at runtime if any are missing
 assertRequiredEnvVars()
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
     default: SITE_NAME!,
