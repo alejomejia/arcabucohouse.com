@@ -40,17 +40,18 @@ export default async function RootLayout({
   const cart = getCart();
 
   return (
-    <html lang="en" className={cn(sans.variable, serif.variable)}>
-      <body className="font-sans antialiased bg-neutral-50 text-black">
+    <html lang="en">
+      <body className={cn("font-sans antialiased bg-neutral-50 text-black", sans.variable, serif.variable)}>
         <div id={PORTAL_IDS.bodyTop} />
         <Toaster closeButton />
 
-        <CartProvider cartPromise={cart}>
-          <Wrapper>{children}</Wrapper>
-        </CartProvider>
+        <Lenis root>
+          <CartProvider cartPromise={cart}>
+            <Wrapper>{children}</Wrapper>
+          </CartProvider>
+        </Lenis>
 
         <GSAPRuntime />
-        <Lenis root />
         <div id={PORTAL_IDS.bodyBottom} />
       </body>
     </html>
