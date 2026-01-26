@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import { Gallery } from '@/components/features/product//gallery'
+import { ProductProvider } from '@/components/features/product//product-context'
+import { ProductDescription } from '@/components/features/product//product-description'
 import { GridTileImage } from '@/components/from-template/grid/tile'
 import Footer from '@/components/from-template/layout/footer'
-import { Gallery } from '@/components/from-template/product/gallery'
-import { ProductProvider } from '@/components/from-template/product/product-context'
-import { ProductDescription } from '@/components/from-template/product/product-description'
 import { HIDDEN_PRODUCT_TAG } from '@/lib/integrations/constants'
 import { getProduct, getProductRecommendations } from '@/lib/integrations/shopify'
 import { Image } from '@/lib/integrations/shopify/types'
@@ -34,15 +34,15 @@ export async function generateMetadata(props: { params: Promise<{ handle: string
     },
     openGraph: url
       ? {
-          images: [
-            {
-              url,
-              width,
-              height,
-              alt
-            }
-          ]
-        }
+        images: [
+          {
+            url,
+            width,
+            height,
+            alt
+          }
+        ]
+      }
       : null
   }
 }
@@ -77,8 +77,8 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
             __html: JSON.stringify(productJsonLd)
           }}
         />
-        <div className="mx-auto max-w-(--breakpoint-2xl) px-4">
-          <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8 dark:border-neutral-800 dark:bg-black">
+        <div className="w-full mx-auto max-w-(--breakpoint-2xl) px-4">
+          <div className="flex flex-col rounded-lg border border-neutral-200 p-8 md:p-12 lg:flex-row lg:gap-8 text-black">
             <div className="h-full w-full basis-full lg:basis-4/6">
               <Suspense
                 fallback={<div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden" />}

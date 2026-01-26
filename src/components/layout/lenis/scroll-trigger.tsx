@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { ScrollTrigger as GSAPScrollTrigger } from "gsap/all";
 import { useLenis } from "lenis/react";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 // Register ScrollTrigger once
@@ -17,20 +18,18 @@ if (typeof window !== "undefined") {
  * Must be rendered inside ReactLenis context.
  */
 export function LenisScrollTriggerSync() {
+  const pathname = usePathname();
+  const lenis = useLenis(() => GSAPScrollTrigger.update());
+
   useEffect(() => {
     GSAPScrollTrigger.update();
   }, []);
 
-  const handleUpdate = () => GSAPScrollTrigger.update();
-  const handleRefresh = () => GSAPScrollTrigger.refresh();
-
-  const lenis = useLenis(handleUpdate);
-
   useEffect(() => {
     if (lenis) {
-      handleRefresh();
+      GSAPScrollTrigger.refresh()
     }
-  }, [lenis]);
+  }, [lenis, pathname]);
 
   return null;
 }

@@ -5,7 +5,6 @@ import LogoSquare from '@/components/from-template/logo-square'
 import { getMenu } from '@/lib/integrations/shopify'
 import { SHOPIFY_MENU_HANDLERS } from '@/lib/integrations/shopify/const'
 import { Menu } from '@/lib/integrations/shopify/types'
-import CartModal from '../../cart/modal'
 
 import { UnderlineLink } from '@/components/effects/underline/underline-link'
 import MobileMenu from './mobile-menu'
@@ -52,9 +51,6 @@ export async function Navbar() {
             <Suspense fallback={<SearchSkeleton />}>
               <Search />
             </Suspense>
-          </div>
-          <div className="flex">
-            <CartModal />
           </div>
         </div>
       </div>

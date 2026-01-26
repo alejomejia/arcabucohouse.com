@@ -25,7 +25,7 @@ export function OverlayBackground() {
     if (!containerRef.current || !isMounted) return
 
     gsap.to(containerRef.current, {
-      opacity: 0.2,
+      opacity: 0.1,
       ...orchestraMenuOverlay.backgroundVideo,
     })
   }, { scope: containerRef, dependencies: [isMounted] })

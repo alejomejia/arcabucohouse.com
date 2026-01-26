@@ -1,9 +1,8 @@
-
-
 import { cn } from '@/lib/utils/helpers'
 
+import { HeaderCart } from '@/components/features/cart/header-cart'
 import { Container } from '@/components/ui/container'
-import { HeaderCart } from './header-cart'
+
 import { HeaderLogo } from './header-logo'
 import { HeaderMiddle } from './header-middle'
 import { Navigation } from './navigation'

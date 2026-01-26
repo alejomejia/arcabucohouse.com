@@ -28,6 +28,7 @@ When generating unit or integration tests for this project, always follow these 
 
 ## Best Practices
 
+- Always make the tests to fail the first time, then make the adjustments to make them pass.
 - Test behavior and outcomes, not implementation details.
 - Prefer screen.getByRole / getByText over querying DOM by class names.
 - For async code, always use await with waitFor or findBy queries to avoid flaky tests.

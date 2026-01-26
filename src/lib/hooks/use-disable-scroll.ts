@@ -1,7 +1,7 @@
 "use client"
 
 import { useLenis } from "lenis/react"
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 
 /**
  * Disables or enables Lenis scroll in the document.
@@ -18,27 +18,14 @@ import { useEffect, useRef } from "react"
  */
 export function useDisableScroll(disabledScroll: boolean) {
   const lenis = useLenis()
-  const wasDisabledRef = useRef(false)
 
   useEffect(() => {
     if (!lenis) return
 
     if (disabledScroll) {
       lenis.stop()
-      wasDisabledRef.current = true
     } else {
       lenis.start()
-      wasDisabledRef.current = false
-    }
-
-    // Cleanup: restore scroll state on unmount only if we disabled it
-    return () => {
-      if (!lenis) return
-
-      if (wasDisabledRef.current) {
-        lenis.start()
-        wasDisabledRef.current = false
-      }
     }
   }, [lenis, disabledScroll])
 }

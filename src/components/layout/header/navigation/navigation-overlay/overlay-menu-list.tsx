@@ -94,7 +94,7 @@ export function OverlayMenuList({
         const digits = twoDigits(index + 1)
 
         return (
-          <li key={index}>
+          <li key={index} className="w-full">
             <Link
               href={path}
               onMouseEnter={() => onItemHover?.(index)}
