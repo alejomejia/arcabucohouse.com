@@ -14,7 +14,7 @@ import {
 } from "@/lib/integrations/shopify";
 
 export async function addItem(
-  prevState: unknown,
+  _prevState: unknown,
   selectedVariantId: string | undefined
 ) {
   if (!selectedVariantId) {
@@ -29,7 +29,7 @@ export async function addItem(
   }
 }
 
-export async function removeItem(prevState: unknown, merchandiseId: string) {
+export async function removeItem(_prevState: unknown, merchandiseId: string) {
   try {
     const cart = await getCart();
 
@@ -53,7 +53,7 @@ export async function removeItem(prevState: unknown, merchandiseId: string) {
 }
 
 export async function updateItemQuantity(
-  prevState: unknown,
+  _prevState: unknown,
   payload: {
     merchandiseId: string;
     quantity: number;

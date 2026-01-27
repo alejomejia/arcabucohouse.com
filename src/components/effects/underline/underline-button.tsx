@@ -1,12 +1,8 @@
 "use client"
 
 import { cn } from '@/lib/utils/helpers'
-
 import type { ButtonHTMLAttributes } from 'react'
-import { ANIMATION_FROM_LEFT, ANIMATION_FROM_RIGHT, UNDERLINE_ANIMATION_CLASSES } from './const'
-import {
-  useUnderlineAnimation,
-} from './use-underline-animation'
+import { useUnderlineAnimation } from './use-underline-animation'
 
 export type UnderlineButtonProps = ButtonHTMLAttributes<HTMLButtonElement>
 
@@ -40,20 +36,13 @@ export function UnderlineButton({
   children,
   ...props
 }: UnderlineButtonProps) {
-  const { direction, handleMouseEnter, handleMouseLeave, elementRef } =
+  const { underlineClassName, handleMouseEnter, handleMouseLeave, elementRef } =
     useUnderlineAnimation<HTMLButtonElement>()
 
   return (
     <button
       ref={elementRef}
-      className={cn(
-        UNDERLINE_ANIMATION_CLASSES,
-        {
-          [ANIMATION_FROM_LEFT]: direction === 'left',
-          [ANIMATION_FROM_RIGHT]: direction === 'right',
-        },
-        className
-      )}
+      className={cn(underlineClassName, className)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       {...props}

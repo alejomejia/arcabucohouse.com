@@ -1,31 +1,37 @@
+import { cn } from '@/lib/utils/helpers'
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
+import { ANIMATION_FROM_LEFT, ANIMATION_FROM_RIGHT, UNDERLINE_ANIMATION_CLASSES } from './const'
 
 type Direction = 'left' | 'right'
 
 /**
- * Hook that manages the underline animation direction based on mouse entry point.
+ * Hook that manages the underline animation direction and classnames based on mouse entry point.
  *
  * Determines which direction the underline should animate from based on where
  * the mouse enters the element (left or right half). The direction is preserved
  * during mouse leave to allow the exit animation to reverse properly.
  *
+ * Returns `underlineClassName` so callers do not need to wire animation classes
+ * manually; merge it with any component-level className.
+ *
  * @returns Object containing:
- * - `direction`: Current animation direction ('left' | 'right' | null)
+ * - `underlineClassName`: Tailwind classes for the full underline effect (base + direction)
  * - `handleMouseEnter`: Mouse enter handler that calculates direction
  * - `handleMouseLeave`: Mouse leave handler that resets direction after animation
  * - `elementRef`: Ref to attach to the animated element
  *
  * @example
  * ```tsx
- * const { direction, handleMouseEnter, handleMouseLeave, elementRef } = useUnderlineAnimation()
+ * const { underlineClassName, handleMouseEnter, handleMouseLeave, elementRef } = useUnderlineAnimation()
  *
- * <div
+ * <a
  *   ref={elementRef}
+ *   className={cn(underlineClassName, className)}
  *   onMouseEnter={handleMouseEnter}
  *   onMouseLeave={handleMouseLeave}
  * >
  *   Content
- * </div>
+ * </a>
  * ```
  */
 export function useUnderlineAnimation<T extends HTMLElement = HTMLElement>() {
@@ -69,8 +75,14 @@ export function useUnderlineAnimation<T extends HTMLElement = HTMLElement>() {
     }
   }, [])
 
+  const underlineClassName = cn(
+    UNDERLINE_ANIMATION_CLASSES,
+    direction === 'left' && ANIMATION_FROM_LEFT,
+    direction === 'right' && ANIMATION_FROM_RIGHT
+  )
+
   return {
-    direction,
+    underlineClassName,
     handleMouseEnter,
     handleMouseLeave,
     elementRef,

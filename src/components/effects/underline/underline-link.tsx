@@ -2,10 +2,7 @@
 
 import { Link, type LinkProps } from '@/components/ui/link'
 import { cn } from '@/lib/utils/helpers'
-import { ANIMATION_FROM_LEFT, ANIMATION_FROM_RIGHT, UNDERLINE_ANIMATION_CLASSES } from './const'
-import {
-  useUnderlineAnimation,
-} from './use-underline-animation'
+import { useUnderlineAnimation } from './use-underline-animation'
 
 /**
  * Renders a link with animated underline effect on hover.
@@ -33,20 +30,13 @@ import {
  * ```
  */
 export function UnderlineLink({ className, children, ...props }: LinkProps) {
-  const { direction, handleMouseEnter, handleMouseLeave, elementRef } =
+  const { underlineClassName, handleMouseEnter, handleMouseLeave, elementRef } =
     useUnderlineAnimation<HTMLAnchorElement>()
 
   return (
     <Link
       ref={elementRef}
-      className={cn(
-        UNDERLINE_ANIMATION_CLASSES,
-        {
-          [ANIMATION_FROM_LEFT]: direction === 'left',
-          [ANIMATION_FROM_RIGHT]: direction === 'right',
-        },
-        className
-      )}
+      className={cn(underlineClassName, className)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       {...props}

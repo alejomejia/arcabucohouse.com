@@ -1,5 +1,7 @@
+import { AnimatedNumber } from '@/components/effects/animated-number'
 import { Price } from '@/components/ui/price'
 import type { Cart } from '@/lib/integrations/shopify/types'
+import { pluralize } from '@/lib/utils/helpers'
 
 type CartSummaryProps = {
   cart: Cart
@@ -19,26 +21,30 @@ type CartSummaryProps = {
  * ```
  */
 export function CartSummary({ cart }: CartSummaryProps) {
+  const { totalQuantity } = cart
+  const { amount, currencyCode } = cart.cost.totalAmount
+
+  const pluralizedQuantity = pluralize({ count: totalQuantity, singular: 'item', plural: 'items' })
+
   return (
-    <div className="py-4 text-sm text-neutral-400">
-      <div className="mb-3 pb-1 flex items-center justify-between border-b border-neutral-700">
-        <p>Taxes</p>
+    <div className="py-4 text-neutral-400 font-serif border-y border-primary-300/50">
+      <div className="flex flex-col gap-4 xs:flex-row xs:gap-2 xs:items-end justify-between text-center xs:text-left">
+        <div>
+          <p className="text-primary-100 text-lg font-semibold">
+            Total
+            <span className="inline-flex items-center gap-1 ml-1 text-secondary-200">
+              <span>[</span>
+              <AnimatedNumber value={totalQuantity} />
+              <span>{pluralizedQuantity}</span>
+              <span>]</span>
+            </span>
+          </p>
+          <small className="text-base text-primary-200">Shipping and taxes calculated at checkout</small>
+        </div>
         <Price
-          className="text-right text-base text-white"
-          amount={cart.cost.totalTaxAmount.amount}
-          currencyCode={cart.cost.totalTaxAmount.currencyCode}
-        />
-      </div>
-      <div className="mb-3 py-1 flex items-center justify-between border-b border-neutral-700">
-        <p>Shipping</p>
-        <p className="text-right">Calculated at checkout</p>
-      </div>
-      <div className="mb-3 py-1 flex items-center justify-between border-b border-neutral-700">
-        <p>Total</p>
-        <Price
-          className="text-right text-base text-white"
-          amount={cart.cost.totalAmount.amount}
-          currencyCode={cart.cost.totalAmount.currencyCode}
+          className="xs:text-right text-2xl text-white font-sans -translate-y-1"
+          amount={amount}
+          currencyCode={currencyCode}
         />
       </div>
     </div>

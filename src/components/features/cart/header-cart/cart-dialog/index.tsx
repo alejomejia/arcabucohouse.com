@@ -1,15 +1,17 @@
-import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react'
-import { Fragment } from 'react'
-
 import { useCart } from '@/components/features/cart/hooks/use-cart'
 import { redirectToCheckout } from '@/components/features/cart/server/actions'
 import type { UpdateType } from '@/components/features/cart/types'
+import { Dialog } from '@/components/ui/dialog'
+import { DialogClose } from '@/components/ui/dialog/dialog-close'
+import { DialogOverlay } from '@/components/ui/dialog/dialog-overlay'
+import { DialogPanel } from '@/components/ui/dialog/dialog-panel'
+import { DialogTitle } from '@/components/ui/dialog/dialog-title'
+import { cn } from '@/lib/utils/helpers'
 
 import { CartEmptyState } from '../cart-empty-state'
 import { CartItemsList } from '../cart-items-list'
 import { CartSummary } from '../cart-summary'
 import { CheckoutButton } from './checkout-button'
-import { CloseButton } from './close-button'
 
 /**
  * Wrapper function for redirectToCheckout that matches the form action signature.
@@ -39,52 +41,44 @@ export function CartDialog({ isOpen, onClose, onUpdateItem }: CartDialogProps) {
   const isEmpty = !cart || cart.lines.length === 0
 
   return (
-    <Transition show={isOpen}>
-      <Dialog onClose={onClose} className="relative z-50">
-        <TransitionChild
-          as={Fragment}
-          enter="transition-all ease-in-out duration-300"
-          enterFrom="opacity-0 backdrop-blur-none"
-          enterTo="opacity-100 backdrop-blur-[.5px]"
-          leave="transition-all ease-in-out duration-200"
-          leaveFrom="opacity-100 backdrop-blur-[.5px]"
-          leaveTo="opacity-0 backdrop-blur-none"
+    <Dialog isOpen={isOpen} onClose={onClose}>
+      <DialogOverlay />
+      <DialogPanel
+        position="right"
+        className={cn(
+          'flex flex-col w-full h-full p-6 overflow-hidden',
+          'text-white',
+          'md:w-140'
+        )}
+      >
+        <div
+          className={cn(
+            'flex shrink-0 items-center justify-between',
+            'border-b border-primary-300/50 pb-4'
+          )}
         >
-          <div className="fixed inset-0 bg-black/90" aria-hidden="true" />
-        </TransitionChild>
-        <TransitionChild
-          as={Fragment}
-          enter="transition-all ease-in-out duration-300"
-          enterFrom="translate-x-full"
-          enterTo="translate-x-0"
-          leave="transition-all ease-in-out duration-200"
-          leaveFrom="translate-x-0"
-          leaveTo="translate-x-full"
-        >
-          <DialogPanel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l p-6 backdrop-blur-xl md:w-[390px] border-neutral-700 bg-black/80 text-white">
-            <div className="flex items-center justify-between">
-              <p className="text-lg font-semibold">My Cart</p>
-              <CloseButton onClick={onClose} />
-            </div>
+          <DialogTitle className="mt-1">Cart</DialogTitle>
+          <DialogClose aria-label="Close cart" />
+        </div>
 
-            {isEmpty ? (
-              <CartEmptyState />
-            ) : (
-              <div className="flex h-full flex-col justify-between overflow-hidden p-1">
-                <CartItemsList
-                  items={cart.lines}
-                  onUpdateItem={onUpdateItem}
-                  onCloseCart={onClose}
-                />
-                <CartSummary cart={cart} />
-                <form action={handleCheckout}>
-                  <CheckoutButton />
-                </form>
-              </div>
-            )}
-          </DialogPanel>
-        </TransitionChild>
-      </Dialog>
-    </Transition>
+        {isEmpty ? (
+          <CartEmptyState />
+        ) : (
+          <div className='flex min-h-0 flex-1 flex-col overflow-hidden'>
+            <CartItemsList
+              items={cart.lines}
+              onUpdateItem={onUpdateItem}
+              onCloseCart={onClose}
+            />
+            <div className="shrink-0">
+              <CartSummary cart={cart} />
+              <form action={handleCheckout}>
+                <CheckoutButton />
+              </form>
+            </div>
+          </div>
+        )}
+      </DialogPanel>
+    </Dialog>
   )
 }

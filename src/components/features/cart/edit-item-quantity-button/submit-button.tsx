@@ -3,7 +3,9 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useFormStatus } from "react-dom";
 
+import { FOCUS_RING_ON_DARK_BG } from "@/lib/styles/const";
 import { cn } from "@/lib/utils/helpers";
+
 import type { UpdateType } from "../types";
 
 type SubmitButtonProps = {
@@ -39,19 +41,21 @@ export function SubmitButton({ type }: SubmitButtonProps) {
       aria-label={label}
       className={cn(
         "flex-none flex items-center justify-center",
-        "min-w-9 max-w-9 h-full p-2",
-        "rounded-full hover:border-neutral-800 opacity-80 hover:opacity-100",
+        "w-12 h-full p-3",
+        "text-white hover:text-primary-400",
+        "opacity-100 hover:bg-secondary-300 ",
         "ease transition-all duration-200",
         "disabled:opacity-50 disabled:cursor-default",
+        FOCUS_RING_ON_DARK_BG,
         {
           "ml-auto": !isPlus,
         }
       )}
     >
       {isPlus ? (
-        <PlusIcon className="h-4 w-4 text-white" />
+        <PlusIcon className="h-4 w-4" />
       ) : (
-        <MinusIcon className="h-4 w-4 text-white" />
+        <MinusIcon className="h-4 w-4" />
       )}
     </button>
   );

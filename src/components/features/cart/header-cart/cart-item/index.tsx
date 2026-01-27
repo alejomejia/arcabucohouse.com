@@ -6,7 +6,11 @@ import { Link } from '@/components/ui/link'
 import { Price } from '@/components/ui/price'
 import { DEFAULT_OPTION } from '@/lib/integrations/constants'
 import type { CartItem } from '@/lib/integrations/shopify/types'
+import { FOCUS_RING_ON_DARK_BG } from '@/lib/styles/const'
 
+import { AnimatedNumber } from '@/components/effects/animated-number'
+import { useUnderlineAnimation } from '@/components/effects/underline/use-underline-animation'
+import { cn } from '@/lib/utils/helpers'
 import { createMerchandiseUrl } from '../helpers'
 
 type CartItemProps = {
@@ -27,68 +31,92 @@ type CartItemProps = {
  * @param onCloseCart - Callback to close the cart dialog
  */
 export function CartItem({ item, onUpdateItem, onCloseCart }: CartItemProps) {
+  const {
+    elementRef,
+    underlineClassName,
+    handleMouseEnter,
+    handleMouseLeave,
+  } = useUnderlineAnimation()
+
   const merchandiseUrl = createMerchandiseUrl(item)
 
+  const { merchandise, cost, quantity } = item
+  const { title: variantTitle } = merchandise
+  const { featuredImage, title: productTitle } = merchandise.product
+  const { amount, currencyCode } = cost.totalAmount
+
+  const hasVariantTitle = variantTitle !== DEFAULT_OPTION
+
   return (
-    <li className="flex w-full flex-col border-b border-neutral-700">
-      <div className="relative flex w-full flex-row justify-between px-1 py-4">
-        <div className="absolute z-40 -ml-1 -mt-2">
-          <DeleteFromCartButton
-            item={item}
-            optimisticUpdateAction={onUpdateItem}
+    <li className="py-4 not-last:border-b border-primary-300/50">
+      <div className="w-full flex flex-col text-center xs:text-left xs:flex-row gap-4">
+        <Link
+          href={merchandiseUrl}
+          onClick={onCloseCart}
+          className="group relative aspect-5/6 w-full max-w-120 xs:max-w-40 overflow-hidden"
+        >
+          <Image
+            className="h-full w-full object-cover"
+            alt={featuredImage.altText || productTitle}
+            src={featuredImage.url}
+            fill
           />
-        </div>
-        <div className="flex flex-row">
-          <div className="relative h-16 w-16 overflow-hidden rounded-md border border-neutral-700 bg-neutral-900 hover:bg-neutral-800">
-            <Image
-              className="h-full w-full object-cover"
-              width={64}
-              height={64}
-              alt={
-                item.merchandise.product.featuredImage.altText ||
-                item.merchandise.product.title
-              }
-              src={item.merchandise.product.featuredImage.url}
+        </Link>
+        <div className="my-2 flex-1 flex flex-col justify-between gap-3">
+          <div>
+            <Link
+              href={merchandiseUrl}
+              onClick={onCloseCart}
+              className={cn("mb-3", FOCUS_RING_ON_DARK_BG)}
+            >
+              <div className="flex flex-1 flex-col font-serif">
+                <span className={cn("leading-tight", {
+                  "text-lg md:text-2xl": !hasVariantTitle,
+                  "text-sm text-secondary-200": hasVariantTitle
+                })}>{productTitle}</span>
+                {hasVariantTitle ? (
+                  <p className="text-lg md:text-2xl text-primary-100">
+                    {variantTitle}
+                  </p>
+                ) : null}
+              </div>
+            </Link>
+            <Price
+              className="text-lg md:text-2xl text-primary-100"
+              amount={amount}
+              currencyCode={currencyCode}
             />
           </div>
-          <Link
-            href={merchandiseUrl}
-            onClick={onCloseCart}
-            className="z-30 ml-2 flex flex-row space-x-4"
-          >
-            <div className="flex flex-1 flex-col text-base">
-              <span className="leading-tight">{item.merchandise.product.title}</span>
-              {item.merchandise.title !== DEFAULT_OPTION ? (
-                <p className="text-sm text-neutral-400">
-                  {item.merchandise.title}
-                </p>
-              ) : null}
+
+          <div className="flex flex-col-reverse gap-8 xs:gap-4 items-center xs:flex-row xs:items-end justify-end">
+            <DeleteFromCartButton item={item} optimisticUpdateAction={onUpdateItem}>
+              <span
+                ref={elementRef}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                className={cn(underlineClassName, 'text-lg font-serif text-secondary-100 leading-none')}
+              >
+                Remove
+              </span>
+            </DeleteFromCartButton>
+            <div className="xs:ml-auto flex h-12 flex-row border border-primary-300">
+              <EditItemQuantityButton
+                item={item}
+                type="minus"
+                optimisticUpdateAction={onUpdateItem}
+              />
+              <p className="min-w-12 text-center select-none leading-none">
+                <AnimatedNumber className="w-full h-full flex items-center justify-center" value={quantity} />
+              </p>
+              <EditItemQuantityButton
+                item={item}
+                type="plus"
+                optimisticUpdateAction={onUpdateItem}
+              />
             </div>
-          </Link>
-        </div>
-        <div className="flex h-16 flex-col justify-between">
-          <Price
-            className="flex justify-end space-y-2 text-right text-sm"
-            amount={item.cost.totalAmount.amount}
-            currencyCode={item.cost.totalAmount.currencyCode}
-          />
-          <div className="ml-auto flex h-9 flex-row items-center rounded-full border border-neutral-700">
-            <EditItemQuantityButton
-              item={item}
-              type="minus"
-              optimisticUpdateAction={onUpdateItem}
-            />
-            <p className="w-6 text-center">
-              <span className="w-full text-sm">{item.quantity}</span>
-            </p>
-            <EditItemQuantityButton
-              item={item}
-              type="plus"
-              optimisticUpdateAction={onUpdateItem}
-            />
           </div>
         </div>
       </div>
-    </li>
+    </li >
   )
 }

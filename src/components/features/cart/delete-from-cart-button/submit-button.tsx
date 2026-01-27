@@ -1,5 +1,13 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
+
+import { FOCUS_RING_ON_DARK_BG } from "@/lib/styles/const";
+import { cn } from "@/lib/utils/helpers";
+
+type SubmitButtonProps = {
+  children?: ReactNode
+}
 
 /**
  * Submit button for removing items from cart with loading state.
@@ -15,7 +23,7 @@ import { useFormStatus } from "react-dom";
  * </form>
  * ```
  */
-export function SubmitButton() {
+export function SubmitButton({ children }: SubmitButtonProps) {
   const { pending } = useFormStatus();
 
   return (
@@ -23,9 +31,16 @@ export function SubmitButton() {
       type="submit"
       aria-label="Remove cart item"
       disabled={pending}
-      className="size-6 flex items-center justify-center rounded-full bg-neutral-500 disabled:opacity-50 disabled:cursor-not-allowed"
+      className={cn(
+        "flex items-center justify-center",
+        "disabled:opacity-50 disabled:cursor-not-allowed",
+        FOCUS_RING_ON_DARK_BG,
+        {
+          "size-6 rounded-full bg-secondary-200": !children,
+        }
+      )}
     >
-      <XMarkIcon className="mx-px size-4 text-black" />
+      {children ?? <XMarkIcon className="mx-px size-4 text-black" />}
     </button>
   );
 }

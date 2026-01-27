@@ -18,7 +18,7 @@ export function OverlayTopText() {
 
   // Initialize text split and set initial state
   useGSAP(() => {
-    if (!splitTextRef.current || isMobile) return
+    if (!splitTextRef.current) return
 
     // Wait for all SplitText instances to be ready
     const checkReady = () => {
@@ -44,11 +44,11 @@ export function OverlayTopText() {
     }
 
     checkReady()
-  }, { scope: splitTextRef, dependencies: [isMobile] })
+  }, { scope: splitTextRef })
 
   // Animate text in/out based on navigation state
   useGSAP(() => {
-    if (!splitTextRef.current || isMobile) return
+    if (!splitTextRef.current) return
     if (!splitTextRef.current.isReady()) return
 
     // Skip animation on initial mount
@@ -110,7 +110,7 @@ export function OverlayTopText() {
       ref={splitTextRef}
       type="words"
       className={cn(
-        "italic font-normal tracking-wide text-lg text-neutral-400 leading-none",
+        "italic font-normal tracking-wide text-lg text-primary-100 leading-none",
         "opacity-0 word:inline-block"
       )}
     >

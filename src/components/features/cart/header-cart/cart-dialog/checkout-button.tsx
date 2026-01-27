@@ -3,6 +3,7 @@
 import { useFormStatus } from 'react-dom'
 
 import { LoadingDots } from '@/components/ui/loading-dots'
+import { FOCUS_RING_ON_DARK_BG } from '@/lib/styles/const'
 import { cn } from '@/lib/utils/helpers'
 
 /**
@@ -16,9 +17,11 @@ export function CheckoutButton() {
       type="submit"
       disabled={pending}
       className={cn(
-        "block w-full p-3",
-        "text-center text-sm font-medium text-white",
-        "bg-blue-600 rounded-full opacity-90 hover:opacity-100"
+        "block w-full px-4 py-5",
+        "text-center text-base uppercase font-semibold tracking-wider text-white",
+        "bg-secondary-400 opacity-90 hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed",
+        "transition-opacity duration-300 ease-in-out",
+        FOCUS_RING_ON_DARK_BG
       )}
     >
       {pending ? <LoadingDots className="bg-white" /> : 'Proceed to Checkout'}

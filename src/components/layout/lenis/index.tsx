@@ -7,6 +7,7 @@ import { ReactNode, useRef } from "react";
 import { useTempus } from "tempus/react";
 
 import { LenisScrollTriggerSync } from "./scroll-trigger";
+import { shouldPreventScroll } from "./utils";
 
 /**
  * Props for the Lenis smooth scroll component.
@@ -75,6 +76,7 @@ export function Lenis({
         lerp: options?.lerp ?? 0.125,
         autoRaf: false,
         anchors: true,
+        prevent: shouldPreventScroll
       }}
     >
       {root && <LenisScrollTriggerSync />}

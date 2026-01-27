@@ -106,7 +106,7 @@ export function OverlayContent({ menu }: OverlayContentProps) {
   return (
     <>
       <OverlayBackground />
-      <div ref={containerRef} className="relative z-20 h-full flex flex-col gap-8 md:h-full text-white">
+      <div ref={containerRef} className="relative z-20 h-full flex flex-col gap-8 md:h-full text-primary-100">
         <div className="flex justify-between gap-6 w-full h-full">
           <div className="flex-1 py-6 md:py-16">
             <OverlayMenuList

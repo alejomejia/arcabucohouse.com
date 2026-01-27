@@ -9,6 +9,7 @@ export const sans = Manrope({
 
 export const serif = localFont({
   variable: "--font-serif",
+  fallback: ["Georgia", "Times New Roman", "serif"],
   src: [
     {
       path: './arc-serif/ArcSerifMTReg.woff2',

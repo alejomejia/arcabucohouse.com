@@ -1,31 +1,32 @@
+/* Tailwind CSS Core */
 @import 'tailwindcss';
 
+/* Tailwind Plugins */
 @plugin "@tailwindcss/container-queries";
 @plugin "@tailwindcss/typography";
 
+/* 
+  Custom CSS Layers
+  Import order matters for CSS cascade specificity:
+  1. Base - Reset and base element styles (@layer base)
+  2. Variants - Custom Tailwind variants (@custom-variant)
+  3. Utilities - Custom utility classes (@layer utilities)
+  4. Theme - CSS custom properties and theme variables
+*/
 @import './base.css';
 @import './variants.css';
 @import './utilities.css';
+@import './theme.css';
 
+/* Global CSS Variables */
 :root {
   --scrollbar-width: calc(var(--spacing) * 2);
 
-  /* Easings */
+  /* CSS Custom Easings */
   --custom-ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
-
-  /* Theme colors */
-  /* --color-neutral-10: #f7f7f7;
-  --color-neutral-20: #efefef;
-  --color-neutral-30: #d9d8db;
-  --color-neutral-40: #c8c7cc;
-  --color-neutral-50: #aaa9b0;
-  --color-neutral-60: #73747d;
-  --color-neutral-70: #63636e;
-  --color-neutral-80: #4a4b54;
-  --color-neutral-90: #39383d;
-  --color-neutral-100: #242426; */
 }
 
+/* Browser-Specific Fixes */
 /* Safari-specific fix for lazy loading image rendering issues */
 @supports (font: -apple-system-body) and (-webkit-appearance: none) {
   img[loading='lazy'] {

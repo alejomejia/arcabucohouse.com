@@ -83,7 +83,7 @@ export function OverlayMenuList({
       ref={containerRef}
       className={cn(
         "group/list flex flex-col items-center justify-center gap-4 h-full",
-        "font-serif italic text-5xl leading-tighter",
+        "font-serif italic text-5xl leading-tighter text-center md:text-left",
         "md:w-fit md:h-fit md:items-start md:justify-start md:gap-2 md:text-[7vw]",
         "lg:text-7xl",
         className
@@ -119,7 +119,7 @@ export function OverlayMenuList({
                 "hidden md:inline-block md:mx-3"
               )}>
                 <span className={cn(
-                  "text-sm text-neutral-500",
+                  "text-sm text-primary-300",
                   "inline-block -translate-y-8 group-hover/link:translate-y-0",
                   "transition-transform duration-300 ease-in-out"
                 )}>[{digits}]</span>

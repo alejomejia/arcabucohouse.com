@@ -10,7 +10,7 @@ export function HeaderMiddle() {
       <div className="w-full max-w-48 md:max-w-84 mx-auto">
         <ScrollProgressBar />
       </div>
-      <div className="absolute">
+      <div className="absolute hidden md:block">
         <OverlayTopText />
       </div>
     </>

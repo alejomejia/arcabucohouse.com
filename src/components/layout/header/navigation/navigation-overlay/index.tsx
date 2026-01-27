@@ -50,7 +50,7 @@ export function NavigationOverlay({ children }: NavigationOverlayProps) {
 
   return (
     <Portal id={PORTAL_IDS.bodyTop}>
-      <div ref={containerRef} className={cn("fixed w-screen h-screen pb-6 z-40 bg-black", HEADER_TOP_PADDING_CLASSNAME)}>
+      <div ref={containerRef} className={cn("fixed w-full h-screen pb-6 z-40 bg-primary-600", HEADER_TOP_PADDING_CLASSNAME)}>
         <Container className="h-full">
           {children}
         </Container>
