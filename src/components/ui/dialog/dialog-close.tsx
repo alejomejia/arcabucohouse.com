@@ -2,6 +2,8 @@
 
 import { XMarkIcon } from "@heroicons/react/24/outline"
 
+import { useCursor } from "@/components/effects/cursor/context"
+import { CURSOR_MEDIUM } from "@/components/effects/cursor/cursor-states"
 import { FOCUS_RING_ON_DARK_BG } from "@/lib/styles/const"
 import { cn } from "@/lib/utils/helpers"
 
@@ -28,11 +30,11 @@ export function DialogClose({
   children,
 }: DialogCloseProps) {
   const { onClose } = useDialogContext()
+  const { setHover, setDefault } = useCursor()
 
   return (
     <button
       type="button"
-      onClick={onClose}
       aria-label="Close dialog"
       className={cn(
         "group relative flex items-center justify-center",
@@ -42,6 +44,9 @@ export function DialogClose({
         FOCUS_RING_ON_DARK_BG,
         className
       )}
+      onMouseEnter={() => setHover(CURSOR_MEDIUM)}
+      onMouseLeave={() => setDefault()}
+      onClick={onClose}
     >
       {children ?? (
         <XMarkIcon className="h-6 duration-300 transition-all ease-in-out group-hover:scale-110 group-hover:rotate-90" />

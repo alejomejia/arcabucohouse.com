@@ -1,7 +1,5 @@
 import type { ReactNode } from "react";
 
-import { WelcomeToast } from "@/components/toast/welcome-toast";
-import { HEADER_TOP_PADDING_CLASSNAME } from "@/lib/styles/const";
 import { cn } from "@/lib/utils/helpers";
 
 import { Header } from '../header';
@@ -41,14 +39,14 @@ export function Wrapper({
 }: WrapperProps) {
   return (
     <>
-      {/* <Navbar /> */}
       <Header />
-      <main className={cn("relative flex grow flex-col", HEADER_TOP_PADDING_CLASSNAME, className)} {...props}>
+      <main className={cn("relative flex grow flex-col", className)} {...props}>
         {children}
       </main>
       <footer>Footer</footer>
 
-      <WelcomeToast />
+      {/** Removed temporarily as we are not using it yet */}
+      {/* <WelcomeToast /> */}
     </>
   );
 }

@@ -37,7 +37,7 @@ Before responding to any request, follow these steps:
 - Implement early returns for better readability
 - Structure components logically: exports, subcomponents, helpers, types
 - Follow screaming architecture when creating files
-- Avoid using barrel imports
+- Avoid using barrel imports and exports (re-exports)
 
 ### Naming Conventions
 

@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils/helpers'
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
-import { ANIMATION_FROM_LEFT, ANIMATION_FROM_RIGHT, UNDERLINE_ANIMATION_CLASSES } from './const'
+import { ANIMATION_FROM_LEFT, ANIMATION_FROM_RIGHT, UNDERLINE_ANIMATION_CLASSES } from '../const'
 
 type Direction = 'left' | 'right'
 

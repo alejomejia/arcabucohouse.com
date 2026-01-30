@@ -26,12 +26,41 @@
     cursor: pointer;
   }
 
-  .word-mask {
+  /* Fix split word animations bug */
+  .word-mask,
+  .line-mask {
     display: inline-block;
   }
 
   /* Avoid cropping characters in Split Text on x axys (sides) */
   .char-mask {
     overflow-x: visible !important;
+  }
+
+  /** Custom scrollbars */
+  /** Default */
+  ::-webkit-scrollbar-track {
+    background-color: var(--color-neutral-100);
+  }
+
+  ::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-neutral-800);
+  }
+
+  /** Cart dialog */
+  ::-webkit-scrollbar-track {
+    background-color: var(--color-primary-base);
+  }
+
+  ::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-secondary-base);
   }
 }

@@ -62,7 +62,6 @@ export function CartItemsList({
 
   return (
     <ul
-      id="cart-dialog-list"
       ref={ref}
       className={cn(
         // Layout – grows to fill space, scrolls when content overflows

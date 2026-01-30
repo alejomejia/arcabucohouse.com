@@ -27,6 +27,21 @@ export const orchestraNavigation: Orchestra = {
   }
 }
 
+export const orchestraHomeHero: Orchestra = {
+  header: {
+    duration: 1,
+    delay: 1,
+    ease: "gentleSlow",
+    stagger: 0.15,
+  },
+  footer: {
+    duration: 1,
+    delay: 0.25,
+    ease: "gentleSlow",
+    stagger: 0.075,
+  }
+}
+
 export const orchestraMenuOverlay: Orchestra = {
   menuList: {
     delay: DEFAULT_DELAY,

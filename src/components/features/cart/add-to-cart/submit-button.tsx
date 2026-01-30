@@ -3,6 +3,8 @@
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { useFormStatus } from 'react-dom'
 
+import { useCursor } from '@/components/effects/cursor/context'
+import { CURSOR_MEDIUM } from '@/components/effects/cursor/cursor-states'
 import { LoadingDots } from '@/components/ui/loading-dots'
 import { cn } from '@/lib/utils/helpers'
 
@@ -54,6 +56,7 @@ export function SubmitButton({
   availableForSale,
   selectedVariantId
 }: SubmitButtonProps) {
+  const { setHover, setDefault } = useCursor()
   const { pending } = useFormStatus()
 
   // Out of stock state
@@ -102,6 +105,8 @@ export function SubmitButton({
           [DISABLED_CLASSNAMES]: pending,
         }
       )}
+      onMouseEnter={() => setHover(CURSOR_MEDIUM)}
+      onMouseLeave={() => setDefault()}
     >
       <div className="absolute left-0 ml-4">
         {pending ? (

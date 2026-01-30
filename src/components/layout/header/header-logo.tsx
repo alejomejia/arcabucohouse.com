@@ -4,6 +4,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef } from "react";
 
+import { CURSOR_MEDIUM } from "@/components/effects/cursor/cursor-states";
+import { CursorTrigger } from "@/components/effects/cursor/cursor-trigger";
 import { Link } from "@/components/ui/link";
 import { Logo } from "@/components/ui/logo";
 import { MinimalLogo } from "@/components/ui/logo/minimal";
@@ -26,13 +28,15 @@ export function HeaderLogo() {
   }, { scope: containerRef, dependencies: [isMobile] })
 
   return (
-    <Link ref={containerRef} className="max-w-8 md:max-w-60 overflow-hidden" href="/">
-      {isMobile ? (
-        <MinimalLogo className="w-full direct-children:translate-y-full" />
-      ) : (
-        <Logo className="w-full direct-children:translate-y-full" />
-      )}
-      <span className="visually-hidden">Homepage</span>
-    </Link>
+    <CursorTrigger config={CURSOR_MEDIUM}>
+      <Link ref={containerRef} className="max-w-8 md:max-w-60 overflow-hidden" href="/">
+        {isMobile ? (
+          <MinimalLogo className="w-full direct-children:translate-y-full" />
+        ) : (
+          <Logo className="w-full direct-children:translate-y-full" />
+        )}
+        <span className="visually-hidden">Homepage</span>
+      </Link>
+    </CursorTrigger>
   )
 }

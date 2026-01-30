@@ -4,6 +4,8 @@ import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
 import { useRef } from "react"
 
+import { useCursor } from "@/components/effects/cursor/context"
+import { CURSOR_MEDIUM } from "@/components/effects/cursor/cursor-states"
 import { SplitText, type SplitTextRef } from "@/components/effects/split-text"
 import { Link } from "@/components/ui/link"
 import type { Menu } from "@/lib/integrations/shopify/types"
@@ -35,6 +37,7 @@ export function OverlayMenuList({
   onMenuLeave,
   className
 }: OverlayMenuListProps) {
+  const { setHover, setDefault } = useCursor()
   const containerRef = useRef<HTMLUListElement>(null)
   const splitRefs = useRef<(SplitTextRef | null)[]>([])
 
@@ -88,7 +91,11 @@ export function OverlayMenuList({
         "lg:text-7xl",
         className
       )}
-      onMouseLeave={onMenuLeave}
+      onMouseEnter={() => setHover(CURSOR_MEDIUM)}
+      onMouseLeave={() => {
+        onMenuLeave?.()
+        setDefault()
+      }}
     >
       {menu.map(({ path, title }, index) => {
         const digits = twoDigits(index + 1)

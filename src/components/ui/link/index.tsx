@@ -30,9 +30,16 @@ export function Link({
   const pathname = usePathname()
   const [shouldPrefetch, setShouldPrefetch] = useState(false)
 
+  const {
+    prefetch: prefetchProp,
+    replace,
+    shallow,
+    onMouseEnter,
+    onMouseLeave,
+    ...restProps
+  } = props
+
   // Determine if link is external synchronously to avoid hydration mismatches
-  // Check for absolute URLs (http/https) or protocol-relative URLs
-  // For relative URLs, we'll check against the current host on the client side
   const isExternalByPattern =
     href.startsWith('http://') ||
     href.startsWith('https://') ||
@@ -41,7 +48,6 @@ export function Link({
   const [isExternal, setIsExternal] = useState(isExternalByPattern)
 
   useEffect(() => {
-    // For relative URLs, check if they're actually external
     if (!isExternalByPattern) {
       try {
         const url = new URL(href, window.location.href)
@@ -51,7 +57,6 @@ export function Link({
       }
     }
 
-    // Only prefetch on good connections
     const connection = (
       navigator as Navigator & {
         connection?: { effectiveType: string; saveData: boolean }
@@ -62,15 +67,11 @@ export function Link({
       const { effectiveType, saveData } = connection
       setShouldPrefetch(effectiveType === '4g' && !saveData)
     } else {
-      // Default to prefetching if API not available
       setShouldPrefetch(true)
     }
   }, [href, isExternalByPattern])
 
   const isActive = pathname === href
-
-  // Destructure Next.js-specific props to avoid conflicts
-  const { prefetch: prefetchProp, replace, shallow, ...restProps } = props
 
   if (isExternal) {
     return (
@@ -79,6 +80,8 @@ export function Link({
         target="_blank"
         rel="noopener noreferrer"
         onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         data-external
         {...restProps}
       >
@@ -93,6 +96,8 @@ export function Link({
       prefetch={shouldPrefetch}
       scroll={scroll}
       data-active={isActive}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       {...(onClick && { onClick })}
       {...restProps}
     >

@@ -5,6 +5,7 @@ import gsap from 'gsap'
 import { useRef } from 'react'
 
 import { Image, type ImageProps } from '@/components/ui/image'
+import { getRandomNumber } from '@/lib/utils/numbers'
 
 export function ParallaxImage({ src, alt, ...imageProps }: ImageProps) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -12,9 +13,15 @@ export function ParallaxImage({ src, alt, ...imageProps }: ImageProps) {
   useGSAP(() => {
     if (!containerRef.current) return
 
-    const from = { yPercent: -20 }
+    const randomNumber = getRandomNumber(10, 20)
+
+    gsap.set("img", {
+      yPercent: -10
+    })
+
+    const from = { yPercent: -10 }
     const to = {
-      yPercent: 20,
+      yPercent: randomNumber,
       scrollTrigger: {
         trigger: containerRef.current,
         start: 'top bottom',
@@ -27,9 +34,9 @@ export function ParallaxImage({ src, alt, ...imageProps }: ImageProps) {
   }, { scope: containerRef })
 
   return (
-    <div ref={containerRef} className="flex items-center justify-center overflow-hidden">
-      <div className="w-full scale-120">
-        <Image src={src} alt={alt} {...imageProps} />
+    <div ref={containerRef} className="flex items-center justify-center h-full overflow-hidden">
+      <div className="w-full h-full scale-110">
+        <Image src={src} alt={alt} {...imageProps} fill />
       </div>
     </div>
   )

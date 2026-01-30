@@ -19,7 +19,7 @@ className="before:content-[''] text-blue-500 hover:scale-105 relative px-4 befor
 ```
 
 **Good:**
-Ignore the comments when making changes, used here to explain better the rule.
+Ignore the CSS comments when doing your work, used here to explain better the rule.
 ```tsx
 className={cn(
   // Layout
@@ -84,6 +84,7 @@ Follow this order for consistency across your codebase:
 10. **Responsive**: `sm:*`, `md:*`, `lg:*`, `xl:*`
 
 Example:
+Ignore the CSS comments, showing here for clarity.
 ```tsx
 className={cn(
   // Layout
@@ -132,14 +133,9 @@ export function Button({ variant = 'primary', size = 'md', className, ...props }
   return (
     <button
       className={cn(
-        // Base styles
         'rounded font-medium transition-colors',
-        
-        // Variants
         buttonVariants[variant],
         sizeVariants[size],
-        
-        // Custom overrides
         className
       )}
       {...props}
@@ -167,10 +163,7 @@ Pseudo-elements often create the longest class strings. Group them separately an
 
 ```tsx
 className={cn(
-  // Base element
   'relative inline-block',
-  
-  // Before pseudo-element (underline animation)
   'before:content-[""]',
   'before:absolute',
   'before:bottom-0',
@@ -181,8 +174,6 @@ className={cn(
   'before:scale-x-0',
   'before:origin-right',
   'before:transition-transform',
-  
-  // Before pseudo-element hover state
   'hover:before:scale-x-100',
   'hover:before:origin-left'
 )}

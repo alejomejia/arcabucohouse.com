@@ -1,28 +1,28 @@
 "use client"
 
-import { cn } from '@/lib/utils/helpers'
-import type { ButtonHTMLAttributes } from 'react'
-import { useUnderlineAnimation } from './use-underline-animation'
+import type { ButtonHTMLAttributes, MouseEvent } from "react"
 
-export type UnderlineButtonProps = ButtonHTMLAttributes<HTMLButtonElement>
+import { cn } from "@/lib/utils/helpers"
+
+import { useUnderlineAnimation } from "./hooks/use-underline-animation"
+import { useUnderlineCursor } from "./hooks/use-underline-cursor"
+
+export type UnderlineButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  /** When true, the custom cursor is not used on hover (default: false) */
+  disableCursor?: boolean
+}
 
 /**
- * Renders a button with animated underline effect on hover.
+ * Renders a button with animated underline and custom cursor on hover.
  *
- * Wraps a button element with a CSS-based underline animation.
- * The underline slides in from the direction opposite to where the mouse
- * entered (left or right side of the button). On mouse leave, it animates
- * out in the reverse direction. Uses custom easing function from CSS
- * variable `--custom-ease-in-out`.
- *
- * The animation direction is determined by the mouse entry point:
- * - Entering from the left half: underline slides from right to left
- * - Entering from the right half: underline slides from left to right
+ * Wraps a button element with a CSS-based underline animation and cursor effect.
+ * The underline slides in from the direction opposite to where the mouse entered.
+ * Uses custom easing from `--custom-ease-in-out`.
  *
  * @param className - Additional CSS classes to merge with underline styles
  * @param children - Button content (text or elements)
+ * @param disableCursor - When true, custom cursor is disabled (default: false)
  * @param props - All other ButtonHTMLAttributes (onClick, type, disabled, etc.)
- * @returns Button component with animated underline effect
  *
  * @example
  * ```tsx
@@ -34,10 +34,25 @@ export type UnderlineButtonProps = ButtonHTMLAttributes<HTMLButtonElement>
 export function UnderlineButton({
   className,
   children,
+  disableCursor = false,
+  onMouseEnter,
+  onMouseLeave,
   ...props
 }: UnderlineButtonProps) {
-  const { underlineClassName, handleMouseEnter, handleMouseLeave, elementRef } =
+  const { cursorEnter, cursorLeave } = useUnderlineCursor(disableCursor, "internal")
+  const { underlineClassName, handleMouseEnter: underlineEnter, handleMouseLeave: underlineLeave, elementRef } =
     useUnderlineAnimation<HTMLButtonElement>()
+
+  const handleMouseEnter = (e: MouseEvent<HTMLButtonElement>) => {
+    underlineEnter(e)
+    cursorEnter()
+    onMouseEnter?.(e)
+  }
+  const handleMouseLeave = (e: MouseEvent<HTMLButtonElement>) => {
+    underlineLeave()
+    cursorLeave()
+    onMouseLeave?.(e)
+  }
 
   return (
     <button

@@ -11,8 +11,6 @@ type UseDialogAnimationOptions = {
   overlayRef: RefObject<HTMLDivElement | null>
   /** Ref to the panel element */
   panelRef: RefObject<HTMLDivElement | null>
-  /** Panel position for slide direction */
-  position: 'left' | 'right'
   /** Called when opening animation completes */
   onOpenComplete: () => void
   /** Called when closing animation completes */
@@ -33,7 +31,6 @@ export function useDialogAnimation({
   animationState,
   overlayRef,
   panelRef,
-  position,
   onOpenComplete,
   onCloseComplete,
 }: UseDialogAnimationOptions) {
@@ -43,13 +40,9 @@ export function useDialogAnimation({
 
     if (!overlay || !panel) return
 
-    // Calculate slide direction based on position
-    const slideOffset = position === 'right' ? '100%' : '-100%'
-
     if (animationState === 'opening') {
       // Set initial states
-      gsap.set(overlay, { opacity: 0 })
-      gsap.set(panel, { x: slideOffset })
+      gsap.set(panel, { x: "100%" })
 
       // Create opening timeline
       const tl = gsap.timeline({
@@ -86,10 +79,10 @@ export function useDialogAnimation({
 
       // Animate panel slide out
       tl.to(panel, {
-        x: slideOffset,
+        x: "100%",
         duration: ANIMATION_DURATION,
         ease: EASE_OUT,
       }, 0)
     }
-  }, { dependencies: [animationState, position] })
+  }, { dependencies: [animationState] })
 }

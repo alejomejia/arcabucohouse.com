@@ -33,10 +33,10 @@ export function CartSummary({ cart }: CartSummaryProps) {
           <p className="text-primary-100 text-lg font-semibold">
             Total
             <span className="inline-flex items-center gap-1 ml-1 text-secondary-200">
-              <span>[</span>
-              <AnimatedNumber value={totalQuantity} />
-              <span>{pluralizedQuantity}</span>
-              <span>]</span>
+              <span>
+                [<AnimatedNumber value={totalQuantity} />
+              </span>
+              <span>{pluralizedQuantity}]</span>
             </span>
           </p>
           <small className="text-base text-primary-200">Shipping and taxes calculated at checkout</small>

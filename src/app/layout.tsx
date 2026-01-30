@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Toaster } from "sonner";
 
-import { CartProvider } from "@/components/features/cart/context";
-import { getCart } from "@/lib/integrations/shopify";
-import { baseUrl } from "@/lib/integrations/utils";
-
+import { CursorProvider } from "@/components/effects/cursor";
 import { GSAPRuntime } from "@/components/effects/gsap";
+import { CartProvider } from "@/components/features/cart/context";
 import { Lenis } from "@/components/layout/lenis";
 import { Wrapper } from "@/components/layout/wrapper";
+import { PortalRoot } from "@/components/ui/portal/portal-root";
+import { getCart } from "@/lib/integrations/shopify";
+import { baseUrl } from "@/lib/integrations/utils";
 import { PORTAL_IDS } from "@/lib/styles/const";
 import { sans, serif } from "@/lib/styles/fonts";
 import "@/lib/styles/globals.css";
@@ -41,18 +42,20 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={cn("font-sans antialiased bg-neutral-50 text-black", sans.variable, serif.variable)}>
-        <div id={PORTAL_IDS.bodyTop} />
+      <body className={cn("font-sans antialiased bg-neutral-50 text-primary-base", sans.variable, serif.variable)}>
+        <PortalRoot id={PORTAL_IDS.bodyTop} />
         <Toaster closeButton />
 
-        <Lenis root>
-          <CartProvider cartPromise={cart}>
-            <Wrapper>{children}</Wrapper>
-          </CartProvider>
-        </Lenis>
+        <CursorProvider>
+          <Lenis root>
+            <CartProvider cartPromise={cart}>
+              <Wrapper>{children}</Wrapper>
+            </CartProvider>
+          </Lenis>
+        </CursorProvider>
 
         <GSAPRuntime />
-        <div id={PORTAL_IDS.bodyBottom} />
+        <PortalRoot id={PORTAL_IDS.bodyBottom} />
       </body>
     </html>
   );

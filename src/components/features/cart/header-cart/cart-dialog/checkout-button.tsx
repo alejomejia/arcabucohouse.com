@@ -2,6 +2,8 @@
 
 import { useFormStatus } from 'react-dom'
 
+import { useCursor } from '@/components/effects/cursor/context'
+import { CURSOR_MEDIUM } from '@/components/effects/cursor/cursor-states'
 import { LoadingDots } from '@/components/ui/loading-dots'
 import { FOCUS_RING_ON_DARK_BG } from '@/lib/styles/const'
 import { cn } from '@/lib/utils/helpers'
@@ -10,6 +12,7 @@ import { cn } from '@/lib/utils/helpers'
  * Checkout button component that handles form submission state.
  */
 export function CheckoutButton() {
+  const { setHover, setDefault } = useCursor()
   const { pending } = useFormStatus()
 
   return (
@@ -23,6 +26,8 @@ export function CheckoutButton() {
         "transition-opacity duration-300 ease-in-out",
         FOCUS_RING_ON_DARK_BG
       )}
+      onMouseEnter={() => setHover(CURSOR_MEDIUM)}
+      onMouseLeave={() => setDefault()}
     >
       {pending ? <LoadingDots className="bg-white" /> : 'Proceed to Checkout'}
     </button>

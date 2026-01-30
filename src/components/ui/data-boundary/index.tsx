@@ -1,4 +1,5 @@
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import type { ComponentType } from "react";
 import { Suspense, type ReactNode } from "react";
 
 type NamedSuspenseProps = {
@@ -20,10 +21,13 @@ function NamedSuspense({ name, fallback, children }: NamedSuspenseProps) {
   );
 }
 
+type ErrorBoundaryProps = { error: Error; reset?: () => void };
+
 type DataBoundaryProps = {
   name: string;
   loading: ReactNode;
-  error: (props: { error: Error; reset?: () => void }) => ReactNode;
+  /** Client Component that receives error and reset. Use a component reference so it can be passed from Server Components. */
+  error: ComponentType<ErrorBoundaryProps>;
   children: ReactNode;
 };
 
@@ -33,23 +37,24 @@ type DataBoundaryProps = {
  * (via ErrorBoundary) in a single wrapper, keeping child components clean
  * and focused on rendering data.
  *
+ * Pass a Client Component reference for `error` when using from a Server
+ * Component (e.g. error={HeroError}), not an inline function.
+ *
  * @example
- * Using error with reset function to allow users to retry:
  * ```tsx
- * <DataBoundary
- *   name="product-gallery"
- *   loading={<GallerySkeleton />}
- *   error={({ error, reset }) => (
- *     <div className="p-4 border border-red-200 rounded">
- *       <h2>Something went wrong</h2>
+ * // error-ui.tsx (must be "use client")
+ * export function HeroError({ error, reset }: { error: Error; reset?: () => void }) {
+ *   return (
+ *     <div>
  *       <p>{error.message}</p>
- *       <button onClick={reset} className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
- *         Try Again
- *       </button>
+ *       <button onClick={reset}>Try again</button>
  *     </div>
- *   )}
- * >
- *   <Gallery images={product.images} />
+ *   );
+ * }
+ *
+ * // page or server component
+ * <DataBoundary name="hero" loading={<Skeleton />} error={HeroError}>
+ *   <Content />
  * </DataBoundary>
  * ```
  */

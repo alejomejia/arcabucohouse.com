@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, type RefObject } from "react"
 
+import { LENIS_PREVENT_CLASS } from "@/components/layout/lenis/utils"
+
 type UseElementHasScrollbarReturn<T extends HTMLElement = HTMLElement> = {
   ref: RefObject<T | null>
   hasScrollbar: boolean
@@ -10,9 +12,8 @@ type UseElementHasScrollbarReturn<T extends HTMLElement = HTMLElement> = {
 /**
  * Tracks whether the element attached via the returned ref has a vertical scrollbar.
  *
- * Toggles the "has-scrollbar" class on the element when overflow is detected, so
- * other logic (e.g. scroll prevention, styling) can rely on that class without
- * consuming the hook’s return value.
+ * Toggles the "has-scrollbar" class (for styling) and LENIS_PREVENT_CLASS (for Lenis)
+ * on the element when overflow is detected.
  *
  * Uses ResizeObserver to re-check when the element's size or content changes.
  * Pass dependencies (e.g. `[items.length]`) to force a re-check when content changes
@@ -47,7 +48,7 @@ export function useElementHasScrollbar<T extends HTMLElement = HTMLElement>(
       const isScrollbarVisible = element.scrollHeight > element.clientHeight
       
       setHasScrollbar(isScrollbarVisible)
-      element.classList.toggle("has-scrollbar", isScrollbarVisible)
+      element.classList.toggle(LENIS_PREVENT_CLASS, isScrollbarVisible)
     }
 
     update()

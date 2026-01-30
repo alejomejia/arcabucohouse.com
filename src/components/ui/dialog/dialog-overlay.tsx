@@ -27,7 +27,7 @@ export function DialogOverlay({ className, children }: DialogOverlayProps) {
       aria-hidden="true"
       className={cn(
         "fixed inset-0",
-        "bg-black/80 backdrop-blur-sm",
+        "bg-secondary-600/95",
         "opacity-0",
         className
       )}

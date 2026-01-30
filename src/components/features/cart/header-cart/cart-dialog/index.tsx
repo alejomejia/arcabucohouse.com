@@ -41,7 +41,7 @@ export function CartDialog({ isOpen, onClose, onUpdateItem }: CartDialogProps) {
   const isEmpty = !cart || cart.lines.length === 0
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
+    <Dialog className="cart-dialog" isOpen={isOpen} onClose={onClose}>
       <DialogOverlay />
       <DialogPanel
         position="right"
@@ -64,7 +64,7 @@ export function CartDialog({ isOpen, onClose, onUpdateItem }: CartDialogProps) {
         {isEmpty ? (
           <CartEmptyState />
         ) : (
-          <div className='flex min-h-0 flex-1 flex-col overflow-hidden'>
+          <div className='flex min-h-0 flex-1 flex-col'>
             <CartItemsList
               items={cart.lines}
               onUpdateItem={onUpdateItem}

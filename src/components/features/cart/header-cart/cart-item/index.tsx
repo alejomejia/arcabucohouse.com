@@ -9,7 +9,9 @@ import type { CartItem } from '@/lib/integrations/shopify/types'
 import { FOCUS_RING_ON_DARK_BG } from '@/lib/styles/const'
 
 import { AnimatedNumber } from '@/components/effects/animated-number'
-import { useUnderlineAnimation } from '@/components/effects/underline/use-underline-animation'
+import { useCursor } from '@/components/effects/cursor/context'
+import { CURSOR_MEDIUM } from '@/components/effects/cursor/cursor-states'
+import { useUnderlineAnimation } from '@/components/effects/underline/hooks/use-underline-animation'
 import { cn } from '@/lib/utils/helpers'
 import { createMerchandiseUrl } from '../helpers'
 
@@ -37,7 +39,7 @@ export function CartItem({ item, onUpdateItem, onCloseCart }: CartItemProps) {
     handleMouseEnter,
     handleMouseLeave,
   } = useUnderlineAnimation()
-
+  const { setHover, setDefault } = useCursor()
   const merchandiseUrl = createMerchandiseUrl(item)
 
   const { merchandise, cost, quantity } = item
@@ -52,11 +54,13 @@ export function CartItem({ item, onUpdateItem, onCloseCart }: CartItemProps) {
       <div className="w-full flex flex-col text-center xs:text-left xs:flex-row gap-4">
         <Link
           href={merchandiseUrl}
+          className="relative aspect-5/6 w-full max-w-120 xs:max-w-40 overflow-hidden"
           onClick={onCloseCart}
-          className="group relative aspect-5/6 w-full max-w-120 xs:max-w-40 overflow-hidden"
+          onMouseEnter={() => setHover(CURSOR_MEDIUM)}
+          onMouseLeave={() => setDefault()}
         >
           <Image
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover brand-gradient-primary"
             alt={featuredImage.altText || productTitle}
             src={featuredImage.url}
             fill
@@ -66,8 +70,12 @@ export function CartItem({ item, onUpdateItem, onCloseCart }: CartItemProps) {
           <div>
             <Link
               href={merchandiseUrl}
-              onClick={onCloseCart}
-              className={cn("mb-3", FOCUS_RING_ON_DARK_BG)}
+              onMouseEnter={() => setHover(CURSOR_MEDIUM)}
+              onMouseLeave={() => setDefault()}
+              className={cn(
+                "mb-3",
+                "opacity-90 hover:opacity-100 transition-opacity duration-300 ease-in-out",
+                FOCUS_RING_ON_DARK_BG)}
             >
               <div className="flex flex-1 flex-col font-serif">
                 <span className={cn("leading-tight", {
@@ -92,8 +100,14 @@ export function CartItem({ item, onUpdateItem, onCloseCart }: CartItemProps) {
             <DeleteFromCartButton item={item} optimisticUpdateAction={onUpdateItem}>
               <span
                 ref={elementRef}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
+                onMouseEnter={(e) => {
+                  handleMouseEnter(e)
+                  setHover(CURSOR_MEDIUM)
+                }}
+                onMouseLeave={() => {
+                  handleMouseLeave()
+                  setDefault()
+                }}
                 className={cn(underlineClassName, 'text-lg font-serif text-secondary-100 leading-none')}
               >
                 Remove

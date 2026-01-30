@@ -1,26 +1,17 @@
 /**
- * Element IDs that participate in scroll prevention when they have a scrollbar.
- * Add an entry here and use the same id on the DOM element; the element must
- * toggle the "has-scrollbar" class for prevention to apply.
+ * Single class name for Lenis scroll prevention. Add this class to any element
+ * (or an ancestor) that should consume the wheel and prevent page scroll.
+ * Import this constant and use it in className when you want to prevent scroll.
  */
-export const SCROLL_PREVENTION_IDS = {
-  cartDialogList: "cart-dialog-list",
-} as const
-
-const PREVENTION_IDS = new Set<string>(
-  Object.values(SCROLL_PREVENTION_IDS)
-)
+export const LENIS_PREVENT_CLASS = "lenis-prevent"
 
 /**
- * Returns true if the node is a known prevention target and currently has a scrollbar.
- * To add new targets, add an id to SCROLL_PREVENTION_IDS and use it on the element;
- * ensure the element has the "has-scrollbar" class when it overflows.
+ * Returns true if Lenis should not scroll for this wheel target.
+ * Prevents when the target or any ancestor has LENIS_PREVENT_CLASS.
  *
- * @param node - The node to check
- * @returns True if scroll should be prevented on this node
+ * @param node - Wheel event target (or node from event composed path)
  */
 export function shouldPreventScroll(node: Element | null): boolean {
-  if (!node?.id) return false
-  
-  return PREVENTION_IDS.has(node.id) && node.classList.contains("has-scrollbar")
+  if (!node) return false
+  return node.closest(`.${LENIS_PREVENT_CLASS}`) !== null
 }

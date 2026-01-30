@@ -1,5 +1,9 @@
+import type { Metadata } from "next"
 
-export const metadata = {
+
+import { Hero } from "./_components/hero"
+
+export const metadata: Metadata = {
   description: 'High-performance ecommerce store built with Next.js, Vercel, and Shopify.',
   openGraph: {
     type: 'website'
@@ -8,13 +12,13 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <div className="w-full">
-      <div className="min-h-screen" />
+    <>
+      <Hero />
       <div className="min-h-screen bg-neutral-300" />
       <div className="min-h-screen" />
       <div className="min-h-screen bg-neutral-300" />
       <div className="min-h-screen" />
       <div className="min-h-screen bg-neutral-300" />
-    </div>
+    </>
   )
 }

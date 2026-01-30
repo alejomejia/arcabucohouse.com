@@ -9,7 +9,7 @@ export function CartEmptyState() {
   const { onClose } = useDialogContext()
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center gap-8 overflow-hidden">
+    <div className="w-full h-full flex flex-col items-center justify-center gap-8">
       <p className="grow flex flex-col justify-center text-center text-lg font-semibold text-secondary-100 font-serif self">[ Your cart is empty ]</p>
       <button
         type="button"
