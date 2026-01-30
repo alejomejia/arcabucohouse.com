@@ -54,7 +54,7 @@ function defaultFormat(n: number, decimals: number): string {
  */
 export function AnimatedNumber({
   value,
-  duration = 1,
+  duration = 0.5,
   ease,
   decimals = 0,
   formatter,
@@ -91,7 +91,7 @@ export function AnimatedNumber({
 
         // Set initial states with force3D for GPU acceleration
         gsap.set(newRef.current, {
-          yPercent: 100,
+          yPercent: 200,
         })
 
         // Create timeline with better performance settings
@@ -103,15 +103,15 @@ export function AnimatedNumber({
 
         // Animate both simultaneously
         tl.to(oldRef.current, {
-          yPercent: -100,
+          yPercent: -200,
           duration,
-          ease: ease ?? 'power2.in',
+          ease: ease ?? 'linear',
         }, 0)
 
         tl.to(newRef.current, {
           yPercent: 0,
           duration,
-          ease: ease ?? 'power2.out',
+          ease: ease ?? 'linear',
         }, 0)
       })
 

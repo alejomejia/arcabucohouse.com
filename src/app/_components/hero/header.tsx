@@ -52,7 +52,7 @@ export function HeroHeader() {
   }, { scope: containerRef })
 
   return (
-    <Container className="w-full">
+    <Container className="w-full pt-10">
       <div ref={containerRef} className="flex justify-between gap-8 opacity-0">
         <h1 className="font-serif">
           <SplitText ref={titleRef} type="lines">
@@ -63,7 +63,7 @@ export function HeroHeader() {
           </SplitText>
         </h1>
         <SplitText ref={descriptionRef} type="lines">
-          <p className="max-w-128 font-medium text-pretty text-secondary-600">Each piece emerges from the hands of skilled makers who understand their materials as living things. We work directly with Colombian artisans, honoring generations of techniquue while pushing towards something new.</p>
+          <p className="max-w-128 font-medium text-pretty text-secondary-600">Each piece emerges from the hands of skilled makers who understand their materials as living things. We work directly with Latin American artisans and companies, honoring generations of technique while pushing towards something new.</p>
         </SplitText>
       </div>
     </Container>
