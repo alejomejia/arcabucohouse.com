@@ -86,7 +86,7 @@ export function Preloader() {
             stagger: TIMING.descriptionStagger,
             duration: TIMING.descriptionDuration
           },
-          "-=0.5"
+          0
         );
 
         // Counter animation (0 → 100)
