@@ -51,7 +51,7 @@ export function ProductSlide({ className, product, preload }: ProductSlideProps)
       href={`/product/${handle}`}
       className={cn("w-full h-full brand-gradient-primary", className)}
     >
-      <Image className="h-full mx-auto" src={url} alt={altText} />
+      <Image className="h-full mx-auto" src={url} alt={altText} preload />
     </Link>
   )
 }

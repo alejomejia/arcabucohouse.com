@@ -8,15 +8,17 @@ import { CartProvider } from "@/components/features/cart/context";
 import { Lenis } from "@/components/layout/lenis";
 import { Wrapper } from "@/components/layout/wrapper";
 import { PortalRoot } from "@/components/ui/portal/portal-root";
+import { PreloaderProvider } from "@/components/ui/preloader/hooks/preloader-context";
+import { PreloaderGate } from "@/components/ui/preloader/preloader-gate";
 import { getCart } from "@/lib/integrations/shopify";
 import { baseUrl } from "@/lib/integrations/utils";
 import { PORTAL_IDS } from "@/lib/styles/const";
 import { sans, serif } from "@/lib/styles/fonts";
 import "@/lib/styles/globals.css";
-import { assertRequiredEnvVars } from "@/lib/utils/config";
+import { assertRequiredEnvVars, config } from "@/lib/utils/config";
 import { cn } from "@/lib/utils/helpers";
 
-const { SITE_NAME } = process.env;
+const { siteName } = config;
 
 // Validate required environment variables at application startup
 // This will fail fast during build or at runtime if any are missing
@@ -25,8 +27,8 @@ assertRequiredEnvVars();
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: SITE_NAME!,
-    template: `%s | ${SITE_NAME}`,
+    default: siteName!,
+    template: `%s | ${siteName}`,
   },
   robots: {
     follow: true,
@@ -46,13 +48,16 @@ export default async function RootLayout({
         <PortalRoot id={PORTAL_IDS.bodyTop} />
         <Toaster closeButton />
 
-        <CursorProvider>
-          <Lenis root>
-            <CartProvider cartPromise={cart}>
-              <Wrapper>{children}</Wrapper>
-            </CartProvider>
-          </Lenis>
-        </CursorProvider>
+        <PreloaderProvider>
+          <PreloaderGate />
+          <CursorProvider>
+            <Lenis root>
+              <CartProvider cartPromise={cart}>
+                <Wrapper>{children}</Wrapper>
+              </CartProvider>
+            </Lenis>
+          </CursorProvider>
+        </PreloaderProvider>
 
         <GSAPRuntime />
         <PortalRoot id={PORTAL_IDS.bodyBottom} />

@@ -1,51 +1,24 @@
+/**
+ * Animation orchestration configurations.
+ *
+ * These configs define animation timing for different UI sections.
+ * Delays here are RELATIVE (e.g., stagger between elements), not absolute
+ * delays from page load. The intro animation system handles coordination
+ * with the preloader automatically.
+ */
+
 type Orchestra = Record<string, gsap.TimelineVars>
 
 const DEFAULT_DELAY = 0.25
 
-export const orchestraNavigation: Orchestra = {
-  logo: {
-    duration: 0.5,
-    delay: DEFAULT_DELAY,
-    stagger: 0.05,
-    ease: "gentleSlow",
-  },
-  progressBar: {
-    duration: 1,
-    ease: "power3.inOut",
-  },
-  menu: {
-    duration: 0.5,
-    delay: DEFAULT_DELAY * 2,
-    stagger: 0.05,
-    ease: "gentleSlow",
-  },
-  cart: {
-    duration: 0.5,
-    delay: DEFAULT_DELAY * 3,
-    stagger: 0.05,
-    ease: "gentleSlow",
-  }
-}
-
-export const orchestraHomeHero: Orchestra = {
-  header: {
-    duration: 1,
-    delay: 1,
-    ease: "gentleSlow",
-    stagger: 0.15,
-  },
-  footer: {
-    duration: 1,
-    delay: 0.25,
-    ease: "gentleSlow",
-    stagger: 0.075,
-  }
-}
-
+/**
+ * Menu overlay animations.
+ * Used when the navigation menu opens/closes.
+ */
 export const orchestraMenuOverlay: Orchestra = {
   menuList: {
     delay: DEFAULT_DELAY,
-    defaults: { ease:"gentleSlow" }
+    defaults: { ease: "gentleSlow" },
   },
   topText: {
     duration: 1,
@@ -66,7 +39,5 @@ export const orchestraMenuOverlay: Orchestra = {
   backgroundVideo: {
     delay: DEFAULT_DELAY * 3,
     duration: 1.5,
-  }
+  },
 }
-
-export const orchestraHome: Orchestra = {}

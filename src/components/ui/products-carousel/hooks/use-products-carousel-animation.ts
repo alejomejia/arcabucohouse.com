@@ -5,11 +5,18 @@ import gsap from "gsap"
 import type { RefObject } from "react"
 import { useRef, useState } from "react"
 
+import { usePreloader } from "@/components/ui/preloader/hooks/use-preloader"
+
 import { getTotalWidth, splitElements } from "./utils"
 
 export const MIN_WRAPPERS = 7
-const SLIDE_DURATION = 1.5
-const SLIDE_EASE = "power3.inOut"
+
+const TIMING = {
+  slideDuration: 1.5,
+  slideEase: "power3.inOut",
+  revealDuration: 1,
+  revealEase: "power3.inOut",
+} as const;
 
 type UseProductsCarouselAnimationReturn = {
   containerRef: RefObject<HTMLDivElement | null>
@@ -24,6 +31,8 @@ type UseProductsCarouselAnimationParams = {
 /**
  * Sets up GSAP layout for the products carousel: z-index by position and
  * horizontal offsets for left/right wrappers so the animation aligns correctly.
+ *
+ * Waits for the preloader to complete before starting the animation.
  *
  * Requires an odd number of slide wrappers (use loop: true, align: "center" in
  * carousel options). Does nothing if wrapper count is even or below minimum.
@@ -49,112 +58,122 @@ export function useProductsCarouselAnimation({
   const [animationEnded, setAnimationEnded] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const completedRef = useRef(false)
+  const hasPlayedRef = useRef(false)
+
+  const { waitForReady } = usePreloader()
 
   useGSAP(
     () => {
       if (!containerRef.current) return
+      if (hasPlayedRef.current) return
 
-      setAnimationEnded(false)
-      completedRef.current = false
+      const runAnimation = () => {
+        if (hasPlayedRef.current) return
+        if (!containerRef.current) return
 
-      const slides = gsap.utils.toArray<HTMLDivElement>(".slide", containerRef.current)
-      const wrappers = gsap.utils.toArray<HTMLDivElement>(".slide-wrapper", containerRef.current)
+        hasPlayedRef.current = true
+        setAnimationEnded(false)
+        completedRef.current = false
 
-      const isInvalidCount =
-        wrappers.length === 0 ||
-        wrappers.length % 2 === 0 ||
-        wrappers.length < MIN_WRAPPERS
+        const container = containerRef.current
+        const slides = gsap.utils.toArray<HTMLDivElement>(".slide", container)
+        const wrappers = gsap.utils.toArray<HTMLDivElement>(".slide-wrapper", container)
 
-      if (isInvalidCount) return
+        const isInvalidCount =
+          wrappers.length === 0 ||
+          wrappers.length % 2 === 0 ||
+          wrappers.length < MIN_WRAPPERS
 
-      const master = gsap.timeline({
-        onComplete: () => {
-          if (completedRef.current) return
-          completedRef.current = true
+        if (isInvalidCount) return
 
-          // Clear all GSAP inline styles so CSS class-based styles work (hover scale, z-index).
-          // Without this, inline transform/z-index override Tailwind classes.
-          gsap.delayedCall(0.25, () => {
-            gsap.set(slides, { clearProps: "z-index" })
-            gsap.set(wrappers, { clearProps: "all" })
-          })
+        const master = gsap.timeline({
+          onComplete: () => {
+            if (completedRef.current) return
+            completedRef.current = true
 
-          setAnimationEnded(true)
-        }
-      })
+            // Clear all GSAP inline styles so CSS class-based styles work
+            gsap.delayedCall(0.25, () => {
+              gsap.set(slides, { clearProps: "z-index" })
+              gsap.set(wrappers, { clearProps: "all" })
+            })
 
-      const {
-        middle: middleSlide,
-        left: leftSlides,
-        right: rightSlides
-      } = splitElements(slides)
+            setAnimationEnded(true)
+          },
+        })
 
-      const {
-        left: leftWrappers,
-        right: rightWrappers
-      } = splitElements(wrappers)
+        const {
+          middle: middleSlide,
+          left: leftSlides,
+          right: rightSlides,
+        } = splitElements(slides)
 
-      const middleZ = Math.round(slides.length / 2)
+        const {
+          left: leftWrappers,
+          right: rightWrappers,
+        } = splitElements(wrappers)
 
-      const hideSlidesAnimation = () => {
+        const middleZ = Math.round(slides.length / 2)
+
+        // Hide slides initially
         master
-        // Middle slide with higher z-index 
-        // than left and right slides
-          .set(middleSlide, {
-            zIndex: middleZ
-          })
+          .set(middleSlide, { zIndex: middleZ })
           .set(leftSlides, {
             zIndex: (i) => middleZ - 1 - i,
-            opacity: 0
+            opacity: 0,
           })
           .set(rightSlides, {
             zIndex: (i) => middleZ - 1 - i,
-            opacity: 0
+            opacity: 0,
           })
-          // Wrapper initial X offsets
-          // All wrappers hidden behind middle slide
           .set(leftWrappers, {
-            x: (i, el) => getTotalWidth(el) * (i + 1)
+            x: (i, el) => getTotalWidth(el) * (i + 1),
           })
           .set(rightWrappers, {
-            x: (i, el) => -getTotalWidth(el) * (i + 1)
+            x: (i, el) => -getTotalWidth(el) * (i + 1),
           })
           .addLabel("slidesReady", "+=0.25")
-      }
 
-      const discoverMiddleSlideAnimation = () => {
+        // Reveal middle slide
         const initialClipPath = "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)"
         const finalClipPath = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"
 
         master
-          .set(containerRef.current, { opacity: 1 }, "slidesReady")
+          .set(container, { opacity: 1 }, "slidesReady")
           .set(".slide-mask", { clipPath: initialClipPath })
           .to(".slide-mask", {
             clipPath: finalClipPath,
-            duration: 1,
-            ease: "power3.inOut"
+            duration: TIMING.revealDuration,
+            ease: TIMING.revealEase,
           })
           .addLabel("middleSlideVisible")
-      }
 
-      const discoverSlidesTimeline = () => {
+        // Reveal side slides
         master
           .set([leftSlides, rightSlides], { opacity: 1 }, "middleSlideVisible")
           .to(
             leftWrappers,
-            { x: 0, duration: SLIDE_DURATION, ease: SLIDE_EASE, stagger: { from: "end" } },
+            {
+              x: 0,
+              duration: TIMING.slideDuration,
+              ease: TIMING.slideEase,
+              stagger: { from: "end" },
+            },
             "<"
           )
           .to(
             rightWrappers,
-            { x: 0, duration: SLIDE_DURATION, ease: SLIDE_EASE, stagger: { from: "end" } },
+            {
+              x: 0,
+              duration: TIMING.slideDuration,
+              ease: TIMING.slideEase,
+              stagger: { from: "end" },
+            },
             "<"
           )
       }
 
-      hideSlidesAnimation()
-      discoverMiddleSlideAnimation()
-      discoverSlidesTimeline()
+      // Wait for preloader, then run animation
+      waitForReady().then(runAnimation)
     },
     { scope: containerRef, dependencies: [carouselLayoutKey] }
   )

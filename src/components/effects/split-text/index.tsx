@@ -10,7 +10,6 @@ import {
   useCallback,
   useImperativeHandle,
   useRef,
-  useState,
   type ReactElement,
   type ReactNode
 } from "react"
@@ -25,7 +24,8 @@ if (typeof window !== "undefined") {
 /**
  * Split type options for text splitting
  */
-export type SplitType = "chars" | "words" | "lines"
+const splitTypes = ["chars", "words", "lines"] as const
+export type SplitType = (typeof splitTypes)[number]
 
 export interface SplitTextProps {
   /** Content to split - can be single element or multiple elements */
@@ -54,7 +54,22 @@ export interface SplitTextRef {
   getSplitInstanceByIndex: (index: number) => GSAPSplitText | null
   /** Get the container element(s) that were split */
   getContainers: () => HTMLElement[]
-  /** Check if fonts are loaded and split is ready */
+  /**
+   * Returns a Promise that resolves when the split is ready.
+   * If already ready, resolves immediately.
+   *
+   * @example
+   * ```tsx
+   * await splitRef.current?.ready()
+   * // Now safe to animate split elements
+   * gsap.from(splitRef.current.getElements(), { y: 100 })
+   * ```
+   */
+  ready: () => Promise<void>
+  /**
+   * @deprecated Use `ready()` instead for Promise-based readiness.
+   * Check if fonts are loaded and split is ready (synchronous).
+   */
   isReady: () => boolean
 }
 
@@ -106,7 +121,28 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(
     const containerRef = useRef<HTMLDivElement>(null)
     const splitsRef = useRef<GSAPSplitText[]>([])
     const containersRef = useRef<HTMLElement[]>([])
-    const [isReady, setIsReady] = useState(false)
+
+    // Promise-based readiness tracking
+    const isReadyRef = useRef(false)
+    const resolveReadyRef = useRef<(() => void) | null>(null)
+    const readyPromiseRef = useRef<Promise<void> | null>(null)
+
+    // Create the ready promise lazily (only when ready() is called)
+    const getReadyPromise = useCallback((): Promise<void> => {
+      // If already ready, return resolved promise
+      if (isReadyRef.current) {
+        return Promise.resolve()
+      }
+
+      // Create promise if it doesn't exist
+      if (!readyPromiseRef.current) {
+        readyPromiseRef.current = new Promise<void>((resolve) => {
+          resolveReadyRef.current = resolve
+        })
+      }
+
+      return readyPromiseRef.current
+    }, [])
 
     /**
      * Get the animated elements based on split type for a specific SplitText instance
@@ -176,9 +212,10 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(
         getElementsByIndex,
         getSplitInstanceByIndex,
         getContainers,
-        isReady: () => isReady
+        ready: getReadyPromise,
+        isReady: () => isReadyRef.current,
       }),
-      [getElements, getElementsByIndex, getSplitInstanceByIndex, getContainers, isReady]
+      [getElements, getElementsByIndex, getSplitInstanceByIndex, getContainers, getReadyPromise]
     )
 
     // Initialize split text
@@ -224,7 +261,9 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(
           splitsRef.current.push(split)
         })
 
-        setIsReady(true)
+        // Mark as ready and resolve any waiting promises
+        isReadyRef.current = true
+        resolveReadyRef.current?.()
       }
 
       // Wait for fonts to load before splitting (if enabled)
@@ -241,7 +280,11 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(
         splitsRef.current.forEach((split) => split?.revert())
         splitsRef.current = []
         containersRef.current = []
-        setIsReady(false)
+
+        // Reset readiness state for potential remount
+        isReadyRef.current = false
+        readyPromiseRef.current = null
+        resolveReadyRef.current = null
       }
     }, {
       scope: containerRef,

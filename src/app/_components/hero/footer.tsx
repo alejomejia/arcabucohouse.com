@@ -7,7 +7,15 @@ import { useRef } from "react";
 import { type SplitTextRef, SplitText } from "@/components/effects/split-text";
 import { UnderlineLink } from "@/components/effects/underline/underline-link";
 import { Container } from "@/components/ui/container";
-import { orchestraHomeHero } from "@/lib/orchestra";
+import { usePreloader } from "@/components/ui/preloader/hooks/use-preloader";
+import { cn } from "@/lib/utils/helpers";
+
+const ANIMATION_CONFIG = {
+  duration: 1,
+  ease: "gentleSlow",
+  stagger: 0.075,
+  delay: 0.25, // Small delay relative to header animation
+} as const;
 
 const COLLECTIONS = [
   {
@@ -35,56 +43,64 @@ const COLLECTIONS = [
 export function HeroFooter() {
   const containerRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<SplitTextRef>(null)
+  const hasPlayedRef = useRef(false)
 
-  useGSAP(() => {
-    const createAnimation = () => {
-      if (!textRef.current || !containerRef.current) return
+  const { waitForReady } = usePreloader()
 
-      const elements = textRef.current.getElements()
-      const container = containerRef.current
+  useGSAP(
+    () => {
+      const runAnimation = async () => {
+        if (hasPlayedRef.current) return
+        if (!textRef.current || !containerRef.current) return
 
-      if (elements.length === 0 || !container) return
+        // Wait for preloader to complete (resolves immediately if skipped)
+        await waitForReady()
+        if (hasPlayedRef.current) return
 
-      gsap.set(container, { opacity: 1 })
-      gsap.set(elements, { yPercent: 100 })
-      gsap.fromTo(elements, { yPercent: 100 }, { yPercent: 0, ...orchestraHomeHero.footer })
-    }
+        // Wait for SplitText to be ready
+        await textRef.current.ready()
+        if (hasPlayedRef.current) return
 
-    // Wait for split to be ready
-    const checkReady = () => {
-      if (!textRef.current?.isReady()) {
-        setTimeout(checkReady, 50)
-        return
+        const elements = textRef.current.getElements()
+        const container = containerRef.current
+
+        if (elements.length === 0 || !container) return
+
+        hasPlayedRef.current = true
+
+        gsap.set(container, { opacity: 1 })
+        gsap.fromTo(
+          elements,
+          { yPercent: 100 },
+          { yPercent: 0, ...ANIMATION_CONFIG }
+        )
       }
 
-      createAnimation()
-    }
-
-    checkReady()
-  }, { scope: containerRef })
+      runAnimation()
+    },
+    { scope: containerRef }
+  )
 
   return (
-    <Container className="w-full py-8 font-medium">
+    <Container className="w-full pb-8 md:py-8 font-medium">
       <div ref={containerRef} className="opacity-0">
         <SplitText ref={textRef} type="words">
-          <div className="flex justify-between items-end gap-8">
-            <div className="flex-1">
-              <p className="text-balance max-w-96">Design objects born in Latin America, curated for modern living</p>
-            </div>
-            <div className="flex-1">
-              <ul className="flex gap-4 justify-center items-center text-primary-base">
-                {COLLECTIONS.map(({ id, name, href }, index) => (
-                  <li key={id} className="flex items-center gap-2">
-                    <UnderlineLink href={href}>{name}</UnderlineLink>
-                    {index < COLLECTIONS.length - 1 && <span className="text-neutral-400">/</span>}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="flex-1">
-              <p className="text-balance max-w-96 text-right ml-auto">Artisan-made interiors from the heart of Latin America</p>
-            </div>
-          </div>
+          <ul className={cn(
+            "flex flex-col gap-2 justify-center items-center",
+            "md:flex-row md:gap-4",
+            "uppercase font-serif font-semibold text-primary-base"
+          )}>
+            {COLLECTIONS.map(({ id, name, href }, index) => (
+              <li key={id} className="flex flex-col md:flex-row items-center gap-2 leading-none">
+                <UnderlineLink href={href} className="tracking-wider">
+                  {name}
+                </UnderlineLink>
+                {index < COLLECTIONS.length - 1 && (
+                  <span className="text-neutral-400 leading-none hidden md:inline-block">—</span>
+                )}
+              </li>
+            ))}
+          </ul>
         </SplitText>
       </div>
     </Container>
