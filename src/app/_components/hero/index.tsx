@@ -12,7 +12,7 @@ import { Loading } from "./loading";
  * @TODO: Check error state component and improve the UI
  */
 
-export async function Hero() {
+export async function HeroSection() {
   const featuredProducts = await getCollectionProducts({
     collection: "hidden-homepage-featured-products",
   });

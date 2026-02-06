@@ -86,7 +86,7 @@ export function HeroFooter() {
       <div ref={containerRef} className="opacity-0">
         <SplitText ref={textRef} type="words">
           <ul className={cn(
-            "flex flex-col gap-2 justify-center items-center",
+            "flex flex-col gap-4 md:gap-2 justify-center items-center",
             "md:flex-row md:gap-4",
             "uppercase font-serif font-semibold text-primary-base"
           )}>

@@ -11,3 +11,9 @@ export const OVERLAY_IMAGES_SHAPE: Record<MenuItemTitle, string> = {
   ceramics: `${SHOPIFY_CDN_BASE_URL}/menu-overlay-ceramics.webp?v=1768813421`,
   projects: `${SHOPIFY_CDN_BASE_URL}/menu-overlay-projects.webp?v=1768813422`
 }
+
+export const SHOPIFY_CDN_ASSETS = {
+  /* Vector assets */
+  VECTOR_COLOMBIA: `${SHOPIFY_CDN_BASE_URL}/vector-colombia.svg`,
+  VECTOR_SOUTH_AMERICA: `${SHOPIFY_CDN_BASE_URL}/vector-south-america.svg`,
+}
