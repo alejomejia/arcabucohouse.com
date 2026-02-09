@@ -36,5 +36,5 @@ export const CURSOR_MEDIUM: CursorConfig = {
 /** External link: arrow icon and large scale. Use for external links (e.g. underline link with arrow). */
 export const CURSOR_LINK_EXTERNAL: CursorConfig = {
   content: <ArrowUpRightIcon className="size-4" aria-hidden />,
-  scale: 2,
+  scale: 1.5,
 }

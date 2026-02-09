@@ -2,7 +2,8 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils/helpers";
 
-import { Header } from '../header';
+import { Footer } from "../footer";
+import { Header } from "../header";
 
 type WrapperProps = {
   className?: string;
@@ -40,10 +41,19 @@ export function Wrapper({
   return (
     <>
       <Header />
-      <main className={cn("relative flex grow flex-col", className)} {...props}>
+      <main
+        id="main"
+        className={cn(
+          "relative z-10 flex grow flex-col bg-neutral-50",
+          className
+        )}
+        {...props}
+      >
         {children}
       </main>
-      <footer>Footer</footer>
+
+      {/* Parallax zone: min-h-screen so footer can stick while this area scrolls */}
+      <Footer />
 
       {/** Removed temporarily as we are not using it yet */}
       {/* <WelcomeToast /> */}

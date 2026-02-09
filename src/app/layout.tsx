@@ -44,7 +44,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={cn("font-sans antialiased bg-neutral-50 text-primary-base", sans.variable, serif.variable)}>
+      <body className={cn("font-sans antialiased text-primary-base", sans.variable, serif.variable)}>
         <PortalRoot id={PORTAL_IDS.bodyTop} />
         <Toaster closeButton />
 
