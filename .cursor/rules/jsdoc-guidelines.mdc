@@ -1,0 +1,505 @@
+---
+description: "This rule provides indications to document the code using JS Docs"
+alwaysApply: false
+---
+# JSDoc Guidelines for Next.js/React
+
+Standards for writing JSDoc comments in this Next.js/React codebase.
+
+## Core Principles
+
+1. Be concise but complete
+2. Always include practical examples
+3. Document intent and behavior, not implementation
+4. Maintain consistency across the codebase
+
+## Standard Structure
+
+```typescript
+/**
+ * [ACTION VERB] brief description of what this does.
+ *
+ * Additional context about behavior, constraints, or gotchas.
+ *
+ * @param paramName - Description with constraints
+ * @param optionalParam - Description (default: value)
+ * @returns What is returned and in what format
+ *
+ * @example
+ * ```tsx
+ * // Realistic usage with actual values
+ * functionName(arg1, arg2)
+ * ```
+ */
+```
+
+## When to Document
+
+### Always Document
+- All exported functions, components, hooks, and types
+- Complex logic or non-obvious algorithms
+- Side-effect code (API calls, DOM manipulation, state changes)
+- Context providers and what they expose
+- Runtime/effect components
+
+### Skip Documentation
+- Simple private helpers
+- Standard React patterns with obvious behavior
+- Self-documenting TypeScript interfaces
+
+**Rule:** When generating code, document all exported entities.
+
+## Components
+
+### Functional Components
+
+```typescript
+/**
+ * Modal dialog with backdrop, focus trapping, and ESC key handling.
+ *
+ * Locks scroll when open. Renders to portal. Closes on backdrop click
+ * unless closeOnBackdrop is false.
+ *
+ * @param isOpen - Controls modal visibility
+ * @param onClose - Callback fired when user closes modal
+ * @param children - Modal content
+ * @param closeOnBackdrop - Allow closing by clicking backdrop (default: true)
+ *
+ * @example
+ * ```tsx
+ * <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+ *   <h2>Confirm Action</h2>
+ *   <button onClick={handleConfirm}>Confirm</button>
+ * </Modal>
+ * ```
+ */
+export function Modal({ isOpen, onClose, children, closeOnBackdrop = true }: ModalProps) {
+  // Implementation
+}
+```
+
+### Server Components
+
+Explicitly mark server components and document data fetching:
+
+```typescript
+/**
+ * Product listing page with server-side data fetching.
+ *
+ * Server Component - fetches at request time.
+ * Supports pagination via 'page' param and filtering via 'category'.
+ *
+ * @example
+ * ```tsx
+ * // app/products/page.tsx
+ * export default async function Page({ searchParams }: PageProps) {
+ *   return <ProductsPage searchParams={searchParams} />
+ * }
+ * ```
+ */
+export async function ProductsPage({ searchParams }: ProductsPageProps) {
+  const products = await fetchProducts(searchParams)
+  return <ProductList products={products} />
+}
+```
+
+### Client Components
+
+Mark clearly and document browser dependencies:
+
+```typescript
+/**
+ * Interactive carousel with touch gestures and auto-play.
+ *
+ * Client Component - requires browser APIs for touch events.
+ * Uses Framer Motion for animations.
+ *
+ * @param images - Array of image URLs
+ * @param autoPlay - Enable auto-advance every 5s (default: false)
+ * @param onImageClick - Optional callback when image clicked
+ *
+ * @example
+ * ```tsx
+ * "use client"
+ * 
+ * <ImageCarousel 
+ *   images={product.images} 
+ *   autoPlay={true}
+ *   onImageClick={(idx) => openLightbox(idx)}
+ * />
+ * ```
+ */
+"use client"
+
+export function ImageCarousel({ images, autoPlay = false, onImageClick }: CarouselProps) {
+  // Implementation
+}
+```
+
+## Hooks
+
+Document state management, side effects, and dependencies:
+
+```typescript
+/**
+ * Manages state synced with localStorage with SSR-safe hydration.
+ *
+ * Reads from localStorage on mount, writes on update.
+ * Handles JSON serialization automatically.
+ *
+ * @param key - localStorage key (must be unique)
+ * @param initialValue - Fallback if localStorage empty
+ * @returns [storedValue, setValue] - Same as useState
+ *
+ * @example
+ * ```tsx
+ * function ThemeToggle() {
+ *   const [theme, setTheme] = useLocalStorage('theme', 'light')
+ *   return (
+ *     <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+ *       {theme}
+ *     </button>
+ *   )
+ * }
+ * ```
+ */
+export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
+  // Implementation
+}
+```
+
+### Hooks with Side Effects
+
+```typescript
+/**
+ * Disables body scroll when active, re-enables on unmount.
+ *
+ * Integrates with Lenis if available.
+ * Adds 'overflow-hidden' to documentElement.
+ *
+ * @param isDisabled - Whether scroll should be disabled
+ *
+ * @example
+ * ```tsx
+ * function Modal({ isOpen }: { isOpen: boolean }) {
+ *   useDisableScroll(isOpen)
+ *   return isOpen ? <div>Modal</div> : null
+ * }
+ * ```
+ */
+export function useDisableScroll(isDisabled: boolean) {
+  // Implementation
+}
+```
+
+## Utility Functions
+
+Focus on inputs, outputs, edge cases:
+
+```typescript
+/**
+ * Constrains a numeric value between min and max bounds.
+ *
+ * @param min - Lower bound (inclusive)
+ * @param input - Value to constrain
+ * @param max - Upper bound (inclusive)
+ * @returns Clamped value between min and max
+ *
+ * @example
+ * ```ts
+ * clamp(0, -5, 100)   // 0
+ * clamp(0, 50, 100)   // 50
+ * clamp(0, 150, 100)  // 100
+ * ```
+ */
+export function clamp(min: number, input: number, max: number): number {
+  return Math.max(min, Math.min(input, max))
+}
+```
+
+### Complex Utilities
+
+```typescript
+/**
+ * Debounces function execution until calls stop for specified time.
+ *
+ * Useful for search inputs, resize handlers, scroll events.
+ *
+ * @param fn - Function to debounce
+ * @param delay - Milliseconds to wait (default: 300)
+ * @returns Debounced function
+ *
+ * @example
+ * ```tsx
+ * function SearchInput() {
+ *   const debouncedSearch = debounce((value: string) => {
+ *     searchAPI(value) // Only fires 300ms after typing stops
+ *   }, 300)
+ *   
+ *   return <input onChange={(e) => debouncedSearch(e.target.value)} />
+ * }
+ * ```
+ */
+export function debounce<T extends (...args: any[]) => any>(
+  fn: T,
+  delay = 300
+): (...args: Parameters<T>) => void {
+  // Implementation
+}
+```
+
+## Types
+
+Document complex types with constraints:
+
+```typescript
+/**
+ * API request configuration with automatic retry logic.
+ *
+ * @property url - API endpoint (must start with '/')
+ * @property method - HTTP method (default: 'GET')
+ * @property retries - Retry attempts on failure (0-5, default: 3)
+ * @property timeout - Request timeout in ms (default: 5000)
+ * @property onRetry - Callback before each retry
+ *
+ * @example
+ * ```ts
+ * const config: APIRequestConfig = {
+ *   url: '/api/users',
+ *   method: 'POST',
+ *   retries: 2,
+ *   onRetry: (attempt) => console.log(`Retry ${attempt}`)
+ * }
+ * ```
+ */
+export type APIRequestConfig = {
+  url: string
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  retries?: number
+  timeout?: number
+  onRetry?: (attempt: number) => void
+}
+```
+
+## Context Providers
+
+Explain managed state and consuming hooks:
+
+```typescript
+/**
+ * Toast notification provider with queue and auto-dismiss.
+ *
+ * Max 3 visible toasts. Auto-dismisses after 5s unless persistent.
+ * Consumed via useToast() hook.
+ *
+ * @example
+ * ```tsx
+ * // app/layout.tsx
+ * <ToastProvider>{children}</ToastProvider>
+ *
+ * // Component usage
+ * function SaveButton() {
+ *   const { showToast } = useToast()
+ *   const handleSave = async () => {
+ *     await saveData()
+ *     showToast({ message: 'Saved!', type: 'success' })
+ *   }
+ *   return <button onClick={handleSave}>Save</button>
+ * }
+ * ```
+ */
+export function ToastProvider({ children }: { children: React.ReactNode }) {
+  // Implementation
+}
+```
+
+## Runtime Components
+
+Components with side effects but no UI:
+
+```typescript
+/**
+ * GSAP Runtime
+ *
+ * Syncs GSAP ticker with Tempus for consistent frame timing.
+ * Mount once in root layout. Returns null (no UI).
+ *
+ * @example
+ * ```tsx
+ * // app/layout.tsx
+ * import { GSAPRuntime } from '@/components/effects/gsap'
+ *
+ * <body>
+ *   <GSAPRuntime />
+ *   {children}
+ * </body>
+ * ```
+ */
+export function GSAPRuntime() {
+  useTempus((time) => gsap.updateRoot(time / 1000))
+  return null
+}
+```
+
+## Higher-Order Components
+
+```typescript
+/**
+ * Wraps component with auth check and automatic redirect.
+ *
+ * Shows loading while checking. Redirects to /login if not authenticated.
+ *
+ * @param Component - Component to protect
+ * @returns Auth-protected component
+ *
+ * @example
+ * ```tsx
+ * const ProtectedDashboard = withAuth(Dashboard)
+ * <ProtectedDashboard userId="123" />
+ * ```
+ */
+export function withAuth<P extends object>(
+  Component: React.ComponentType<P>
+): React.ComponentType<P> {
+  // Implementation
+}
+```
+
+## API Routes
+
+```typescript
+/**
+ * GET /api/products - Paginated product list with filters.
+ *
+ * Query params: page (default: 1), limit (max: 100, default: 20), category
+ * Returns: { products: Product[], total: number, page: number }
+ *
+ * @example
+ * ```ts
+ * fetch('/api/products?page=2&category=electronics&limit=10')
+ * // { products: [...], total: 156, page: 2 }
+ * ```
+ */
+export async function GET(request: Request) {
+  // Implementation
+}
+```
+
+## Code Generation Rules
+
+When generating code:
+
+1. **Always document exported entities** - Components, hooks, utilities, types
+2. **Include at least one example** - Use realistic values
+3. **Document side effects** - API calls, DOM changes, state mutations
+4. **Mark async operations** - Note loading states or suspense
+5. **Specify client vs server** - Be explicit for Next.js
+6. **Document dependencies** - Required context or global setup
+
+## Pattern Recognition
+
+Replicate these patterns from existing code:
+
+- **Action verbs** - "Fetches", "Handles", "Formats", "Validates"
+- **Example blocks** - Triple backticks with language tag
+- **Behavior first** - Side effects before `@param`
+- **Defaults in descriptions** - "(default: value)"
+- **Return formats** - Specify structure of returned data
+
+## Best Practices
+
+### Parameters
+
+✅ Include constraints, defaults, and optional behavior
+❌ Don't write generic descriptions like "@param id - The id"
+
+### Examples
+
+✅ Complete runnable code with realistic values
+✅ Show common use cases
+❌ Don't use placeholders like `foo`, `bar`
+❌ Don't write non-working examples
+
+### Descriptions
+
+✅ Action verb + present tense
+✅ First line under 80 chars
+✅ Mention behaviors and gotchas
+❌ Don't describe implementation
+❌ Don't use passive voice
+
+## Special Tags
+
+```typescript
+/**
+ * Legacy JWT authentication.
+ *
+ * @deprecated Use authWithOAuth. Removed in v3.0.
+ * @see authWithOAuth
+ */
+```
+
+Available: `@deprecated`, `@see`, `@throws`, `@internal`, `@remarks`
+
+## TypeScript Integration
+
+- TypeScript defines types and signatures
+- JSDoc defines behavior and usage
+- Don't duplicate type info in JSDoc
+- Focus on what TypeScript can't express
+
+## Quality Checklist
+
+Before completing generation:
+
+- [ ] Exported entities documented
+- [ ] At least one example included
+- [ ] Parameters documented clearly
+- [ ] Side effects mentioned
+- [ ] Client/server boundary clear
+- [ ] Return values described
+- [ ] Examples use realistic values
+- [ ] Style matches project conventions
+
+## Quick Templates
+
+**Utility:**
+```typescript
+/**
+ * [Verb] brief description.
+ * @param param1 - Description
+ * @returns Return description
+ * @example
+ * ```ts
+ * functionName(arg1) // result
+ * ```
+ */
+```
+
+**Component:**
+```typescript
+/**
+ * [Purpose] with [features].
+ * @param prop1 - Description
+ * @example
+ * ```tsx
+ * <Component prop1={value} />
+ * ```
+ */
+```
+
+**Hook:**
+```typescript
+/**
+ * [State managed] with [features].
+ * @param param - Description
+ * @returns Return description
+ * @example
+ * ```tsx
+ * function Component() {
+ *   const value = useHook(param)
+ *   return <div>{value}</div>
+ * }
+ * ```
+ */
+```

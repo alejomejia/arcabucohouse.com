@@ -1,0 +1,38 @@
+@layer utilities {
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .leading-tighter {
+    line-height: 1.05;
+  }
+
+  .arc-images-animation {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    will-change: clip-path;
+
+    .arc-images-animation__wrapper {
+      clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+      will-change: clip-path;
+    }
+  }
+
+  /* Custom gradients */
+  .brand-gradient-primary {
+    background: var(--color-primary-400);
+    background: radial-gradient(circle at 100% 100%, #565454 0%, #252525 100%);
+  }
+
+  .brand-gradient-secondary {
+    background: var(--color-secondary-400);
+    background: radial-gradient(circle at 100% 100%, #AA9B8D 0%, #6F5F54 100%);
+  }
+}

@@ -1,0 +1,57 @@
+@custom-variant first-child {
+  &>*:first-child {
+    @slot;
+  }
+}
+
+@custom-variant last-child {
+  &>*:last-child {
+    @slot;
+  }
+}
+
+@custom-variant bafter {
+
+  &:before,
+  &:after {
+    content: '';
+    @slot;
+  }
+}
+
+@custom-variant not-last {
+  &:not(:last-child) {
+    @slot;
+  }
+}
+
+@custom-variant all-children-span {
+  & span {
+    @slot;
+  }
+}
+
+@custom-variant direct-children {
+  &>* {
+    @slot;
+  }
+}
+
+/* GSAP Split Text */
+@custom-variant char {
+  & .char {
+    @slot;
+  }
+}
+
+@custom-variant word {
+  & .word {
+    @slot;
+  }
+}
+
+@custom-variant line {
+  & .line {
+    @slot;
+  }
+}
