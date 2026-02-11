@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+
 import { cn } from '@/lib/utils/helpers'
 
 import { HeaderCart } from '@/components/features/cart/header-cart'
@@ -24,7 +26,9 @@ export function Header() {
         </div>
         <div className="md:flex-1 flex justify-end items-center gap-3 md:gap-4">
           <Navigation />
-          <HeaderCart />
+          <Suspense fallback={null}>
+            <HeaderCart />
+          </Suspense>
         </div>
       </Container>
     </header>

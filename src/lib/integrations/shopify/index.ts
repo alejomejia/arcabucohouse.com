@@ -2,7 +2,7 @@ import { HIDDEN_PRODUCT_TAG, SHOPIFY_GRAPHQL_API_ENDPOINT, TAGS } from '@/lib/in
 import { isShopifyError } from '@/lib/integrations/type-guards'
 import { isDev } from '@/lib/utils/config'
 import { ensureStartsWith } from '@/lib/utils/strings'
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag, revalidateTag } from 'next/cache'
+import { cacheLife, cacheTag, revalidateTag } from 'next/cache'
 import { cookies, headers } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import { addToCartMutation, createCartMutation, editCartItemsMutation, removeFromCartMutation } from './mutations/cart'

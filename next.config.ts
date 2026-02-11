@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   experimental: {
-    ppr: true,
     useCache: true,
+    cacheComponents: true,
     cacheLife: {
       // Shopify catalog cache profile (products and collections)
       // Cached indefinitely until webhook revalidation from Shopify

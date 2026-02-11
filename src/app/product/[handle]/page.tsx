@@ -5,7 +5,6 @@ import { Gallery } from '@/components/features/product//gallery'
 import { ProductProvider } from '@/components/features/product//product-context'
 import { ProductDescription } from '@/components/features/product//product-description'
 import { GridTileImage } from '@/components/from-template/grid/tile'
-import Footer from '@/components/from-template/layout/footer'
 import { HIDDEN_PRODUCT_TAG } from '@/lib/integrations/constants'
 import { getProduct, getProductRecommendations } from '@/lib/integrations/shopify'
 import { Image } from '@/lib/integrations/shopify/types'
@@ -100,7 +99,6 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
           </div>
           <RelatedProducts id={product.id} />
         </div>
-        <Footer />
       </ProductProvider>
     </Suspense>
   )

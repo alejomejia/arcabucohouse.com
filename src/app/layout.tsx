@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { Toaster } from "sonner";
 
 import { CursorProvider } from "@/components/effects/cursor";
@@ -48,16 +48,18 @@ export default async function RootLayout({
         <PortalRoot id={PORTAL_IDS.bodyTop} />
         <Toaster closeButton />
 
-        <PreloaderProvider>
-          <PreloaderGate />
-          <CursorProvider>
-            <Lenis root>
-              <CartProvider cartPromise={cart}>
-                <Wrapper>{children}</Wrapper>
-              </CartProvider>
-            </Lenis>
-          </CursorProvider>
-        </PreloaderProvider>
+        <Suspense>
+          <PreloaderProvider>
+            <PreloaderGate />
+            <CursorProvider>
+              <Lenis root>
+                <CartProvider cartPromise={cart}>
+                  <Wrapper>{children}</Wrapper>
+                </CartProvider>
+              </Lenis>
+            </CursorProvider>
+          </PreloaderProvider>
+        </Suspense>
 
         <GSAPRuntime />
         <PortalRoot id={PORTAL_IDS.bodyBottom} />
