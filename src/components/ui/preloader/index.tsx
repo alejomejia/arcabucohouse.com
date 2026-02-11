@@ -1,11 +1,10 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText as GSAPSplitText } from "gsap/SplitText";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 
-import { type SplitTextRef, SplitText } from "@/components/effects/split-text";
+import { SplitText } from "@/components/effects/split-text";
 import { cn } from "@/lib/utils/helpers";
 
 import { Logo } from "../logo";
@@ -48,100 +47,89 @@ export function Preloader() {
   const { markReady } = usePreloader();
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const descriptionRef = useRef<SplitTextRef>(null);
   const progressContainerRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLSpanElement>(null);
   const counterRef = useRef({ value: 0 });
 
-  useGSAP(
-    () => {
-      const runAnimation = async () => {
-        const container = containerRef.current;
-        const progressContainer = progressContainerRef.current;
-        const progressEl = progressRef.current;
-        const description = descriptionRef.current;
+  // Create the full preloader timeline when the description split is ready.
+  // Animations are tracked by SplitText's context for automatic cleanup.
+  const handleDescriptionReady = useCallback((lines: HTMLElement[]) => {
+    const container = containerRef.current;
+    const progressContainer = progressContainerRef.current;
+    const progressEl = progressRef.current;
 
-        if (!container || !progressContainer || !progressEl || !description) return;
+    if (!container || !progressContainer || !progressEl) return;
 
-        const counter = counterRef.current;
+    const counter = counterRef.current;
 
-        await description.ready();
+    // Main timeline - signals ready when complete
+    const tl = gsap.timeline({
+      onComplete: markReady,
+    });
 
-        const lines = description.getElements();
+    // Set initial state
+    tl.set(container, { clipPath: CLIP_PATH.initial });
 
-        // Main timeline - signals ready when complete
-        const tl = gsap.timeline({
-          onComplete: markReady,
-        });
+    tl.fromTo(
+      lines,
+      { yPercent: 100 },
+      {
+        yPercent: 0,
+        ease: "gentleSlow",
+        stagger: TIMING.descriptionStagger,
+        duration: TIMING.descriptionDuration
+      },
+      0
+    );
 
-        // Set initial state
-        tl.set(container, { clipPath: CLIP_PATH.initial });
+    // Counter animation (0 → 100)
+    tl.to(
+      counter,
+      {
+        value: 100,
+        duration: TIMING.counterDuration,
+        ease: "power3.out",
+        onUpdate: () => {
+          progressEl.textContent = Math.floor(counter.value).toString();
+        },
+        onComplete: () => {
+          // Split text and animate digits out
+          const split = new GSAPSplitText(progressEl, {
+            type: "chars",
+            charsClass: "digit",
+            mask: "chars",
+          });
 
-        tl.fromTo(
-          lines,
-          { yPercent: 100 },
-          {
-            yPercent: 0,
-            ease: "gentleSlow",
-            stagger: TIMING.descriptionStagger,
-            duration: TIMING.descriptionDuration
-          },
-          0
-        );
-
-        // Counter animation (0 → 100)
-        tl.to(
-          counter,
-          {
-            value: 100,
-            duration: TIMING.counterDuration,
+          gsap.to(split.chars, {
+            x: "-100%",
+            duration: TIMING.digitSlideDuration,
             ease: "power3.out",
-            onUpdate: () => {
-              progressEl.textContent = Math.floor(counter.value).toString();
-            },
-            onComplete: () => {
-              // Split text and animate digits out
-              const split = new GSAPSplitText(progressEl, {
-                type: "chars",
-                charsClass: "digit",
-                mask: "chars",
-              });
+            stagger: TIMING.digitSlideStagger,
+            delay: TIMING.digitSlideDelay,
+          });
+        },
+      },
+      0.5
+    );
 
-              gsap.to(split.chars, {
-                x: "-100%",
-                duration: TIMING.digitSlideDuration,
-                ease: "power3.out",
-                stagger: TIMING.digitSlideStagger,
-                delay: TIMING.digitSlideDelay,
-              });
-            },
-          },
-          0.5
-        );
+    // Scale up the progress container in parallel
+    tl.to(
+      progressContainer,
+      {
+        scale: 1,
+        duration: TIMING.scaleDuration,
+        ease: "power3.out",
+      },
+      0.5
+    );
 
-        // Scale up the progress container in parallel
-        tl.to(
-          progressContainer,
-          {
-            scale: 1,
-            duration: TIMING.scaleDuration,
-            ease: "power3.out",
-          },
-          0.5
-        );
-
-        // Final reveal - clip-path collapse
-        tl.to(container, {
-          clipPath: CLIP_PATH.final,
-          duration: TIMING.revealDuration,
-          ease: "power3.inOut",
-        }, "counterComplete+=1.5");
-      }
-
-      runAnimation()
-    },
-    { scope: containerRef }
-  );
+    // Final reveal - clip-path collapse
+    tl.to(container, {
+      clipPath: CLIP_PATH.final,
+      duration: TIMING.revealDuration,
+      ease: "power3.inOut",
+    }, "counterComplete+=1.5");
+  }, [markReady]);
 
   return (
     <div
@@ -155,7 +143,7 @@ export function Preloader() {
         <div className="max-w-60 mb-4">
           <Logo className="w-full" />
         </div>
-        <SplitText ref={descriptionRef} type="lines">
+        <SplitText type="lines" onReady={handleDescriptionReady}>
           <p className="text-base font-medium text-primary-400 max-w-54">
             Artisan-made interiors from the heart of Latin America
           </p>

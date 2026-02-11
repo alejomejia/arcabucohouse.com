@@ -28,22 +28,24 @@ export interface UseNavigationToggleReturn {
   containerRef: RefObject<HTMLDivElement | null>
   menuRef: RefObject<SplitTextRef | null>
   closeRef: RefObject<SplitTextRef | null>
+  onSplitReady: () => void
   toggle: () => void
   disabled: boolean
   open: boolean
 }
 
 /**
- * Custom hook that manages navigation toggle animations and state.
- * Handles text reveal animations using GSAP SplitText and prevents
- * overlapping animations on rapid clicks.
+ * Manages navigation toggle animations and state.
  *
- * @returns Object containing refs, toggle function, and state
+ * Coordinates preloader readiness, SplitText readiness, and user
+ * interaction to animate between "Menu" and "Close" labels.
+ *
+ * @returns Object containing refs, onSplitReady, toggle function, and state
  */
 export function useNavigationToggle(): UseNavigationToggleReturn {
   const pathname = usePathname()
   const { navState, isNavOpen, openNav, openingNav, closingNav } = useNavigation()
-  const { waitForReady } = usePreloader()
+  const { isReady: preloaderReady } = usePreloader()
   const [disabled, setDisabled] = useState(true)
 
   const containerRef = useRef<HTMLDivElement>(null)
@@ -53,10 +55,23 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
   const isAnimatingRef = useRef(false)
   const hasPlayedIntroRef = useRef(false)
 
+  // Track split readiness via state so useGSAP re-runs when both splits are ready
+  const [splitsReady, setSplitsReady] = useState(false)
+  const splitReadyCountRef = useRef(0)
+
+  const onSplitReady = useCallback(() => {
+    splitReadyCountRef.current++
+    if (splitReadyCountRef.current >= 2) {
+      setSplitsReady(true)
+    }
+  }, [])
+
   useDisableScroll(isNavOpen)
 
-  // Close navigation on route change
+  // Close navigation on route change (skip before intro plays)
   useEffect(() => {
+    if (!hasPlayedIntroRef.current) return
+
     closingNav()
     closeAnimation()
   }, [pathname])
@@ -68,63 +83,45 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
     return () => clearTimeout(timeout)
   }, [])
 
-  // Animate menu label in - waits for preloader
+  // Animate menu label in — runs when preloader and both splits are ready
   const { contextSafe } = useGSAP(() => {
-    if (!menuRef.current || !closeRef.current) return
     if (hasPlayedIntroRef.current) return
+    if (!preloaderReady || !splitsReady) return
+    if (!menuRef.current || !closeRef.current) return
 
-    const runAnimation = async () => {
-      if (hasPlayedIntroRef.current) return
-      if (!menuRef.current || !closeRef.current) return
+    const menuChars = menuRef.current.getElements()
+    const closeChars = closeRef.current.getElements()
 
-      // Wait for preloader to complete (resolves immediately if skipped)
-      await waitForReady()
-      if (hasPlayedIntroRef.current) return
+    if (menuChars.length === 0 || closeChars.length === 0) return
 
-      // Wait for both SplitText instances to be ready
-      await Promise.all([
-        menuRef.current.ready(),
-        closeRef.current.ready(),
-      ])
+    hasPlayedIntroRef.current = true
 
-      if (hasPlayedIntroRef.current) return
+    // Get the container element
+    const [menuContainer] = menuRef.current.getContainers()
 
-      const menuChars = menuRef.current.getElements()
-      const closeChars = closeRef.current.getElements()
-
-      if (menuChars.length === 0 || closeChars.length === 0) return
-
-      hasPlayedIntroRef.current = true
-
-      // Get the container element
-      const [menuContainer] = menuRef.current.getContainers()
-
-      // Set container visible
-      if (menuContainer) {
-        gsap.set(menuContainer, { opacity: 1 })
-      }
-
-      // Initial state
-      gsap.set(menuChars, { yPercent: 100 })
-
-      // Animate in
-      gsap.to(menuChars, {
-        yPercent: 0,
-        opacity: 1,
-        ...PRELOADER_ANIMATION_CONFIG,
-        onComplete: () => {
-          debouncedSetDisabled()
-        },
-      })
+    // Set container visible
+    if (menuContainer) {
+      gsap.set(menuContainer, { opacity: 1 })
     }
 
-    runAnimation()
-  }, { scope: containerRef })
+    // Initial state
+    gsap.set(menuChars, { yPercent: 100 })
+
+    // Animate in
+    gsap.to(menuChars, {
+      yPercent: 0,
+      opacity: 1,
+      ...PRELOADER_ANIMATION_CONFIG,
+      onComplete: () => {
+        debouncedSetDisabled()
+      },
+    })
+  }, { scope: containerRef, dependencies: [preloaderReady, splitsReady] })
 
   // Animate menu label out and close label in, on open
   const openAnimation = contextSafe(() => {
+    if (!hasPlayedIntroRef.current) return
     if (!menuRef.current || !closeRef.current) return
-    if (!menuRef.current.isReady() || !closeRef.current.isReady()) return
 
     const menuChars = menuRef.current.getElements()
     const closeChars = closeRef.current.getElements()
@@ -164,46 +161,35 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
 
   // Animate close label out and menu label in, on close
   const closeAnimation = contextSafe(() => {
+    if (!hasPlayedIntroRef.current) return
     if (!menuRef.current || !closeRef.current) return
 
-    const runAnimation = async () => {
-      if (!menuRef.current || !closeRef.current) return
+    const menuChars = menuRef.current.getElements()
+    const closeChars = closeRef.current.getElements()
 
-      // Wait for both SplitText instances to be ready
-      await Promise.all([
-        menuRef.current.ready(),
-        closeRef.current.ready(),
-      ])
-      
-      const menuChars = menuRef.current.getElements()
-      const closeChars = closeRef.current.getElements()
+    if (menuChars.length === 0 || closeChars.length === 0) return
 
-      if (menuChars.length === 0 || closeChars.length === 0) return
+    // Kill any ongoing animations to prevent overlap
+    gsap.killTweensOf([menuChars, closeChars])
 
-      // Kill any ongoing animations to prevent overlap
-      gsap.killTweensOf([menuChars, closeChars])
+    // Animate menu label in
+    gsap.to(menuChars, {
+      yPercent: 0,
+      delay: 0.5,
+      ...MENU_ANIMATION_OPTIONS,
+    })
 
-      // Animate menu label in
-      gsap.to(menuChars, {
-        yPercent: 0,
-        delay: 0.5,
-        ...MENU_ANIMATION_OPTIONS,
-      })
-
-      // Animate close label out
-      gsap.to(closeChars, {
-        yPercent: 100,
-        delay: 0.25,
-        ...MENU_ANIMATION_OPTIONS,
-        onComplete: () => {
-          isAnimatingRef.current = false
-          debouncedSetDisabled()
-          // Don't set to 'closed' here - let NavigationOverlay do it after its animation
-        },
-      })
-    }
-
-    runAnimation()
+    // Animate close label out
+    gsap.to(closeChars, {
+      yPercent: 100,
+      delay: 0.25,
+      ...MENU_ANIMATION_OPTIONS,
+      onComplete: () => {
+        isAnimatingRef.current = false
+        debouncedSetDisabled()
+        // Don't set to 'closed' here - let NavigationOverlay do it after its animation
+      },
+    })
   })
 
   const toggle = () => {
@@ -228,6 +214,7 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
     containerRef,
     menuRef,
     closeRef,
+    onSplitReady,
     toggle,
     disabled,
     open: isNavOpen,

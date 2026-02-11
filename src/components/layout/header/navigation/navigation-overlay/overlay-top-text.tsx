@@ -2,7 +2,7 @@
 
 import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
-import { useRef } from "react"
+import { useCallback, useRef } from "react"
 
 import { SplitText, type SplitTextRef } from "@/components/effects/split-text"
 import { useBreakpoint } from "@/lib/hooks/use-breakpoint"
@@ -15,41 +15,17 @@ export function OverlayTopText() {
   const { isMobile } = useBreakpoint()
   const splitTextRef = useRef<SplitTextRef>(null)
   const prevNavStateRef = useRef<typeof navState>(null)
+  const isReadyRef = useRef(false)
 
-  // Initialize text split and set initial state
-  useGSAP(() => {
-    if (!splitTextRef.current) return
-
-    // Wait for all SplitText instances to be ready
-    const checkReady = () => {
-      const isReady = splitTextRef.current?.isReady()
-
-      if (!isReady) {
-        setTimeout(checkReady, 50)
-        return
-      }
-
-      initializeText()
-    }
-
-    // Initialize text state
-    const initializeText = () => {
-      if (!splitTextRef.current) return
-
-      const words = splitTextRef.current.getElements()
-
-      if (words.length === 0) return
-
-      prevNavStateRef.current = navState
-    }
-
-    checkReady()
-  }, { scope: splitTextRef })
+  // Initialize text state when split is ready
+  const handleReady = useCallback(() => {
+    isReadyRef.current = true
+    prevNavStateRef.current = navState
+  }, [navState])
 
   // Animate text in/out based on navigation state
   useGSAP(() => {
-    if (!splitTextRef.current) return
-    if (!splitTextRef.current.isReady()) return
+    if (!isReadyRef.current || !splitTextRef.current) return
 
     // Skip animation on initial mount
     if (prevNavStateRef.current === null) {
@@ -109,6 +85,7 @@ export function OverlayTopText() {
     <SplitText
       ref={splitTextRef}
       type="words"
+      onReady={handleReady}
       className={cn(
         "italic font-normal tracking-wide text-lg text-primary-100 leading-none",
         "opacity-0 word:inline-block"

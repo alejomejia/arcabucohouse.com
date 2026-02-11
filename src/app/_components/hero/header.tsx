@@ -2,7 +2,7 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { SplitText, type SplitTextRef } from "@/components/effects/split-text";
 import { Container } from "@/components/ui/container";
@@ -20,68 +20,61 @@ export function HeroHeader() {
   const descriptionRef = useRef<SplitTextRef>(null)
   const hasPlayedRef = useRef(false)
 
-  const { waitForReady } = usePreloader()
+  const { isReady: preloaderReady } = usePreloader()
+  const [splitsReady, setSplitsReady] = useState(0)
 
+  const handleSplitReady = useCallback(() => {
+    setSplitsReady(prev => prev + 1)
+  }, [])
+
+  // Animate when preloader is done and both splits are ready
   useGSAP(
     () => {
-      const runAnimation = async () => {
-        if (hasPlayedRef.current) return
-        if (!titleRef.current || !descriptionRef.current || !containerRef.current) return
+      if (hasPlayedRef.current) return
+      if (!preloaderReady || splitsReady < 2) return
+      if (!titleRef.current || !descriptionRef.current || !containerRef.current) return
 
-        // Wait for preloader to complete (resolves immediately if skipped)
-        await waitForReady()
-        if (hasPlayedRef.current) return
+      const title = titleRef.current.getElements()
+      const description = descriptionRef.current.getElements()
 
-        // Wait for both SplitText instances to be ready
-        await Promise.all([
-          titleRef.current.ready(),
-          descriptionRef.current.ready(),
-        ])
+      if (title.length === 0 || description.length === 0) return
 
-        if (hasPlayedRef.current) return
+      hasPlayedRef.current = true
 
-        const container = containerRef.current
-        const title = titleRef.current.getElements()
-        const description = descriptionRef.current.getElements()
+      gsap.set(containerRef.current, { opacity: 1 })
 
-        if (title.length === 0 || description.length === 0) return
+      const elements = [...title, ...description]
 
-        hasPlayedRef.current = true
-
-        gsap.set(container, { opacity: 1 })
-
-        const elements = [...title, ...description]
-
-        gsap.fromTo(
-          elements,
-          { yPercent: 100 },
-          { yPercent: 0, ...ANIMATION_CONFIG }
-        )
-      }
-
-      runAnimation()
+      gsap.fromTo(
+        elements,
+        { yPercent: 100 },
+        { yPercent: 0, ...ANIMATION_CONFIG }
+      )
     },
-    { scope: containerRef }
+    {
+      scope: containerRef,
+      dependencies: [preloaderReady, splitsReady]
+    }
   )
 
   return (
-    <Container className="w-full pt-10">
+    <Container className="w-full pt-6">
       <div
         ref={containerRef}
         className="text-center flex flex-col justify-center items-center gap-1 opacity-0"
       >
-        <h1 className="font-serif">
-          <SplitText ref={titleRef} type="lines">
-            <span className="block text-3xl lg:text-4xl text-primary-base italic text-pretty leading-none mb-1">
+        <h1 className="mb-4">
+          <SplitText ref={titleRef} type="lines" onReady={handleSplitReady}>
+            <span className="block font-serif text-3xl lg:text-4xl text-primary-base italic text-pretty leading-none">
               Curated South American Artistry
             </span>
-            <span className="text-4xl lg:text-5xl tracking-wider uppercase text-secondary-300">
+            <span className="text-4xl lg:text-5xl leading-none tracking-wider uppercase text-secondary-300">
               for modern interiors
             </span>
           </SplitText>
         </h1>
-        <SplitText ref={descriptionRef} type="lines">
-          <p className="max-w-84 font-medium text-secondary-600">
+        <SplitText ref={descriptionRef} type="lines" onReady={handleSplitReady}>
+          <p className="max-w-96 font-serif font-medium text-xl text-primary-base leading-tight">
             Design objects born in Latin America, curated for modern living
           </p>
         </SplitText>

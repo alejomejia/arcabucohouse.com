@@ -3,7 +3,7 @@
 import { type ImageProps } from "@/components/ui/image";
 import { cn } from "@/lib/utils/helpers";
 
-import { ParallaxImage } from "../parallax-image";
+import { ParallaxImage } from "../parallax";
 import { useSpotlightContext } from "./spotlight-context";
 
 /**

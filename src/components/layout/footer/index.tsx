@@ -2,7 +2,6 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger as GSAPScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText as GSAPSplitText } from "gsap/SplitText";
 import { useRef } from "react";
 
@@ -10,12 +9,8 @@ import { UnderlineLink } from "@/components/effects/underline/underline-link";
 import { Container } from "@/components/ui/container";
 import { cn } from "@/lib/utils/helpers";
 
-import { FOOTER_COLUMN_HEADING_CLASSNAME, FOOTER_COLUMN_WRAPPER_CLASSNAME, FOOTER_COLUMNS, START_YEAR } from "./const";
+import { FOOTER_COLUMN_HEADING_CLASSNAME, FOOTER_COLUMNS, START_YEAR } from "./const";
 import { FooterLogo } from "./footer-logo";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(GSAPScrollTrigger, GSAPSplitText);
-}
 
 const ANIMATION_CONFIG = {
   duration: 2,
@@ -96,7 +91,7 @@ export function Footer() {
       <div ref={footerLogoRef} className="bg-secondary-base min-h-0 flex-1" aria-hidden />
       <Container className="py-8 lg:py-16">
         <div className="grid grid-cols-12 gap-8 mb-12 lg:mb-24 font-serif">
-          <div data-footer-col className={FOOTER_COLUMN_WRAPPER_CLASSNAME}>
+          <div data-footer-col className="text-primary-200 col-span-12 md:col-span-6 lg:col-span-3 md:pr-8 lg:border-r border-primary-100/30">
             <h4 className={FOOTER_COLUMN_HEADING_CLASSNAME}>About</h4>
             <p>
               Arcabuco is a creative collective amplifying South American artistic voices.
@@ -105,7 +100,7 @@ export function Footer() {
             </p>
           </div>
           {FOOTER_COLUMNS.map(({ title, links }) => (
-            <div key={title} data-footer-col className={FOOTER_COLUMN_WRAPPER_CLASSNAME}>
+            <div key={title} data-footer-col className="text-primary-200 col-span-6 lg:col-span-3 md:pr-8 lg:border-r border-primary-100/30">
               <h4 className={FOOTER_COLUMN_HEADING_CLASSNAME}>{title}</h4>
               <ul className="group/list w-fit flex flex-col gap-3">
                 {links.map(({ id, name, href }) => (

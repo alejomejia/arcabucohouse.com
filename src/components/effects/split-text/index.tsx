@@ -1,7 +1,6 @@
 "use client"
 
 import { useGSAP } from "@gsap/react"
-import gsap from "gsap"
 import { SplitText as GSAPSplitText } from "gsap/SplitText"
 import {
   Children,
@@ -15,11 +14,6 @@ import {
 } from "react"
 
 import { cn } from "@/lib/utils/helpers"
-
-// Register plugin client-side only
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(GSAPSplitText)
-}
 
 /**
  * Split type options for text splitting
@@ -38,6 +32,30 @@ export interface SplitTextProps {
   className?: string
   /** Whether to wait for fonts to load before splitting */
   waitForFonts?: boolean
+  /**
+   * Called once when fonts are loaded and text is split.
+   *
+   * Any GSAP animations created inside this callback are automatically
+   * tracked by SplitText's internal context and cleaned up on unmount.
+   * This eliminates the need for async/await or polling in consumer components.
+   *
+   * @param elements - The split elements (chars, words, or lines)
+   * @param containers - The container element(s) that were split
+   *
+   * @example
+   * ```tsx
+   * <SplitText
+   *   type="words"
+   *   onReady={(words) => {
+   *     gsap.set(words, { yPercent: 100 })
+   *     gsap.to(words, { yPercent: 0, stagger: 0.03 })
+   *   }}
+   * >
+   *   <p>Hello World</p>
+   * </SplitText>
+   * ```
+   */
+  onReady?: (elements: HTMLElement[], containers: HTMLElement[]) => void
 }
 
 /**
@@ -54,50 +72,32 @@ export interface SplitTextRef {
   getSplitInstanceByIndex: (index: number) => GSAPSplitText | null
   /** Get the container element(s) that were split */
   getContainers: () => HTMLElement[]
-  /**
-   * Returns a Promise that resolves when the split is ready.
-   * If already ready, resolves immediately.
-   *
-   * @example
-   * ```tsx
-   * await splitRef.current?.ready()
-   * // Now safe to animate split elements
-   * gsap.from(splitRef.current.getElements(), { y: 100 })
-   * ```
-   */
-  ready: () => Promise<void>
-  /**
-   * @deprecated Use `ready()` instead for Promise-based readiness.
-   * Check if fonts are loaded and split is ready (synchronous).
-   */
-  isReady: () => boolean
 }
 
 /**
- * SplitText component that splits text into characters, words, or lines using GSAP SplitText.
- * This component only handles splitting - animations should be applied externally using the exposed refs.
+ * Splits text into characters, words, or lines using GSAP SplitText.
+ *
+ * Waits for fonts to load (when `waitForFonts` is enabled) before splitting
+ * to ensure accurate measurements. Fires the `onReady` callback when done,
+ * with any GSAP animations created inside automatically tracked for cleanup.
  *
  * @example
  * ```tsx
- * // Basic usage - single element
- * const splitRef = useRef<SplitTextRef>(null)
- *
- * <SplitText ref={splitRef} type="chars">
+ * // Animate on ready — no ref, no hooks, no async needed
+ * <SplitText
+ *   type="chars"
+ *   onReady={(chars) => {
+ *     gsap.from(chars, { y: 100, stagger: 0.05 })
+ *   }}
+ * >
  *   <h1>Hello World</h1>
  * </SplitText>
  *
- * // Later, animate the split elements
- * useGSAP(() => {
- *   if (!splitRef.current) return
- * 
- *   const elements = splitRef.current.getElements()
- *   gsap.fromTo(elements, { y: 100 }, { y: 0, stagger: 0.05 })
- * }, { scope: splitRef })
+ * // With ref — for reactive animations driven by state
+ * const splitRef = useRef<SplitTextRef>(null)
  *
- * // Multiple elements
- * <SplitText ref={splitRef} type="words">
+ * <SplitText ref={splitRef} type="words" onReady={() => { ... }}>
  *   <h1>Title</h1>
- *   <p>Subtitle</p>
  * </SplitText>
  * ```
  */
@@ -108,7 +108,8 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(
       type = "lines",
       splitClassName,
       className,
-      waitForFonts = true
+      waitForFonts = true,
+      onReady
     },
     ref
   ) {
@@ -122,27 +123,9 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(
     const splitsRef = useRef<GSAPSplitText[]>([])
     const containersRef = useRef<HTMLElement[]>([])
 
-    // Promise-based readiness tracking
-    const isReadyRef = useRef(false)
-    const resolveReadyRef = useRef<(() => void) | null>(null)
-    const readyPromiseRef = useRef<Promise<void> | null>(null)
-
-    // Create the ready promise lazily (only when ready() is called)
-    const getReadyPromise = useCallback((): Promise<void> => {
-      // If already ready, return resolved promise
-      if (isReadyRef.current) {
-        return Promise.resolve()
-      }
-
-      // Create promise if it doesn't exist
-      if (!readyPromiseRef.current) {
-        readyPromiseRef.current = new Promise<void>((resolve) => {
-          resolveReadyRef.current = resolve
-        })
-      }
-
-      return readyPromiseRef.current
-    }, [])
+    // Store latest onReady in a ref so font-loading callback uses current value
+    const onReadyRef = useRef(onReady)
+    onReadyRef.current = onReady
 
     /**
      * Get the animated elements based on split type for a specific SplitText instance
@@ -212,18 +195,18 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(
         getElementsByIndex,
         getSplitInstanceByIndex,
         getContainers,
-        ready: getReadyPromise,
-        isReady: () => isReadyRef.current,
       }),
-      [getElements, getElementsByIndex, getSplitInstanceByIndex, getContainers, getReadyPromise]
+      [getElements, getElementsByIndex, getSplitInstanceByIndex, getContainers]
     )
 
     // Initialize split text
-    useGSAP(() => {
+    useGSAP((ctx) => {
       if (!containerRef.current) return
 
+      let cancelled = false
+
       const initializeSplit = () => {
-        if (!containerRef.current) return
+        if (cancelled || !containerRef.current) return
 
         // Determine which elements to split
         const elementsToSplit: HTMLElement[] = []
@@ -261,9 +244,13 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(
           splitsRef.current.push(split)
         })
 
-        // Mark as ready and resolve any waiting promises
-        isReadyRef.current = true
-        resolveReadyRef.current?.()
+        // Notify consumer — context.add() ensures any GSAP animations
+        // created inside the callback are tracked for automatic cleanup
+        if (onReadyRef.current) {
+          ctx.add(() => {
+            onReadyRef.current?.(getElements(), getContainers())
+          })
+        }
       }
 
       // Wait for fonts to load before splitting (if enabled)
@@ -277,14 +264,10 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(
       // Cleanup: SplitText instances must be manually reverted
       // as gsap.context().revert() doesn't automatically handle them
       return () => {
+        cancelled = true
         splitsRef.current.forEach((split) => split?.revert())
         splitsRef.current = []
         containersRef.current = []
-
-        // Reset readiness state for potential remount
-        isReadyRef.current = false
-        readyPromiseRef.current = null
-        resolveReadyRef.current = null
       }
     }, {
       scope: containerRef,

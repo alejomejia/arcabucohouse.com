@@ -73,5 +73,4 @@ export const FOOTER_COLUMNS = [
   },
 ]
 
-export const FOOTER_COLUMN_WRAPPER_CLASSNAME = "text-primary-200 col-span-12 md:col-span-6 lg:col-span-3 pr-8 lg:border-r border-primary-100/30"
 export const FOOTER_COLUMN_HEADING_CLASSNAME = "text-primary-100 text-sm uppercase font-sans font-semibold tracking-wider mb-6"

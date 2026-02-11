@@ -8,10 +8,6 @@ import { type RefObject, useRef } from "react";
 
 import type { SpotlightContextValue } from "../spotlight-context";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, SplitText);
-}
-
 /**
  * Optional configuration for spotlight scroll animation. All fields have defaults.
  *

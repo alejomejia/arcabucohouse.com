@@ -7,13 +7,13 @@ import { useCallback, useEffect, useRef, useState, type WheelEvent } from "react
  * Hover duration (ms) before wheel is captured by the carousel;
  * keeps page scroll for quick pass-through.
  */
-const HOVER_ACTIVATE_MS = 200
+const HOVER_ACTIVATE_MS = 1000
 
 /**
  * Idle time (ms) after the last wheel event before we consider the carousel "still".
  * Used to expose isScrolling for UI (e.g. custom cursor visibility).
  */
-const SCROLL_IDLE_MS = 500
+const SCROLL_IDLE_MS = 1000
 
 /**
  * Manages all products-carousel behavior: hover-to-activate wheel, wheel-to-horizontal

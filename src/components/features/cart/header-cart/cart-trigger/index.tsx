@@ -18,7 +18,7 @@ export function CartTrigger({ onOpen }: CartTriggerProps) {
   const { cart } = useCart()
   const quantity = cart?.totalQuantity ?? 0
 
-  const cartRef = useCartTriggerAnimation(quantity)
+  const { cartRef, onSplitReady } = useCartTriggerAnimation(quantity)
 
   return (
     <UnderlineButton onClick={onOpen} aria-label="Open cart">
@@ -26,6 +26,7 @@ export function CartTrigger({ onOpen }: CartTriggerProps) {
         key={quantity}
         ref={cartRef}
         type="chars"
+        onReady={onSplitReady}
         className="flex items-center opacity-0"
       >
         <div className="overflow-hidden">

@@ -15,6 +15,7 @@ export function NavigationToggle() {
     containerRef,
     menuRef,
     closeRef,
+    onSplitReady,
     toggle,
     disabled
   } = useNavigationToggle()
@@ -33,6 +34,7 @@ export function NavigationToggle() {
             ref={menuRef}
             type="chars"
             className="opacity-0"
+            onReady={onSplitReady}
           >
             <span>Menu</span>
           </SplitText>
@@ -40,6 +42,7 @@ export function NavigationToggle() {
             ref={closeRef}
             type="chars"
             className="opacity-0 absolute top-0 left-0"
+            onReady={onSplitReady}
           >
             <span>Close</span>
           </SplitText>

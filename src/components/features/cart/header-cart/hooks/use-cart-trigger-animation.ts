@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import { type SplitTextRef } from '@/components/effects/split-text'
 import { usePreloader } from '@/components/ui/preloader/hooks/use-preloader'
@@ -13,73 +13,57 @@ const ANIMATION_CONFIG = {
 } as const;
 
 /**
- * Hook to handle GSAP animation for the cart trigger button.
- * Waits for preloader to complete before animating.
+ * Manages GSAP animation for the cart trigger button.
  *
- * @returns A ref to attach to the SplitText component
+ * Waits for both preloader completion and SplitText readiness before
+ * playing the intro animation. On quantity changes (SplitText remounts),
+ * the onReady handler sets container opacity directly.
+ *
+ * @returns Object with cartRef and onSplitReady to attach to SplitText
  */
 export function useCartTriggerAnimation(quantity: number) {
   const cartRef = useRef<SplitTextRef>(null)
   const hasPlayedIntroRef = useRef(false)
-  const { waitForReady } = usePreloader()
 
-  // Initial mount animation - waits for preloader
+  const { isReady: preloaderReady } = usePreloader()
+  const [splitReady, setSplitReady] = useState(false)
+
+  // Called by SplitText onReady — handles both initial mount and remounts
+  const onSplitReady = useCallback((_elements: HTMLElement[], containers: HTMLElement[]) => {
+    if (!hasPlayedIntroRef.current) {
+      // First mount: signal readiness for the preloader-dependent animation
+      setSplitReady(true)
+      return
+    }
+
+    // Subsequent mounts (quantity change): set container visible directly
+    if (containers.length > 0) {
+      gsap.set(containers, { opacity: 1 })
+    }
+  }, [])
+
+  // Initial mount animation — runs when both preloader and split are ready
   useGSAP(() => {
-    if (!cartRef.current) return
     if (hasPlayedIntroRef.current) return
+    if (!preloaderReady || !splitReady || !cartRef.current) return
 
-    const runAnimation = async () => {
-      if (hasPlayedIntroRef.current) return
-      if (!cartRef.current) return
+    const chars = cartRef.current.getElements()
+    const container = cartRef.current.getContainers()
 
-      // Wait for preloader to complete (resolves immediately if skipped)
-      await waitForReady()
-      if (hasPlayedIntroRef.current) return
+    if (chars.length === 0 || container.length === 0) return
 
-      // Wait for SplitText to be ready
-      await cartRef.current.ready()
-      if (hasPlayedIntroRef.current) return
+    hasPlayedIntroRef.current = true
 
-      const chars = cartRef.current.getElements()
-      const container = cartRef.current.getContainers()
+    // Set initial state
+    gsap.set(chars, { yPercent: 100 })
+    gsap.set(container, { opacity: 1 })
 
-      if (chars.length === 0 || container.length === 0) return
+    // Animate to final state
+    gsap.to(chars, {
+      yPercent: 0,
+      ...ANIMATION_CONFIG,
+    })
+  }, { scope: cartRef, dependencies: [preloaderReady, splitReady] })
 
-      hasPlayedIntroRef.current = true
-
-      // Set initial state
-      gsap.set(chars, { yPercent: 100 })
-      gsap.set(container, { opacity: 1 })
-
-      // Animate to final state
-      gsap.to(chars, {
-        yPercent: 0,
-        ...ANIMATION_CONFIG,
-      })
-    }
-
-    runAnimation()
-  }, { scope: cartRef })
-
-  // Handle quantity changes (after initial animation)
-  useGSAP(() => {
-    if (!cartRef.current) return
-    if (!hasPlayedIntroRef.current) return // Skip if intro hasn't played
-
-    const updateContainer = async () => {
-      if (!cartRef.current) return
-
-      // Wait for SplitText to be ready (no polling!)
-      await cartRef.current.ready()
-
-      const container = cartRef.current.getContainers()
-      if (container.length === 0) return
-
-      gsap.set(container, { opacity: 1 })
-    }
-
-    updateContainer()
-  }, { scope: cartRef, dependencies: [quantity] })
-
-  return cartRef
+  return { cartRef, onSplitReady }
 }

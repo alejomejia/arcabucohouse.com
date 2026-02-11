@@ -1,6 +1,5 @@
 "use client"
 
-import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
 import { useRef } from "react"
 
@@ -38,52 +37,32 @@ export function OverlayMenuList({
   className
 }: OverlayMenuListProps) {
   const { setHover, setDefault } = useCursor()
-  const containerRef = useRef<HTMLUListElement>(null)
   const splitRefs = useRef<(SplitTextRef | null)[]>([])
+  const readyCountRef = useRef(0)
 
-  // Initialize text split animation
-  useGSAP(() => {
-    if (!containerRef.current) return
+  // Called by each SplitText when ready — the last one triggers the timeline
+  const handleSplitReady = () => {
+    readyCountRef.current++
+    if (readyCountRef.current < menu.length) return
 
-    // Create animation timeline
-    const createAnimation = () => {
-      const tl = gsap.timeline({
-        ...orchestraMenuOverlay.menuList,
-      })
+    // All SplitText instances are ready — create coordinated timeline
+    const tl = gsap.timeline({
+      ...orchestraMenuOverlay.menuList,
+    })
 
-      splitRefs.current.forEach((ref) => {
-        if (!ref) return
+    splitRefs.current.forEach((ref) => {
+      if (!ref) return
 
-        const chars = ref.getElements()
-        if (chars.length > 0) {
-          // Set initial state (characters start below)
-          gsap.set(chars, { y: '100%' })
-          // Animate to final position
-          tl.to(chars, { y: 0, stagger: 0.05 }, '<0.1')
-        }
-      })
-    }
-
-    // Wait for all SplitText instances to be ready
-    const checkReady = () => {
-      const allReady = splitRefs.current.every(
-        (ref) => ref?.isReady() ?? false
-      )
-
-      if (!allReady) {
-        setTimeout(checkReady, 50)
-        return
+      const chars = ref.getElements()
+      if (chars.length > 0) {
+        gsap.set(chars, { y: '100%' })
+        tl.to(chars, { y: 0, stagger: 0.05 }, '<0.1')
       }
-
-      createAnimation()
-    }
-
-    checkReady()
-  }, { scope: containerRef })
+    })
+  }
 
   return (
     <ul
-      ref={containerRef}
       className={cn(
         "group/list flex flex-col items-center justify-center gap-4 h-full",
         "font-serif italic text-5xl leading-tighter text-center md:text-left",
@@ -117,6 +96,7 @@ export function OverlayMenuList({
                   splitRefs.current[index] = ref
                 }}
                 type="chars"
+                onReady={handleSplitReady}
               >
                 <span>{title}</span>
               </SplitText>
