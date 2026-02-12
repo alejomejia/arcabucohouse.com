@@ -101,7 +101,7 @@ export function ProductsCarousel({ products }: ProductsCarouselProps) {
                 key={product.id}
                 className={cn(
                   "slide-wrapper relative flex items-center justify-center",
-                  "h-[var(--slide-height)] min-w-0",
+                  "h-(--slide-height) min-w-0",
                   "select-none",
                   "transition-transform duration-350 ease-in-out",
                   hoveredIndex === index ? "scale-110" : "scale-100",
@@ -109,7 +109,7 @@ export function ProductsCarousel({ products }: ProductsCarouselProps) {
                 onMouseEnter={() => handleSlideMouseEnter(index)}
                 onMouseLeave={handleSlideMouseLeave}
               >
-                <ProductSlide className="slide-item" product={product} preload={index === 0} />
+                <ProductSlide className="slide-item" product={product} isFirstSlide={index === 0} />
               </div>
             )
           })}

@@ -10,7 +10,7 @@ import {
 } from "react"
 
 import { useDisableScroll } from "@/lib/hooks/use-disable-scroll"
-import { PORTAL_IDS } from "@/lib/styles/const"
+import { PORTAL_IDS, Z_INDEX_CLASSNAMES } from "@/lib/styles/const"
 import { cn } from "@/lib/utils/helpers"
 
 import { Portal } from "../portal"
@@ -117,7 +117,7 @@ export function Dialog({
   return (
     <Portal id={PORTAL_IDS.bodyBottom}>
       <DialogContext.Provider value={contextValue}>
-        <div id="dialog" className={cn("fixed inset-0 z-50", className)}>
+        <div id="dialog" className={cn("fixed inset-0", Z_INDEX_CLASSNAMES.dialog, className)}>
           {children}
         </div>
       </DialogContext.Provider>

@@ -2,6 +2,7 @@
 
 import { useRef, type ReactNode } from "react";
 
+import { Z_INDEX_CLASSNAMES } from "@/lib/styles/const";
 import { cn } from "@/lib/utils/helpers";
 
 import { FooterLogo } from "./footer-logo";
@@ -22,7 +23,8 @@ export function FooterClient({ children }: FooterClientProps) {
     <footer
       ref={footerRef}
       className={cn(
-        "overflow-hidden sticky bottom-0 left-0 right-0 z-0",
+        "overflow-hidden sticky bottom-0 left-0 right-0",
+        Z_INDEX_CLASSNAMES.footer,
         "flex h-full min-h-screen flex-col bg-primary-base text-primary-100"
       )}
     >

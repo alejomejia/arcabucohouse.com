@@ -7,6 +7,7 @@ import { useCallback, useRef, useState } from "react";
 import { SplitText, type SplitTextRef } from "@/components/effects/split-text";
 import { Container } from "@/components/ui/container";
 import { usePreloader } from "@/components/ui/preloader/hooks/use-preloader";
+import { useTransitionState } from "next-transition-router";
 
 const ANIMATION_CONFIG = {
   duration: 1,
@@ -15,10 +16,11 @@ const ANIMATION_CONFIG = {
 } as const;
 
 export function HeroHeader() {
+  const { isReady: isTransitionReady } = useTransitionState()
+
   const containerRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<SplitTextRef>(null)
   const descriptionRef = useRef<SplitTextRef>(null)
-  const hasPlayedRef = useRef(false)
 
   const { isReady: preloaderReady } = usePreloader()
   const [splitsReady, setSplitsReady] = useState(0)
@@ -27,19 +29,16 @@ export function HeroHeader() {
     setSplitsReady(prev => prev + 1)
   }, [])
 
-  // Animate when preloader is done and both splits are ready
+  // Animate when preloader is done, transition is done and both splits are ready
   useGSAP(
     () => {
-      if (hasPlayedRef.current) return
-      if (!preloaderReady || splitsReady < 2) return
+      if (!preloaderReady || splitsReady < 2 || !isTransitionReady) return
       if (!titleRef.current || !descriptionRef.current || !containerRef.current) return
 
       const title = titleRef.current.getElements()
       const description = descriptionRef.current.getElements()
 
       if (title.length === 0 || description.length === 0) return
-
-      hasPlayedRef.current = true
 
       gsap.set(containerRef.current, { opacity: 1 })
 
@@ -48,12 +47,15 @@ export function HeroHeader() {
       gsap.fromTo(
         elements,
         { yPercent: 100 },
-        { yPercent: 0, ...ANIMATION_CONFIG }
+        {
+          yPercent: 0,
+          ...ANIMATION_CONFIG
+        }
       )
     },
     {
       scope: containerRef,
-      dependencies: [preloaderReady, splitsReady]
+      dependencies: [preloaderReady, splitsReady, isTransitionReady]
     }
   )
 

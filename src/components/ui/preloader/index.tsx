@@ -7,6 +7,7 @@ import { useCallback, useRef } from "react";
 import { SplitText } from "@/components/effects/split-text";
 import { cn } from "@/lib/utils/helpers";
 
+import { Z_INDEX_CLASSNAMES } from "@/lib/styles/const";
 import { Logo } from "../logo";
 import { usePreloader } from "./hooks/use-preloader";
 
@@ -135,7 +136,8 @@ export function Preloader() {
     <div
       ref={containerRef}
       className={cn(
-        "fixed inset-0 z-9999",
+        "fixed inset-0",
+        Z_INDEX_CLASSNAMES.preloader,
         "bg-primary-100 text-secondary-600"
       )}
     >

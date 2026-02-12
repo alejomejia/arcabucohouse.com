@@ -6,7 +6,7 @@ import { type ReactNode, useRef } from "react"
 
 import { Container } from "@/components/ui/container"
 import { Portal } from "@/components/ui/portal"
-import { HEADER_TOP_PADDING_CLASSNAME, PORTAL_IDS } from "@/lib/styles/const"
+import { HEADER_TOP_PADDING_CLASSNAME, PORTAL_IDS, Z_INDEX_CLASSNAMES } from "@/lib/styles/const"
 import { cn } from "@/lib/utils/helpers"
 import { useNavigation } from "@/lib/utils/store"
 
@@ -50,7 +50,7 @@ export function NavigationOverlay({ children }: NavigationOverlayProps) {
 
   return (
     <Portal id={PORTAL_IDS.bodyTop}>
-      <div ref={containerRef} className={cn("fixed w-full h-screen pb-6 z-40 bg-primary-600", HEADER_TOP_PADDING_CLASSNAME)}>
+      <div ref={containerRef} className={cn("fixed w-full h-screen pb-6 bg-primary-600", Z_INDEX_CLASSNAMES.navigationOverlay, HEADER_TOP_PADDING_CLASSNAME)}>
         <Container className="h-full">
           {children}
         </Container>

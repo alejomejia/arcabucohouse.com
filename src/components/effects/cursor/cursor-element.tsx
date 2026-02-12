@@ -4,6 +4,7 @@ import { type CSSProperties, useEffect, useRef } from 'react'
 
 import { cn } from '@/lib/utils/helpers'
 
+import { Z_INDEX_CLASSNAMES } from '@/lib/styles/const'
 import { useCursorAnimation } from './hooks/use-cursor-animation'
 import type { CursorInternalState } from './types'
 
@@ -54,7 +55,8 @@ export function CursorElement({
       ref={cursorRef}
       className={cn(
         "hidden lg:block",
-        'fixed top-0 left-0 z-9999',
+        'fixed top-0 left-0',
+        Z_INDEX_CLASSNAMES.cursor,
         'pointer-events-none',
         '-translate-x-1/2 -translate-y-1/2',
         'opacity-0',

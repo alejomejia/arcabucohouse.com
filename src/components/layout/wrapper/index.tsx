@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils/helpers";
 
+import { PageTransitionProvider } from "@/components/effects/page-transition-provider";
 import { Footer } from "../footer";
 import { Header } from "../header";
 
@@ -41,16 +42,18 @@ export function Wrapper({
   return (
     <>
       <Header />
-      <main
-        id="main"
-        className={cn(
-          "relative z-10 flex grow flex-col bg-neutral-50",
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </main>
+      <PageTransitionProvider>
+        <main
+          id="main"
+          className={cn(
+            "relative z-10 flex grow flex-col bg-neutral-50",
+            className
+          )}
+          {...props}
+        >
+          {children}
+        </main>
+      </PageTransitionProvider>
 
       {/* Parallax zone: min-h-screen so footer can stick while this area scrolls */}
       <Footer />
