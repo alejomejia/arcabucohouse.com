@@ -1,8 +1,10 @@
 import type { ReactNode } from "react";
 
+import { PageTransitionProvider } from "@/components/effects/page-transition-provider";
+import { PreloaderProvider } from "@/components/ui/preloader/hooks/preloader-context";
+import { PreloaderGate } from "@/components/ui/preloader/preloader-gate";
 import { cn } from "@/lib/utils/helpers";
 
-import { PageTransitionProvider } from "@/components/effects/page-transition-provider";
 import { Footer } from "../footer";
 import { Header } from "../header";
 
@@ -40,7 +42,8 @@ export function Wrapper({
   ...props
 }: WrapperProps) {
   return (
-    <>
+    <PreloaderProvider>
+      <PreloaderGate />
       <Header />
       <PageTransitionProvider>
         <main
@@ -60,6 +63,6 @@ export function Wrapper({
 
       {/** Removed temporarily as we are not using it yet */}
       {/* <WelcomeToast /> */}
-    </>
+    </PreloaderProvider>
   );
 }

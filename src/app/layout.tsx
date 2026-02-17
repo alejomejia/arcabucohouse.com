@@ -8,8 +8,6 @@ import { CartProvider } from "@/components/features/cart/context";
 import { Lenis } from "@/components/layout/lenis";
 import { Wrapper } from "@/components/layout/wrapper";
 import { PortalRoot } from "@/components/ui/portal/portal-root";
-import { PreloaderProvider } from "@/components/ui/preloader/hooks/preloader-context";
-import { PreloaderGate } from "@/components/ui/preloader/preloader-gate";
 import { getCart } from "@/lib/integrations/shopify";
 import { baseUrl } from "@/lib/integrations/utils";
 import { PORTAL_IDS } from "@/lib/styles/const";
@@ -49,16 +47,13 @@ export default async function RootLayout({
         <Toaster closeButton />
 
         <Suspense>
-          <PreloaderProvider>
-            <PreloaderGate />
-            <CursorProvider>
-              <Lenis root>
-                <CartProvider cartPromise={cart}>
-                  <Wrapper>{children}</Wrapper>
-                </CartProvider>
-              </Lenis>
-            </CursorProvider>
-          </PreloaderProvider>
+          <CursorProvider>
+            <Lenis root>
+              <CartProvider cartPromise={cart}>
+                <Wrapper>{children}</Wrapper>
+              </CartProvider>
+            </Lenis>
+          </CursorProvider>
         </Suspense>
 
         <GSAPRuntime />

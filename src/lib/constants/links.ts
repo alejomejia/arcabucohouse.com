@@ -22,6 +22,11 @@ export const POLICIES_LINKS = [
     href: "/shipping-policy",
   },
   {
+    id: "returns",
+    label: "Returns",
+    href: "/returns-policy",
+  },
+  {
     id: "privacy",
     label: "Privacy",
     href: "/privacy-policy",
@@ -29,6 +34,6 @@ export const POLICIES_LINKS = [
   {
     id: "terms",
     label: "Terms",
-    href: "/terms-of-service",
+    href: "/terms-and-conditions",
   },
 ] as const;

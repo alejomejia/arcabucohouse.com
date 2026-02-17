@@ -1,3 +1,5 @@
+import { POLICIES_LINKS } from "@/lib/constants/links";
+
 export const START_YEAR = 2025;
 
 export const FOOTER_COLUMNS = [
@@ -6,67 +8,46 @@ export const FOOTER_COLUMNS = [
     links: [
       {
         id: "rugs",
-        name: "Rugs",
+        label: "Rugs",
         href: "/collections/rugs",
       },
       {
         id: "lights",
-        name: "Lights",
+        label: "Lights",
         href: "/collections/lights",
       },
       {
         id: "ceramics",
-        name: "Ceramics",
+        label: "Ceramics",
         href: "/collections/ceramics",
       },
       {
         id: "accessories",
-        name: "Accessories",
+        label: "Accessories",
         href: "/collections/accessories",
       },
     ]
   },
   {
     title: "Support",
-    links: [
-      {
-        id: "shipping",
-        name: "Shipping",
-        href: "/shipping-policy",
-      },
-      {
-        id: "privacy",
-        name: "Privacy",
-        href: "/privacy-policy",
-      },
-      {
-        id: "terms",
-        name: "Terms",
-        href: "/terms-of-service",
-      },
-      {
-        id: "returns",
-        name: "Returns",
-        href: "/returns-policy",
-      }
-    ]
+    links: [...POLICIES_LINKS]
   },
   {
     title: "Socials",
     links: [
       {
         id: "instagram",
-        name: "Instagram",
+        label: "Instagram",
         href: "https://www.instagram.com/arcabuco.house/",
       },
       {
         id: "pinterest",
-        name: "Pinterest",
+        label: "Pinterest",
         href: "https://www.pinterest.com/arcabucohouse/",
       },
       {
         id: "linkedin",
-        name: "LinkedIn",
+        label: "LinkedIn",
         href: "#",
       },
     ]

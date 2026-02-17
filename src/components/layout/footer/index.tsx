@@ -36,7 +36,7 @@ export async function Footer() {
             >
               <h4 className={FOOTER_COLUMN_HEADING_CLASSNAME}>{title}</h4>
               <ul className="group/list w-fit flex flex-col gap-3">
-                {links.map(({ id, name, href }) => (
+                {links.map(({ id, label, href }) => (
                   <UnderlineLink
                     key={id}
                     href={href}
@@ -45,7 +45,7 @@ export async function Footer() {
                       "leading-none transition-opacity duration-300 ease-in-out"
                     )}
                   >
-                    {name}
+                    {label}
                   </UnderlineLink>
                 ))}
               </ul>

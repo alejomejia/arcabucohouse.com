@@ -17,6 +17,10 @@ export default function HomePage() {
       <HeroSection />
       <AboutSection />
       <DesignServicesSection />
+      {/* @TODO: [X] Projects section */}
+      {/* @TODO: Collabs section with artists and artisans */}
+      {/* @TODO: Why Arcabuco section */}
+      {/* @TODO: LatinAmerican Design section */}
       <div className="min-h-screen bg-neutral-300" />
       <div className="min-h-screen" />
     </>

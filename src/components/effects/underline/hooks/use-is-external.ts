@@ -25,6 +25,12 @@ export function useIsExternal(href: string): boolean {
 
   useEffect(() => {
     if (isExternalByPattern) return
+
+    if (href.startsWith('mailto:')) {
+      setIsExternal(false)
+      return
+    }
+
     try {
       const url = new URL(href, window.location.href)
       setIsExternal(url.host !== window.location.host)
