@@ -9,6 +9,7 @@ import { UnderlineLink } from "@/components/effects/underline/underline-link";
 import { Container } from "@/components/ui/container";
 import { usePreloader } from "@/components/ui/preloader/hooks/use-preloader";
 import { cn } from "@/lib/utils/helpers";
+import { useTransitionState } from "next-transition-router";
 
 const ANIMATION_CONFIG = {
   duration: 1,
@@ -41,9 +42,10 @@ const COLLECTIONS = [
 ]
 
 export function HeroFooter() {
+  const { isReady: isTransitionReady } = useTransitionState()
+
   const containerRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<SplitTextRef>(null)
-  const hasPlayedRef = useRef(false)
 
   const { isReady: preloaderReady } = usePreloader()
   const [splitReady, setSplitReady] = useState(false)
@@ -51,14 +53,11 @@ export function HeroFooter() {
   // Animate when both preloader and split are ready
   useGSAP(
     () => {
-      if (hasPlayedRef.current) return
-      if (!preloaderReady || !splitReady) return
+      if (!preloaderReady || !splitReady || !isTransitionReady) return
       if (!textRef.current || !containerRef.current) return
 
       const elements = textRef.current.getElements()
       if (elements.length === 0) return
-
-      hasPlayedRef.current = true
 
       gsap.set(containerRef.current, { opacity: 1 })
       gsap.fromTo(
@@ -69,7 +68,7 @@ export function HeroFooter() {
     },
     {
       scope: containerRef,
-      dependencies: [preloaderReady, splitReady]
+      dependencies: [preloaderReady, splitReady, isTransitionReady]
     }
   )
 
