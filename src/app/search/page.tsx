@@ -1,7 +1,7 @@
 import Grid from '@/components/from-template/grid'
 import ProductGridItems from '@/components/from-template/layout/product-grid-items'
 import { defaultSort, sorting } from '@/lib/integrations/constants'
-import { getProducts } from '@/lib/integrations/shopify'
+import { getProducts } from '@/lib/integrations/shopify/product'
 
 export const metadata = {
   title: 'Search',

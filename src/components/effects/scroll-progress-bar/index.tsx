@@ -3,6 +3,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePathname } from "next/navigation";
 import { type HTMLAttributes, useRef } from "react";
 
 import { usePreloaderGSAP } from "@/components/ui/preloader/hooks/use-preloader-gsap";
@@ -33,6 +34,7 @@ const ANIMATION_CONFIG = {
  */
 export function ScrollProgressBar(props: HTMLAttributes<HTMLDivElement>) {
   const { navState, isNavOpen } = useNavigation();
+  const pathname = usePathname();
 
   const containerRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -56,7 +58,10 @@ export function ScrollProgressBar(props: HTMLAttributes<HTMLDivElement>) {
     () => {
       if (!containerRef.current || !progressBarRef.current) return;
 
-      ScrollTrigger.create({
+      // Refresh to recalculate scroll height for the new page
+      ScrollTrigger.refresh();
+
+      const scrollTrigger = ScrollTrigger.create({
         trigger: document.documentElement,
         start: 0,
         end: "max",
@@ -66,10 +71,11 @@ export function ScrollProgressBar(props: HTMLAttributes<HTMLDivElement>) {
             scaleX: self.progress,
           });
         },
-        invalidateOnRefresh: true,
       });
+
+      return () => scrollTrigger.kill();
     },
-    { scope: containerRef }
+    { scope: containerRef, dependencies: [pathname] }
   );
 
   // Show/hide depending on navigation state - skips first render

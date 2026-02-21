@@ -1,10 +1,8 @@
 "use client";
 
-import { type ReactNode, createContext } from "react";
+import { type ReactNode, createContext, useMemo } from "react";
 
-import type {
-  Cart
-} from "@/lib/integrations/shopify/types";
+import type { Cart } from "@/lib/integrations/shopify/types";
 
 import type { CartContextType } from "../types";
 
@@ -25,8 +23,10 @@ export function CartProvider({
   children,
   cartPromise,
 }: CartProviderProps) {
+  const value = useMemo(() => ({ cartPromise }), [cartPromise]);
+
   return (
-    <CartContext.Provider value={{ cartPromise }}>
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );

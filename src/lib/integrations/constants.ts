@@ -1,3 +1,6 @@
+import { config } from "@/lib/utils/config";
+import { ensureStartsWith } from "@/lib/utils/strings";
+
 export type SortFilterItem = {
   title: string;
   slug: string | null;
@@ -29,3 +32,6 @@ export const TAGS = {
 export const HIDDEN_PRODUCT_TAG = 'nextjs-frontend-hidden';
 export const DEFAULT_OPTION = 'Default Title';
 export const SHOPIFY_GRAPHQL_API_ENDPOINT = '/api/2023-01/graphql.json';
+export const SHOPIFY_STORE_CATEGORY_PATH = '/category';
+
+export const domain = config.shopifyStoreDomain ? ensureStartsWith(config.shopifyStoreDomain, 'https://') : ''

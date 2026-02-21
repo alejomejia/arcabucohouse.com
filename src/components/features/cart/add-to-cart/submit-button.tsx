@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils/helpers'
 const BUTTON_CLASSNAMES = [
   'relative w-full p-4',
   'flex items-center justify-center',
-  'bg-black text-white',
+  'bg-secondary-base text-white',
   'uppercase font-semibold tracking-wide',
   'transition-all duration-300 ease-in-out',
 ].join(' ')

@@ -23,6 +23,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     useCache: true,
+    optimizePackageImports: ["@heroicons/react", "gsap", "sonner"]
   },
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -35,7 +36,7 @@ const nextConfig: NextConfig = {
         pathname: '/s/files/1/0723/4578/0420/**'
       }
     ]
-  }
+  },
 };
 
 export default nextConfig;

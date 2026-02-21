@@ -54,28 +54,6 @@ const useNavState = () => {
 }
 
 /**
- * Hook that provides navigation state actions.
- * Encapsulates all navigation state mutations in one place.
- * 
- * @returns Object with navigation action functions
- * 
- * @example
- * ```tsx
- * const { openNav, closeNav } = useNavigationActions()
- * ```
- */
-const useNavigationActions = () => {
-  const setNavState = useAppStore((state) => state.setNavState)
-
-  return {
-    openingNav: () => setNavState('opening'),
-    openNav: () => setNavState('open'),
-    closingNav: () => setNavState('closing'),
-    closeNav: () => setNavState('closed'),
-  }
-}
-
-/**
  * Comprehensive navigation hook that provides both state and actions.
  * Use this when you need both reading and writing navigation state.
  * 
@@ -89,12 +67,19 @@ const useNavigationActions = () => {
 export const useNavigation = () => {
   const navState = useNavState()
   const isNavOpen = useIsNavOpen()
-  const actions = useNavigationActions()
+
+  const openingNav = () => setNavState('opening')
+  const openNav = () => setNavState('open')
+  const closingNav = () => setNavState('closing')
+  const closeNav = () => setNavState('closed')
 
   return {
     navState,
     isNavOpen,
-    ...actions,
+    openingNav,
+    openNav,
+    closingNav,
+    closeNav,
   }
 }
 

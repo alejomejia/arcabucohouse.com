@@ -3,7 +3,7 @@
 import { useActionState } from 'react'
 
 import { addItem } from '@/components/features/cart/server/actions'
-import { useProduct } from '@/components/features/product/product-context'
+import { useProduct } from '@/components/features/product/hooks/use-product'
 import type { Product, ProductVariant } from '@/lib/integrations/shopify/types'
 
 import { useCart } from '../hooks/use-cart'

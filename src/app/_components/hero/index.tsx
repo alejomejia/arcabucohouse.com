@@ -1,6 +1,6 @@
 import { DataBoundary } from "@/components/ui/data-boundary";
 import { ProductsCarousel } from "@/components/ui/products-carousel";
-import { getCollectionProducts } from "@/lib/integrations/shopify";
+import { getCollectionProducts } from "@/lib/integrations/shopify/collection";
 
 import { Error } from "./error";
 import { HeroFooter } from "./footer";

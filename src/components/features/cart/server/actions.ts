@@ -11,7 +11,7 @@ import {
   getCart,
   removeFromCart,
   updateCart,
-} from "@/lib/integrations/shopify";
+} from "@/lib/integrations/shopify/cart";
 
 export async function addItem(
   _prevState: unknown,

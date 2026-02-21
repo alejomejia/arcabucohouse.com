@@ -20,18 +20,6 @@ export function PageTransitionProvider({ children }: PageTransitionProviderProps
   const transitionRef = useRef<HTMLDivElement>(null)
 
   const onLeave = useCallback((next: () => void) => {
-    gsap.set(transitionRef.current, { opacity: 1, yPercent: 100 })
-
-    const tween = gsap.to(transitionRef.current, {
-      yPercent: 0,
-      ...ANIMATION_CONFIG,
-      onComplete: next,
-    })
-
-    return () => tween.kill()
-  }, [])
-
-  const onEnter = useCallback((next: () => void) => {
     gsap.set(transitionRef.current, { opacity: 1, yPercent: 0 })
 
     const tl = gsap.timeline()
@@ -46,6 +34,24 @@ export function PageTransitionProvider({ children }: PageTransitionProviderProps
     return () => tl.kill()
   }, [])
 
+  const onEnter = useCallback((next: () => void) => {
+    gsap.set(transitionRef.current, { opacity: 1, yPercent: -100 })
+
+    const tl = gsap.timeline()
+      .to(transitionRef.current, {
+        yPercent: -200,
+        ...ANIMATION_CONFIG,
+        onComplete: () => {
+          gsap.set(transitionRef.current, { yPercent: 0 })
+          next()
+        },
+      }).call(() => {
+        requestAnimationFrame(() => startTransition(next))
+      })
+
+    return () => tl.kill()
+  }, [])
+
   return (
     <TransitionRouter auto leave={onLeave} enter={onEnter}>
       <div
@@ -53,8 +59,9 @@ export function PageTransitionProvider({ children }: PageTransitionProviderProps
         className={cn(
           "fixed inset-0",
           Z_INDEX_CLASSNAMES.pageTransition,
-          "w-full h-full pointer-events-none overflow-hidden",
-          "bg-primary-base opacity-0"
+          "w-full h-full overflow-hidden",
+          "bg-primary-base opacity-0 will-change-transform",
+          "translate-y-full"
         )} />
       {children}
     </TransitionRouter>

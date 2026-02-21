@@ -43,9 +43,9 @@ export function HeaderLogo() {
         href="/"
       >
         {isMobile ? (
-          <MinimalLogo className="w-full direct-children:translate-y-full" />
+          <MinimalLogo className="block md:hidden w-full direct-children:translate-y-full" />
         ) : (
-          <Logo className="w-full direct-children:translate-y-full" />
+          <Logo className="hidden md:block w-full direct-children:translate-y-full" />
         )}
         <span className="visually-hidden">Homepage</span>
       </Link>

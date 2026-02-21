@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { Suspense, type ReactNode } from "react";
-import { Toaster } from "sonner";
 
 import { CursorProvider } from "@/components/effects/cursor";
 import { GSAPRuntime } from "@/components/effects/gsap";
 import { CartProvider } from "@/components/features/cart/context";
 import { Lenis } from "@/components/layout/lenis";
 import { Wrapper } from "@/components/layout/wrapper";
+import { Toaster } from "@/components/toast/toaster";
 import { PortalRoot } from "@/components/ui/portal/portal-root";
-import { getCart } from "@/lib/integrations/shopify";
+import { getCart } from "@/lib/integrations/shopify/cart";
 import { baseUrl } from "@/lib/integrations/utils";
 import { PORTAL_IDS } from "@/lib/styles/const";
 import { sans, serif } from "@/lib/styles/fonts";

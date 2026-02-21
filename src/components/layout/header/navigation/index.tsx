@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
-import { getMenu } from '@/lib/integrations/shopify';
 import { SHOPIFY_MENU_HANDLERS } from '@/lib/integrations/shopify/const';
+import { getMenu } from '@/lib/integrations/shopify/menu';
 
 import { NavigationOverlay } from './navigation-overlay';
 import { OverlayContent } from './navigation-overlay/overlay-content';

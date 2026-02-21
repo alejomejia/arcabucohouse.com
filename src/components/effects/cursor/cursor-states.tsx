@@ -4,13 +4,15 @@ import { ArrowUpRightIcon } from '@heroicons/react/24/outline'
 
 import type { CursorConfig } from './types'
 
+const TEXT_CONTENT_CLASSNAME = 'uppercase font-semibold text-[0.5rem] tracking-widest'
+
 /** 
  * Cursor with "Scroll" label and large scale. 
  * Use for horizontal/vertical scroll areas (e.g. carousels). */
 export const CURSOR_SCROLL: CursorConfig = {
   text: 'Scroll',
   scale: 3,
-  contentClassName: 'uppercase font-semibold text-[0.5rem] tracking-widest',
+  contentClassName: TEXT_CONTENT_CLASSNAME,
 }
 
 /** Hover zone where the cursor is hidden. Use for custom interactive areas (e.g. canvas, custom controls). */

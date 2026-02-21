@@ -2,6 +2,7 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { useTransitionState } from "next-transition-router";
 import { useRef, useState } from "react";
 
 import { type SplitTextRef, SplitText } from "@/components/effects/split-text";
@@ -9,7 +10,6 @@ import { UnderlineLink } from "@/components/effects/underline/underline-link";
 import { Container } from "@/components/ui/container";
 import { usePreloader } from "@/components/ui/preloader/hooks/use-preloader";
 import { cn } from "@/lib/utils/helpers";
-import { useTransitionState } from "next-transition-router";
 
 const ANIMATION_CONFIG = {
   duration: 1,

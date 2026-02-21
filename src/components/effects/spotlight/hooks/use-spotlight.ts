@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { type RefObject, useRef } from "react";
+import { type RefObject, useMemo, useRef } from "react";
 
 import type { SpotlightContextValue } from "../spotlight-context";
 
@@ -80,13 +80,13 @@ export function useSpotlight(options?: UseSpotlightOptions): UseSpotlightReturn 
   const maskImageRef = useRef<HTMLDivElement>(null);
   const maskHeaderRef = useRef<HTMLHeadingElement>(null);
 
-  const contextValue: SpotlightContextValue = {
+  const contextValue = useMemo<SpotlightContextValue>(() => ({
     sectionRef,
     imagesRef,
     maskContainerRef,
     maskImageRef,
     maskHeaderRef,
-  };
+  }), []);
 
   const opts = { ...DEFAULT_OPTIONS, ...options };
 

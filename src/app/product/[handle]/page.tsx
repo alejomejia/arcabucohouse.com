@@ -1,106 +1,60 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-
-import { Gallery } from '@/components/features/product//gallery'
-import { ProductProvider } from '@/components/features/product//product-context'
-import { ProductDescription } from '@/components/features/product//product-description'
-import { GridTileImage } from '@/components/from-template/grid/tile'
-import { HIDDEN_PRODUCT_TAG } from '@/lib/integrations/constants'
-import { getProduct, getProductRecommendations } from '@/lib/integrations/shopify'
-import { Image } from '@/lib/integrations/shopify/types'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
-export async function generateMetadata(props: { params: Promise<{ handle: string }> }): Promise<Metadata> {
+import { ProductProvider } from '@/components/features/product/context'
+import { GridTileImage } from '@/components/from-template/grid/tile'
+import { Container } from '@/components/ui/container'
+import { getProduct, getProductRecommendations } from '@/lib/integrations/shopify/product'
+import { generateProductJsonLd, generateProductMetadata } from '@/lib/seo/metadata'
+
+import { ProductSection } from './_sections/product'
+import { ProductCraftmanshipSection } from './_sections/product-craftmanship'
+
+type ProductHandleParams = Promise<{ handle: string }>
+
+/**
+ * Generate metadata for the product page
+ * @param props - The props object containing the params
+ * @returns The metadata for the product page
+ */
+export async function generateMetadata(props: { params: ProductHandleParams }): Promise<Metadata> {
   const params = await props.params
   const product = await getProduct(params.handle)
 
   if (!product) return notFound()
 
-  const { url, width, height, altText: alt } = product.featuredImage || {}
-  const indexable = !product.tags.includes(HIDDEN_PRODUCT_TAG)
-
-  return {
-    title: product.seo.title || product.title,
-    description: product.seo.description || product.description,
-    robots: {
-      index: indexable,
-      follow: indexable,
-      googleBot: {
-        index: indexable,
-        follow: indexable
-      }
-    },
-    openGraph: url
-      ? {
-        images: [
-          {
-            url,
-            width,
-            height,
-            alt
-          }
-        ]
-      }
-      : null
-  }
+  return generateProductMetadata(product)
 }
 
-export default async function ProductPage(props: { params: Promise<{ handle: string }> }) {
+export default async function ProductPage(props: { params: ProductHandleParams }) {
   const params = await props.params
   const product = await getProduct(params.handle)
 
   if (!product) return notFound()
 
-  const productJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.title,
-    description: product.description,
-    image: product.featuredImage.url,
-    offers: {
-      '@type': 'AggregateOffer',
-      availability: product.availableForSale ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-      priceCurrency: product.priceRange.minVariantPrice.currencyCode,
-      highPrice: product.priceRange.maxVariantPrice.amount,
-      lowPrice: product.priceRange.minVariantPrice.amount
-    }
-  }
+  const productJsonLd = generateProductJsonLd(product)
 
   return (
-    <Suspense fallback={null}>
-      <ProductProvider>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(productJsonLd)
-          }}
-        />
-        <div className="w-full mx-auto max-w-(--breakpoint-2xl) px-4">
-          <div className="flex flex-col rounded-lg border border-neutral-200 p-8 md:p-12 lg:flex-row lg:gap-8 text-black">
-            <div className="h-full w-full basis-full lg:basis-4/6">
-              <Suspense
-                fallback={<div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden" />}
-              >
-                <Gallery
-                  images={product.images.slice(0, 5).map((image: Image) => ({
-                    src: image.url,
-                    altText: image.altText
-                  }))}
-                />
-              </Suspense>
-            </div>
+    <ProductProvider>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productJsonLd)
+        }}
+      />
+      <Container>
+        <ProductSection product={product} />
+        <ProductCraftmanshipSection />
 
-            <div className="basis-full lg:basis-2/6">
-              <Suspense fallback={null}>
-                <ProductDescription product={product} />
-              </Suspense>
-            </div>
-          </div>
+        <div className="min-h-screen bg-primary-200">2</div>
+        <div className="min-h-screen bg-primary-100">1</div>
+        <Suspense fallback={null}>
           <RelatedProducts id={product.id} />
-        </div>
-      </ProductProvider>
-    </Suspense>
+        </Suspense>
+      </Container>
+    </ProductProvider>
   )
 }
 

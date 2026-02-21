@@ -33,7 +33,7 @@ jest.mock('../hooks/use-cart', () => ({
 }))
 
 // Mock product context
-jest.mock('@/components/features/product/product-context', () => ({
+jest.mock('@/components/features/product/hooks/use-product', () => ({
   useProduct: jest.fn(() => ({
     state: mockProductState,
     updateOption: mockUpdateOption,

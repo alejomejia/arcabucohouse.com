@@ -40,7 +40,7 @@ export function Parallax({ children }: ParallaxProps) {
   }, { scope: containerRef })
 
   return (
-    <div ref={containerRef} className="flex items-center justify-center h-full overflow-hidden">
+    <div ref={containerRef} className="w-full h-full flex items-center justify-center overflow-hidden">
       <div className="w-full h-full scale-110" data-parallax-content>
         {children}
       </div>

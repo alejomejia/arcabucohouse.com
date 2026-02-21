@@ -54,6 +54,7 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
 
   const isAnimatingRef = useRef(false)
   const hasPlayedIntroRef = useRef(false)
+  const disableTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null)
 
   // Track split readiness via state so useGSAP re-runs when both splits are ready
   const [splitsReady, setSplitsReady] = useState(false)
@@ -68,19 +69,15 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
 
   useDisableScroll(isNavOpen)
 
-  // Close navigation on route change (skip before intro plays)
+  // Schedule the enable of the button after a delay
+  const scheduleEnable = useCallback(() => {
+    clearTimeout(disableTimeoutRef.current ?? undefined)
+    disableTimeoutRef.current = setTimeout(() => setDisabled(false), 200)
+  }, [])
+
+  // Cleanup the timeout on unmount
   useEffect(() => {
-    if (!hasPlayedIntroRef.current) return
-
-    closingNav()
-    closeAnimation()
-  }, [pathname])
-
-  // Debounce setDisabled to prevent rapid clicking bugs
-  const debouncedSetDisabled = useCallback(() => {
-    const timeout = setTimeout(() => setDisabled(false), 200)
-
-    return () => clearTimeout(timeout)
+    return () => clearTimeout(disableTimeoutRef.current ?? undefined)
   }, [])
 
   // Animate menu label in — runs when preloader and both splits are ready
@@ -113,7 +110,7 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
       opacity: 1,
       ...PRELOADER_ANIMATION_CONFIG,
       onComplete: () => {
-        debouncedSetDisabled()
+        scheduleEnable()
       },
     })
   }, { scope: containerRef, dependencies: [preloaderReady, splitsReady] })
@@ -153,7 +150,7 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
       ...MENU_ANIMATION_OPTIONS,
       onComplete: () => {
         isAnimatingRef.current = false
-        debouncedSetDisabled()
+        scheduleEnable()
         openNav()
       },
     })
@@ -186,7 +183,7 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
       ...MENU_ANIMATION_OPTIONS,
       onComplete: () => {
         isAnimatingRef.current = false
-        debouncedSetDisabled()
+        scheduleEnable()
         // Don't set to 'closed' here - let NavigationOverlay do it after its animation
       },
     })
@@ -209,6 +206,14 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
       closeAnimation()
     }
   }
+
+  // Close navigation on route change (skip before intro plays)
+  useEffect(() => {
+    if (!hasPlayedIntroRef.current) return
+
+    closingNav()
+    closeAnimation()
+  }, [pathname])
 
   return {
     containerRef,

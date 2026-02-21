@@ -1,5 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
+import { useMemo } from 'react'
 
 import type { UpdateType } from '@/components/features/cart/types'
 import { useDialogContext } from '@/components/ui/dialog/context'
@@ -56,9 +57,9 @@ export function CartItemsList({
     { scope: ref, dependencies: [animationState, items.length] }
   )
 
-  const sortedItems = [...items].sort((a, b) =>
+  const sortedItems = useMemo(() => [...items].sort((a, b) =>
     a.merchandise.product.title.localeCompare(b.merchandise.product.title)
-  )
+  ), [items])
 
   return (
     <ul

@@ -1,9 +1,19 @@
 "use client";
 
+import dynamic from "next/dynamic";
+
 import { useDisableScroll } from "@/lib/hooks/use-disable-scroll";
 
 import { usePreloader } from "./hooks/use-preloader";
-import { Preloader } from "./index";
+
+/**
+ * Only load when the component is actually rendered
+ * Used only in Homepage and per session
+ */
+const Preloader = dynamic(
+  () => import("./index").then((mod) => mod.Preloader),
+  { ssr: false }
+)
 
 /**
  * Conditionally renders the Preloader based on PreloaderContext state.

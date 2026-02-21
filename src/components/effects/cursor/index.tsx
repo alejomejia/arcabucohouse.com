@@ -1,5 +1,7 @@
 'use client'
 
+import { useLayoutEffect, useState } from 'react'
+
 import { Portal } from '@/components/ui/portal'
 import { PORTAL_IDS } from '@/lib/styles/const'
 
@@ -44,12 +46,17 @@ export function CursorProvider({
   lerpFactor = 0.15,
 }: CursorProviderProps) {
   const { contextValue, isMounted, cursorState } = useCursorProvider()
+  const [hasPointer, setHasPointer] = useState(false)
+
+  useLayoutEffect(() => {
+    setHasPointer(window.matchMedia('(pointer: fine)').matches)
+  }, [])
 
   return (
     <CursorContext.Provider value={contextValue}>
       {children}
 
-      {isMounted && (
+      {isMounted && hasPointer && (
         <Portal id={PORTAL_IDS.bodyTop}>
           <CursorElement
             cursorState={cursorState}

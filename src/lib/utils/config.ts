@@ -8,6 +8,7 @@ export const config = {
   shopifyStorefrontAccessToken: process.env.SHOPIFY_STOREFRONT_ACCESS_API_TOKEN,
   shopifyRevalidationSecret: process.env.SHOPIFY_REVALIDATION_SECRET,
   shopifyCustomerAccountApiToken: process.env.SHOPIFY_CUSTOMER_ACCOUNT_API_TOKEN,
+  shopifyCdnBaseUrl: process.env.NEXT_PUBLIC_SHOPIFY_CDN_BASE_URL,
   // MAILCHIMP
   mailchimpApiKey: process.env.MAILCHIMP_API_KEY,
   mailchimpServerPrefix: process.env.MAILCHIMP_SERVER_PREFIX,

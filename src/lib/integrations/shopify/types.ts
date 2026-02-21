@@ -68,9 +68,10 @@ export type Page = {
   updatedAt: string;
 };
 
-export type Product = Omit<ShopifyProduct, 'variants' | 'images'> & {
+export type Product = Omit<ShopifyProduct, 'variants' | 'images' | 'collections'> & {
   variants: ProductVariant[];
   images: Image[];
+  collections: Collection[];
 };
 
 export type ProductOption = {
@@ -108,6 +109,7 @@ export type ShopifyCart = {
 };
 
 export type ShopifyCollection = {
+  id: string;
   handle: string;
   title: string;
   description: string;
@@ -133,6 +135,7 @@ export type ShopifyProduct = {
   seo: SEO;
   tags: string[];
   updatedAt: string;
+  collections: Connection<ShopifyCollection>;
 };
 
 export type ShopifyCartOperation = {

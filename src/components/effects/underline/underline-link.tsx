@@ -48,8 +48,13 @@ export function UnderlineLink({
     disableCursor,
     isExternal ? "external" : "internal"
   )
-  const { underlineClassName, handleMouseEnter: underlineEnter, handleMouseLeave: underlineLeave, elementRef } =
-    useUnderlineAnimation<HTMLAnchorElement>()
+
+  const {
+    underlineClassName,
+    handleMouseEnter: underlineEnter,
+    handleMouseLeave: underlineLeave,
+    elementRef
+  } = useUnderlineAnimation<HTMLAnchorElement>()
 
   const handleMouseEnter = (e: MouseEvent<HTMLAnchorElement>) => {
     underlineEnter(e)

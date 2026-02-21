@@ -1,4 +1,4 @@
-import { getCollection, getCollectionProducts } from '@/lib/integrations/shopify'
+import { getCollection, getCollectionProducts } from '@/lib/integrations/shopify/collection'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
@@ -22,8 +22,8 @@ export default async function CategoryPage(props: {
   params: Promise<{ collection: string }>
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const searchParams = await props.searchParams
-  const params = await props.params
+  const [searchParams, params] = await Promise.all([props.searchParams, props.params])
+
   const { sort } = searchParams as { [key: string]: string }
   const { sortKey, reverse } = sorting.find((item) => item.slug === sort) || defaultSort
   const products = await getCollectionProducts({ collection: params.collection, sortKey, reverse })
