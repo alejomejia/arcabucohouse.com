@@ -1,5 +1,5 @@
 ---
-description: "This rule provides indications to document the code using JS Docs"
+description: Standards for writing JSDoc comments in this Next.js codebase
 alwaysApply: false
 ---
 # JSDoc Guidelines for Next.js/React

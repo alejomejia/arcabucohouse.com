@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton, SkeletonText } from "@/components/ui/skeleton";
 
 export function ProductContentSkeleton() {
   return (
@@ -10,9 +10,7 @@ export function ProductContentSkeleton() {
         <div className="flex flex-col gap-3 mb-3">
           <ProductDataSkeleton />
         </div>
-        <div className="flex flex-col gap-3">
-          <ProductDescriptionSkeleton />
-        </div>
+        <ProductDescriptionSkeleton />
         <ProductAddToCartSkeleton />
       </div>
     </div>
@@ -37,15 +35,7 @@ function ProductDataSkeleton() {
 }
 
 function ProductDescriptionSkeleton() {
-  const amountOfLines = 7;
-
-  return Array.from({ length: amountOfLines }).map((_, index) => {
-    return index === amountOfLines - 1 ? (
-      <Skeleton key={index} className="max-w-1/3 h-4" />
-    ) : (
-      <Skeleton key={index} className="h-4" />
-    )
-  })
+  return <SkeletonText linesCount={7} />
 }
 
 function ProductAddToCartSkeleton() {

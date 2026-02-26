@@ -3,15 +3,10 @@ import { Container } from "@/components/ui/container";
 import { cn } from "@/lib/utils/helpers";
 
 import { FOOTER_COLUMN_HEADING_CLASSNAME, FOOTER_COLUMNS, START_YEAR } from "./const";
+import { CurrentYear } from "./current-year";
 import { FooterClient } from "./footer.client";
 
-async function getCurrentYear() {
-  "use cache";
-  return new Date().getFullYear();
-}
-
 export async function Footer() {
-  const currentYear = await getCurrentYear();
 
   return (
     <FooterClient>
@@ -61,7 +56,7 @@ export async function Footer() {
           )}
         >
           <span>South American interior art and objects</span>
-          <span>Copyright &copy; {START_YEAR} - {currentYear} Arcabuco</span>
+          <span>Copyright &copy; {START_YEAR} - <CurrentYear /> Arcabuco</span>
         </div>
       </Container>
     </FooterClient>

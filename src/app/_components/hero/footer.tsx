@@ -9,6 +9,7 @@ import { type SplitTextRef, SplitText } from "@/components/effects/split-text";
 import { UnderlineLink } from "@/components/effects/underline/underline-link";
 import { Container } from "@/components/ui/container";
 import { usePreloader } from "@/components/ui/preloader/hooks/use-preloader";
+import type { Menu } from '@/lib/integrations/shopify/types';
 import { cn } from "@/lib/utils/helpers";
 
 const ANIMATION_CONFIG = {
@@ -18,30 +19,11 @@ const ANIMATION_CONFIG = {
   delay: 0.25, // Small delay relative to header animation
 } as const;
 
-const COLLECTIONS = [
-  {
-    id: "rugs",
-    name: "Rugs",
-    href: "/collections/rugs",
-  },
-  {
-    id: "lights",
-    name: "Lights",
-    href: "/collections/lights",
-  },
-  {
-    id: "ceramics",
-    name: "Ceramics",
-    href: "/collections/ceramics",
-  },
-  {
-    id: "accessories",
-    name: "Accessories",
-    href: "/collections/accessories",
-  },
-]
+type HeroFooterProps = {
+  categories: Menu[]
+}
 
-export function HeroFooter() {
+export function HeroFooter({ categories }: HeroFooterProps) {
   const { isReady: isTransitionReady } = useTransitionState()
 
   const containerRef = useRef<HTMLDivElement>(null)
@@ -85,12 +67,12 @@ export function HeroFooter() {
             "md:flex-row md:gap-4",
             "uppercase font-serif font-semibold text-primary-base"
           )}>
-            {COLLECTIONS.map(({ id, name, href }, index) => (
-              <li key={id} className="flex flex-col md:flex-row items-center gap-2 leading-none">
-                <UnderlineLink href={href} className="tracking-wider">
-                  {name}
+            {categories.map(({ title, path }, index) => (
+              <li key={title} className="flex flex-col md:flex-row items-center gap-2 leading-none">
+                <UnderlineLink href={path} className="tracking-wider">
+                  {title}
                 </UnderlineLink>
-                {index < COLLECTIONS.length - 1 && (
+                {index < categories.length - 1 && (
                   <span className="text-neutral-400 leading-none hidden md:inline-block">—</span>
                 )}
               </li>

@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 
 import { HIDDEN_PRODUCT_TAG } from '@/lib/integrations/constants'
-import type { Product } from '../integrations/shopify/types'
+
+import type { Collection, Product } from '../integrations/shopify/types'
 
 /**
  * Generate metadata for a product
@@ -59,5 +60,17 @@ export function generateProductJsonLd(product: Product) {
       highPrice: priceRange.maxVariantPrice.amount,
       lowPrice: priceRange.minVariantPrice.amount
     }
+  }
+}
+
+/**
+ * Generate metadata for a category
+ * @param category - The collection category to generate metadata for
+ * @returns The metadata for the category
+ */
+export function generateCategoryMetadata(category: Collection): Metadata {
+  return {
+    title: category.seo.title || category.title,
+    description: category.seo.description || category.description,
   }
 }

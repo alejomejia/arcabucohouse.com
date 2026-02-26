@@ -3,10 +3,41 @@ import { cacheLife, cacheTag } from 'next/cache'
 import { domain, TAGS } from '@/lib/integrations/constants'
 import { isDev } from '@/lib/utils/config'
 
+import { shopifyFetch } from './client'
 import { getMenuQuery } from './queries/menu'
 import type { Menu, ShopifyMenuOperation } from './types'
 
-import { shopifyFetch } from './client'
+/**
+ * Default path transformation for menu items:
+ * - Strip the shop domain
+ * - Map `/collections` to `/search`
+ * - Strip `/pages`
+ */
+function defaultMenuPath(url: string): string {
+  return url
+    .replace(domain, '')
+    .replace('/pages', '')
+}
+
+function categoriesMenuPath(url: string): string {
+  return url
+    .replace(domain, '')
+    .replace('category-', '')
+    .replace("/collections", "/category")
+}
+
+/**
+ * Menu-specific path transformation chosen by handle.
+ * Add cases here when a menu needs different URL behavior.
+ */
+function resolveMenuPath(url: string, handle: string): string {
+  switch (handle) {
+    case 'categories-menu':
+      return categoriesMenuPath(url)
+    default:
+      return defaultMenuPath(url)
+  }
+}
 
 /**
  * Fetches a menu by handle and normalizes its items.
@@ -31,7 +62,7 @@ export async function getMenu(handle: string): Promise<Menu[]> {
     return (
       res.body?.data?.menu?.items.map((item: { title: string; url: string }) => ({
         title: item.title,
-        path: item.url.replace(domain, '').replace('/collections', '/search').replace('/pages', '')
+        path: resolveMenuPath(item.url, handle)
       })) || []
     )
   } catch (error) {

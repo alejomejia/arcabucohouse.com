@@ -273,3 +273,29 @@ export type ShopifyProductsOperation = {
     sortKey?: string;
   };
 };
+
+/**
+ * Shopify category operations are used to fetch a category and its products.
+ * Categories are collections with the handle prefix "category-".
+ * Like: Rugs (category-rugs), Lighting (category-Lighting), etc.
+ */
+export type ShopifyCategoryOperation = {
+  data: {
+    collection: {
+      title: string;
+      description: string;
+      products: Connection<ShopifyProduct>;
+    };
+  };
+  variables: {
+    handle: string;
+    reverse?: boolean;
+    sortKey?: string;
+  };
+};
+
+export type Category = {
+  title: string;
+  description: string;
+  products: Product[];
+}

@@ -1,8 +1,6 @@
 ---
-description: "This rule provides standards for managing TailwindCSS classes following best practices"
-alwaysApply: true
+alwaysApply: false
 ---
-
 # TailwindCSS Best Practices for Readable Components
 
 This guide outlines best practices for writing clean, maintainable TailwindCSS class names in React components.
@@ -45,8 +43,8 @@ When you have repeated or complex class combinations, extract them to named cons
 **Bad:**
 ```tsx
 // Repeated in multiple components
-<div className="before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-r before:from-blue-500 before:to-purple-500 before:opacity-0 hover:before:opacity-100 before:transition-opacity" />
-<div className="before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-r before:from-blue-500 before:to-purple-500 before:opacity-0 hover:before:opacity-100 before:transition-opacity" />
+<div className="before:content-[''] before:absolute before:inset-0 before:bg-linear-to-r before:from-blue-500 before:to-purple-500 before:opacity-0 hover:before:opacity-100 before:transition-opacity" />
+<div className="before:content-[''] before:absolute before:inset-0 before:bg-linear-to-r before:from-blue-500 before:to-purple-500 before:opacity-0 hover:before:opacity-100 before:transition-opacity" />
 ```
 
 **Good:**
@@ -255,7 +253,7 @@ className={cn(
   'max-h-[calc(100vh-var(--header-height)-var(--spacing)*4)]',
   
   // Custom timing function - use arbitrary
-  '[transition-timing-function:var(--custom-ease-in-out)]',
+  'ease-(--custom-ease-in-out)',
   
   // Percentage value - use arbitrary
   'w-[95%]'
@@ -320,8 +318,8 @@ className={cn(
   '[--card-radius:var(--radius-lg)]',
   
   // Apply custom properties
-  'p-[var(--card-padding)]',
-  'rounded-[var(--card-radius)]'
+  'p-(--card-padding)',
+  'rounded-(--card-radius)'
 )}
 ```
 

@@ -33,7 +33,7 @@ export function AboutSection() {
           href="/about"
           className="text-lg font-semibold uppercase leading-none font-serif"
         >
-          Explore The Collective
+          Explore
         </UnderlineLink>
       </div>
       <div className="col-start-18 -col-end-1  min-h-[75vh]">

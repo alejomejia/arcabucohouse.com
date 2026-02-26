@@ -2,6 +2,7 @@ import { DataBoundary } from "@/components/ui/data-boundary";
 import { ProductsCarousel } from "@/components/ui/products-carousel";
 import { getCollectionProducts } from "@/lib/integrations/shopify/collection";
 
+import { getMenu } from "@/lib/integrations/shopify/menu";
 import { Error } from "./error";
 import { HeroFooter } from "./footer";
 import { HeroHeader } from "./header";
@@ -13,6 +14,7 @@ import { Loading } from "./loading";
  */
 
 export async function HeroSection() {
+  const categoriesMenu = await getMenu("categories-menu")
   const featuredProducts = await getCollectionProducts({
     collection: "hidden-homepage-featured-products",
   });
@@ -29,7 +31,12 @@ export async function HeroSection() {
           <ProductsCarousel products={featuredProducts} />
         </DataBoundary>
       </div>
-      <HeroFooter />
+      <DataBoundary
+        name="home-hero-footer"
+        loading={null}
+        error={Error}>
+        <HeroFooter categories={categoriesMenu} />
+      </DataBoundary>
     </section>
   );
 }

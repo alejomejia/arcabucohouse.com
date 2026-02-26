@@ -26,14 +26,14 @@ export function DesignServicesSection() {
           <UnderlineLink
             className="text-lg font-semibold uppercase leading-none font-serif"
             href="/about">
-            Discover Our Approach
+            Discover
           </UnderlineLink>
         </div>
         <div className="col-start-9 col-end-17 min-h-[150vh]">
           <ParallaxImage src={OVERLAY_IMAGES_SHAPE.home} alt="" />
         </div>
         <div className="col-start-18 -col-end-1 flex flex-col justify-center gap-12 py-12">
-          <div className="flex flex-col gap-12 min-h-[100vh]">
+          <div className="flex flex-col gap-12 min-h-screen">
             <ParallaxVideo src="/video-01.mp4" className="object-top" loop />
             <ParallaxVideo src="/video-02.mp4" className="object-top" loop />
           </div>

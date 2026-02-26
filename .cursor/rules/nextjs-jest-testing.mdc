@@ -1,3 +1,7 @@
+---
+alwaysApply: false
+---
+
 # NextJS Jest Testing Best Practices
 
 When generating unit or integration tests for this project, always follow these guidelines:

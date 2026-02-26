@@ -14,7 +14,7 @@ export function ProductHeading({ product }: ProductHeadingProps) {
   // Get the first collection if available
   const category = product.collections?.[0]
   const categoryTitle = category?.title
-  const categoryPath = category?.path
+  const categoryPath = category?.path.replace("category-", "")
   const productTitle = product.title
 
   return (

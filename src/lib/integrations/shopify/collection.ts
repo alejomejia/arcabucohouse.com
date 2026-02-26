@@ -1,8 +1,10 @@
-import { TAGS } from '@/lib/integrations/constants'
 import { cacheLife, cacheTag } from 'next/cache'
+
+import { TAGS } from '@/lib/integrations/constants'
 
 import { shopifyFetch } from './client'
 import {
+  getCategoryQuery,
   getCollectionProductsQuery,
   getCollectionQuery,
   getCollectionsQuery
@@ -14,8 +16,10 @@ import {
   reshapeProducts
 } from './reshaper'
 import type {
+  Category,
   Collection,
   Product,
+  ShopifyCategoryOperation,
   ShopifyCollectionOperation,
   ShopifyCollectionProductsOperation,
   ShopifyCollectionsOperation
@@ -116,4 +120,46 @@ export async function getCollections(): Promise<Collection[]> {
   ]
 
   return collections
+}
+
+/**
+ * Fetches single category collection and it's data.
+ * Applies caching and optional sorting.
+ *
+ * @param params.collection - Collection handle.
+ * @param params.reverse - Whether to reverse the sort order.
+ * @param params.sortKey - Shopify sort key.
+ * @returns Array of normalized products.
+ */
+export async function getCategory({
+  collection,
+  reverse,
+  sortKey
+}: {
+  collection: string
+  reverse?: boolean
+  sortKey?: string
+}): Promise<Category | undefined> {
+  'use cache'
+  cacheTag(TAGS.categories, TAGS.products, collection)
+  cacheLife('shopify')
+
+  const res = await shopifyFetch<ShopifyCategoryOperation>({
+    query: getCategoryQuery,
+    variables: {
+      handle: collection,
+      reverse,
+      sortKey: sortKey === 'CREATED_AT' ? 'CREATED' : sortKey
+    }
+  })
+
+  if (!res.body.data.collection) {
+    console.log(`No collection found for \`${collection}\``)
+    return undefined
+  }
+
+  return {
+    ...res.body.data.collection,
+    products: reshapeProducts(removeEdgesAndNodes(res.body.data.collection.products)),
+  }
 }

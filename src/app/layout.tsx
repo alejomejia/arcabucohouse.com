@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
     default: siteName!,
-    template: `%s | ${siteName}`,
+    template: `%s`,
   },
   robots: {
     follow: true,
