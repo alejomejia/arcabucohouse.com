@@ -7,16 +7,16 @@ type Direction = 'left' | 'right'
 /**
  * Hook that manages the underline animation direction and classnames based on mouse entry point.
  *
- * Determines which direction the underline should animate from based on where
- * the mouse enters the element (left or right half). The direction is preserved
- * during mouse leave to allow the exit animation to reverse properly.
+ * The underline is always visible and disappears on hover, sliding out in the direction
+ * the mouse entered (left half → exits left; right half → exits right). Direction is
+ * preserved during mouse leave so the re-entrance animation reverses correctly.
  *
  * Returns `underlineClassName` so callers do not need to wire animation classes
  * manually; merge it with any component-level className.
  *
  * @returns Object containing:
  * - `underlineClassName`: Tailwind classes for the full underline effect (base + direction)
- * - `handleMouseEnter`: Mouse enter handler that calculates direction
+ * - `handleMouseEnter`: Mouse enter handler that calculates entry direction
  * - `handleMouseLeave`: Mouse leave handler that resets direction after animation
  * - `elementRef`: Ref to attach to the animated element
  *

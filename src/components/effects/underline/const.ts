@@ -1,62 +1,42 @@
+import { cn } from "@/lib/utils/helpers"
+
 /**
- * Animation classes for underline sliding from left side.
- * When mouse enters from left, underline slides from right to left.
+ * Mouse entered from the LEFT:
+ * - Default origin-left  → re-appears from the left on mouse leave
+ * - Hover origin-right   → underline collapses toward the right (exits right)
  */
-export const ANIMATION_FROM_LEFT = [
-  // Pseudo-element setup
-  'before:left-0',
-
-  // Animation - slide from right to left
-  'before:origin-right',
-
-  // Hover state - slide in from left
-  'hover:before:origin-left',
-].join(' ')
+export const ANIMATION_FROM_LEFT = "before:origin-left hover:before:origin-right"
 
 /**
- * Animation classes for underline sliding from right side.
- * When mouse enters from right, underline slides from left to right.
+ * Mouse entered from the RIGHT:
+ * - Default origin-right → re-appears from the right on mouse leave
+ * - Hover origin-left    → underline collapses toward the left (exits left)
  */
-export const ANIMATION_FROM_RIGHT = [
-  // Pseudo-element setup
-  'before:right-0',
-
-  // Animation - slide from left to right
-  'before:origin-left',
-
-  // Hover state - slide in from right
-  'hover:before:origin-right',
-].join(' ')
+export const ANIMATION_FROM_RIGHT = "before:origin-right hover:before:origin-left"
 
 /**
- * Base TailwindCSS classes for the underline animation effect.
+ * Base Tailwind classes for the animated underline effect.
  *
- * Creates a pseudo-element that acts as an underline, positioned below the content.
- * The underline scales from 0 to full width on hover, with smooth transitions.
+ * The underline is always visible and slides out on hover in the direction
+ * the mouse entered (controlled by `ANIMATION_FROM_LEFT` / `ANIMATION_FROM_RIGHT`).
+ * Uses `--custom-ease-in-out` easing.
  */
-export const UNDERLINE_ANIMATION_CLASSES = [
+export const UNDERLINE_ANIMATION_CLASSES = cn(
   // Layout
-  'group',
-  'relative',
-  'inline-block',
-  'w-fit',
+  "group relative inline-block w-fit",
 
   // Pseudo-element setup
-  'before:content-[""]',
-  'before:absolute',
-  'before:-bottom-0.5',
+  'before:content-[""] before:absolute before:left-0 before:-bottom-0.5',
 
   // Underline dimensions
-  'before:w-full',
-  'before:h-px',
-  'before:bg-current',
+  "before:w-full before:h-px before:bg-current",
 
-  // Animation - slide from right to left
-  'before:scale-x-0',
-  'before:transition-transform',
-  'before:duration-300',
-  'before:[transition-timing-function:var(--custom-ease-in-out)]',
+  // Always visible; default origin (overridden by direction classes)
+  "before:scale-x-100 before:origin-left",
 
-  // Hover state - slide in from left
-  'hover:before:scale-x-100',
-].join(' ')
+  // Transition
+  "before:transition-transform before:duration-300 before:[transition-timing-function:var(--custom-ease-in-out)]",
+
+  // Disappear on hover
+  "hover:before:scale-x-0",
+)
