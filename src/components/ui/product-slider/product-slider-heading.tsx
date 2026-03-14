@@ -34,7 +34,7 @@ export function ProductSliderHeading({ className }: HeadingProps) {
           <span ref={categoryRef}>{categoryTitle}</span>
           <span>]</span>
         </span>
-        <h3 className="text-3xl" ref={titleRef}>
+        <h3 className="text-5xl italic" ref={titleRef}>
           {firstProduct.title}
         </h3>
       </div>

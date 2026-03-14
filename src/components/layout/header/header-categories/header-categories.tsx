@@ -12,14 +12,15 @@ import type { Menu } from '@/lib/integrations/shopify/types';
 import { cn } from "@/lib/utils/helpers";
 import { useNavigation } from "@/lib/utils/store";
 
-const ANIMATION_CONFIG = {
+const MOUNT_ANIMATION_CONFIG = {
   duration: 1,
   ease: "gentleSlow",
   stagger: 0.075,
   delay: 0.25,
 } as const;
 
-const RE_ANIMATE_DELAY = 0.3;
+
+const RE_ANIMATE_DELAY = 0.1;
 
 type HeroFooterProps = {
   categories: Menu[]
@@ -49,7 +50,7 @@ export function HeaderCategories({ categories }: HeroFooterProps) {
       gsap.fromTo(
         elements,
         { yPercent: 100 },
-        { yPercent: 0, ...ANIMATION_CONFIG },
+        { yPercent: 0, ...MOUNT_ANIMATION_CONFIG },
       )
     },
     {
@@ -64,22 +65,12 @@ export function HeaderCategories({ categories }: HeroFooterProps) {
       if (!wrapperRef.current) return
 
       const prevState = prevNavStateRef.current
-      const elements = textRef.current?.getElements() ?? []
 
       if (navState === 'opening') {
-        gsap.to(wrapperRef.current, { opacity: 0, duration: 0.3, ease: "power2.out" })
-        if (elements.length > 0) {
-          gsap.set(elements, { yPercent: 100 })
-        }
+        // Fade the whole wrapper — underlines and text disappear together
+        gsap.to(wrapperRef.current, { opacity: 0, duration: 0.3, ease: "gentleSlow" })
       } else if (navState === 'closed' && prevState === 'closing') {
-        gsap.set(wrapperRef.current, { opacity: 1 })
-        if (elements.length > 0) {
-          gsap.fromTo(
-            elements,
-            { yPercent: 100 },
-            { yPercent: 0, ...ANIMATION_CONFIG }
-          )
-        }
+        gsap.fromTo(wrapperRef.current, { opacity: 0 }, { opacity: 1, duration: 1, ease: "gentleSlow", delay: RE_ANIMATE_DELAY })
       }
 
       prevNavStateRef.current = navState
@@ -97,17 +88,17 @@ export function HeaderCategories({ categories }: HeroFooterProps) {
             onReady={() => setSplitReady(true)}
           >
             <ul className={cn(
-              "flex flex-col gap-4 md:gap-2 justify-center items-center",
+              "flex flex-col gap-4 justify-center items-center",
               "md:flex-row md:gap-4",
               "uppercase text-sm font-serif font-semibold text-neutral-300"
             )}>
               {categories.map(({ title, path }, index) => (
-                <li key={title} className="flex flex-col md:flex-row items-center gap-2">
+                <li key={title} className="flex flex-col md:flex-row items-center gap-4">
                   <UnderlineLink href={path} className="tracking-wider leading-none">
                     {title}
                   </UnderlineLink>
                   {index < categories.length - 1 && (
-                    <span className="text-neutral-600 leading-none hidden md:inline-block">—</span>
+                    <span className="text-neutral-600 leading-none hidden md:inline-block">|</span>
                   )}
                 </li>
               ))}
