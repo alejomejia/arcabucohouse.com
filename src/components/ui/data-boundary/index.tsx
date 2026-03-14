@@ -21,7 +21,7 @@ function NamedSuspense({ name, fallback, children }: NamedSuspenseProps) {
   );
 }
 
-type ErrorBoundaryProps = { error: Error; reset?: () => void };
+export type ErrorBoundaryProps = { error: Error; reset?(): void };
 
 type DataBoundaryProps = {
   name: string;

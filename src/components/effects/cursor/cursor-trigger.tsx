@@ -2,8 +2,6 @@
 
 import { useEffect, useEffectEvent, useRef, type ElementType } from 'react'
 
-import { cn } from '@/lib/utils/helpers'
-
 import { useCursor } from './context'
 import type { CursorConfig, CursorTriggerProps } from './types'
 
@@ -76,7 +74,7 @@ export function CursorTrigger({
 
   return (
     <Component
-      className={cn('cursor-none', className)}
+      className={className}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

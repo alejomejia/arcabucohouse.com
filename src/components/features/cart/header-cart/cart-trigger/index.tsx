@@ -32,7 +32,7 @@ export function CartTrigger({ onOpen }: CartTriggerProps) {
         <div className="overflow-hidden">
           <span>Cart</span>
           {!!quantity ? (
-            <span className="inline-block ml-1 text-neutral-300">
+            <span className="inline-block ml-1">
               [{quantity}]
             </span>
           ) : null}

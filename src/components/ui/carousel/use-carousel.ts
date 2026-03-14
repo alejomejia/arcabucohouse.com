@@ -10,6 +10,8 @@ export type UseCarouselOptions = {
   options?: EmblaOptionsType
   /** Callback when the carousel is scrolled (e.g. wheel). Uses non-passive listener when provided. */
   onScroll?(event: WheelEvent<HTMLElement>, emblaApi: EmblaCarouselType): void
+  /** Fired once when the Embla instance is ready. Use to store a ref to the API. */
+  onInit?(emblaApi: EmblaCarouselType): void
   /** Height of each slide content area. Use CSS length (e.g. `"19rem"`, `"320px"`). */
   slideHeight?: string
   /** Gap between slides. Use CSS length (e.g. `"2rem"`, `"1.5rem"`). */
@@ -49,6 +51,7 @@ export type UseCarouselReturn = {
 export function useCarousel({
   options,
   onScroll,
+  onInit,
 }: UseCarouselOptions): UseCarouselReturn {
   const [emblaRef, emblaApi] = useEmblaCarousel(options)
   const carouselRef = useRef<HTMLDivElement>(null)
@@ -57,15 +60,21 @@ export function useCarousel({
     if (emblaApi) onScroll?.(event as unknown as WheelEvent<HTMLElement>, emblaApi)
   })
 
+  const onInitEvent = useEffectEvent((api: EmblaCarouselType) => {
+    onInit?.(api)
+  })
+
   useEffect(() => {
     if (!emblaApi) return
     const section = carouselRef.current
     if (!section) return
 
+    onInitEvent(emblaApi)
+
     const handleWheel = (event: globalThis.WheelEvent) => {
       onWheel(event)
     }
-    
+
     section.addEventListener("wheel", handleWheel, { passive: false })
     return () => section.removeEventListener("wheel", handleWheel)
   }, [emblaApi])

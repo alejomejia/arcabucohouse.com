@@ -12,13 +12,14 @@
   --color-primary-600: #0F0F0F;
 
   /* Secondary color scale */
-  --color-secondary-100: #C5BFBB;
-  --color-secondary-200: #A89F98;
-  --color-secondary-300: #8C7F76;
-  --color-secondary-base: #6F5F54;
-  --color-secondary-400: #594C43;
-  --color-secondary-500: #433932;
-  --color-secondary-600: #2C2622;
+  --color-secondary-50: #F0EEEC;
+  --color-secondary-100: #D9CDC9;
+  --color-secondary-200: #C2AFA8;
+  --color-secondary-300: #B0968D;
+  --color-secondary-base: #9B7B6F;
+  --color-secondary-400: #81645A;
+  --color-secondary-500: #664F47;
+  --color-secondary-600: #483832;
 
   /* Custom breakpoints */
   --breakpoint-xs: 30rem;

@@ -161,8 +161,7 @@ export function Preloader() {
         <span
           ref={progressRef}
           className="text-[clamp(2.5rem,25vw,25rem)] leading-none font-medium"
-          aria-live="polite"
-          aria-atomic="true"
+          aria-hidden="true"
         >
           0
         </span>

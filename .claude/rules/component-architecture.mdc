@@ -1,0 +1,228 @@
+---
+description: Standards for create components in this NextJS codebase
+alwaysApply: false
+---
+# Component Architecture Rule (React / Next.js)
+
+Always follow this architecture when creating React components.
+
+--
+
+# 1. Folder Structure
+
+Every reusable UI component must live in its own folder.
+
+- components/
+-- ui/
+--- component-name/
+---- `component-name.tsx`
+---- `component-name-subpart.tsx`
+---- `component-name.types.ts`
+---- `component-name.context.ts`
+---- `component-name.styles.ts`
+---- `use-component-name.ts`
+---- `index.ts`
+
+Example:
+
+- components/
+-- ui/`
+--- tabs/
+---- `tabs.tsx`
+---- `tabs-list.tsx`
+---- `tabs-trigger.tsx`
+---- `tabs-panel.tsx`
+---- `tabs.types.ts`
+---- `tabs.context.ts`
+---- `tabs.styles.ts`
+---- `use-tabs.ts`
+---- `index.ts`
+
+# 2. Naming Conventions
+
+## Files
+
+Use **kebab-case** for all files.
+
+Examples:
+
+`tabs.tsx`
+`tabs-list.tsx`
+`tabs-trigger.tsx`
+`tabs-panel.tsx`
+`tabs.context.ts`
+`tabs.types.ts`
+`tabs.styles.ts`
+`use-tabs.ts`
+
+## Components
+
+Use **PascalCase**.
+
+Examples:
+
+Tabs
+TabsList
+TabsTrigger
+TabsPanel
+
+---
+
+## Hooks
+
+Internal hooks must follow this pattern: `use-component-name.ts`
+
+Examples:
+
+`use-tabs.ts`
+`use-modal.ts`
+`use-dropdown.ts`
+
+Internal hooks must live **inside the component folder**.
+
+Example:
+
+`components/ui/tabs/use-tabs.ts`
+
+# 3. Barrel Export Rule
+
+Every component folder must contain a **single local barrel export**.
+
+`index.ts`
+
+```ts
+export { Tabs } from "./tabs"
+export { TabsList } from "./tabs-list"
+export { TabsTrigger } from "./tabs-trigger"
+export { TabsPanel } from "./tabs-panel"
+
+export type * from "./tabs.types"
+```
+
+Rules:
+- Use explicit exports only
+- Never use export *
+- Never create global barrels like `components/index.ts`
+
+# 4. Import Rules
+
+Consumers must import only from the component folder.
+
+Good:
+```ts
+import { Tabs, TabsList } from "@/components/ui/tabs"
+```
+
+Bad:
+```ts
+import { Tabs } from "@/components/ui/tabs/tabs"
+import { TabsList } from "@/components/ui/tabs/tabs-list"
+```
+
+Internal files must **never be imported outside the component folder**.
+
+# 5. File Responsibilities
+
+`component-name.tsx`
+Root component and main logic.
+
+`component-name-subpart.tsx`
+Compound subcomponents.
+
+`component-name.context.ts`
+React context and providers.
+
+`component-name.types.ts`
+TypeScript interfaces and types.
+
+`component-name.styles.ts`
+Classnames, style helpers, variants.
+
+`use-component-name.ts`
+Internal hooks.
+
+`index.ts`
+Public API for the component.
+
+# 6. Example Implementation
+
+- components/
+-- ui/
+--- tabs/
+---- `tabs.tsx`
+---- `tabs-list.tsx`
+---- `tabs-trigger.tsx`
+---- `tabs-panel.tsx`
+---- `tabs.types.ts`
+---- `tabs.context.ts`
+---- `tabs.styles.ts`
+---- `use-tabs.ts`
+---- `index.ts`
+
+Usage:
+
+```ts
+import { Tabs, TabsList, TabsTrigger, TabsPanel } from "@/components/ui/tabs"
+```
+
+# 7. Private File Enforcement Rule
+
+Files inside a component folder are private by default.
+
+Only files exported in index.ts are part of the public API.
+
+Allowed:
+```ts
+import { Tabs } from "@/components/ui/tabs"
+```
+
+Not allowed:
+```ts
+import { TabsContext } from "@/components/ui/tabs/tabs.context"
+import { useTabs } from "@/components/ui/tabs/use-tabs"
+```
+
+Internal files must only be used **within the same component folder**.
+
+# 8. Subcomponent Composition Rule
+
+Large components must be split into **compound subcomponents** instead of growing a single large file.
+
+Example:
+
+Tabs
+TabsList
+TabsTrigger
+TabsPanel
+
+Usage:
+```tsx
+<Tabs defaultValue="account">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="password">Password</TabsTrigger>
+  </TabsList>
+
+  <TabsPanel value="account">
+    Account content
+  </TabsPanel>
+
+  <TabsPanel value="password">
+    Password content
+  </TabsPanel>
+</Tabs>
+```
+
+This keeps components:
+- scalable
+- readable
+- easier to maintain
+
+# 9. Key Principles
+
+1.	One component = one folder
+2.	Explicit exports only
+3.	No global barrels
+4.	Internal files stay private
+5.	Use compound components for complex UI
+6.	Consistent naming everywhere

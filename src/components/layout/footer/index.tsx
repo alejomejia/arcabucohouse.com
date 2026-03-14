@@ -18,7 +18,7 @@ export async function Footer() {
           >
             <h4 className={FOOTER_COLUMN_HEADING_CLASSNAME}>About</h4>
             <p>
-              Arcabuco is a creative collective amplifying South American artistic voices.
+              Arcabuco is a creative collective amplifying Latin American artistic voices.
               Inspired by architecture and interior design, we curate handcrafted objects
               that blend cultural heritage with contemporary form.
             </p>
@@ -55,7 +55,7 @@ export async function Footer() {
             "border-t border-primary-100/30 pt-8 md:pt-4"
           )}
         >
-          <span>South American interior art and objects</span>
+          <span>Latin American interior art and objects</span>
           <span>Copyright &copy; {START_YEAR} - <CurrentYear /> Arcabuco</span>
         </div>
       </Container>

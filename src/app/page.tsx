@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-import { AboutSection } from "./_components/about";
-import { DesignServicesSection } from "./_components/design-services";
+import { AboutArcabucoSection } from "./_components/about-arcabuco";
 import { HeroSection } from "./_components/hero";
+import { InteriorShowcaseSection } from "./_components/interior-showcase";
 
 export const metadata: Metadata = {
   description: 'High-performance ecommerce store built with Next.js, Vercel, and Shopify.',
@@ -15,8 +15,8 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <AboutSection />
-      <DesignServicesSection />
+      <AboutArcabucoSection />
+      <InteriorShowcaseSection />
       {/* @TODO: [X] Projects section */}
       {/* @TODO: Collabs section with artists and artisans */}
       {/* @TODO: Why Arcabuco section */}

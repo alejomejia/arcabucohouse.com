@@ -28,7 +28,7 @@ export function FooterClient({ children }: FooterClientProps) {
         "flex h-full min-h-screen flex-col bg-primary-base text-primary-100"
       )}
     >
-      <div className="bg-secondary-base min-h-0 flex-1" aria-hidden />
+      <div className="bg-primary-100 min-h-0 flex-1" aria-hidden />
       {children}
       <FooterLogo containerRef={logoContainerRef} />
     </footer>

@@ -118,6 +118,22 @@ export function useSpotlight(options?: UseSpotlightOptions): UseSpotlightReturn 
         gsap.set(headerSplit.words, { opacity: 0 });
       }
 
+      // Pre-create quickSetters for zero-overhead per-frame property updates
+      const setImagesY = gsap.quickSetter(spotlightImages, "y", "%");
+      const setMaskImageScale = maskImage
+        ? gsap.quickSetter(maskImage, "scale")
+        : null;
+
+      // Cache words as HTMLElements once to avoid repeated casting in onUpdate
+      const words = headerSplit?.words as HTMLElement[] | undefined;
+
+      // Pre-create quickSetters for word opacity — avoids direct style
+      // manipulation on every ScrollTrigger tick (~60fps). Each quickSetter
+      // is a thin function that sets a single property with zero overhead.
+      const wordSetters = words?.map(
+        (word) => gsap.quickSetter(word, "opacity")
+      );
+
       ScrollTrigger.create({
         trigger: section,
         start: "top top",
@@ -130,17 +146,14 @@ export function useSpotlight(options?: UseSpotlightOptions): UseSpotlightReturn 
 
           // Image strip: move from initial Y to end over the first N% of scroll progress
           if (progress <= opts.imageScrollEndProgress) {
-            const segmentProgress =
-              progress / opts.imageScrollEndProgress;
+            const segmentProgress = progress / opts.imageScrollEndProgress;
             const startY = opts.initialImagesYPercent;
-            const endY =
-              -(totalMovement / spotlightContainerHeight) * 100;
-            const currentY = startY + (endY - startY) * segmentProgress;
-            gsap.set(spotlightImages, { y: `${currentY}%` });
+            const endY = -(totalMovement / spotlightContainerHeight) * 100;
+            setImagesY(startY + (endY - startY) * segmentProgress);
           }
 
           // Mask: grow from 0% to max size and scale banner from start to end scale
-          if (maskContainer && maskImage) {
+          if (maskContainer && maskImage && setMaskImageScale) {
             const maskSegmentLength =
               opts.maskRevealEnd - opts.maskRevealStart;
             if (
@@ -155,17 +168,14 @@ export function useSpotlight(options?: UseSpotlightOptions): UseSpotlightReturn 
                 (opts.maskImageScaleEnd - opts.maskImageScaleStart) *
                   maskProgress;
 
-              maskContainer.style.setProperty(
-                "-webkit-mask-size",
-                maskSize
-              );
+              maskContainer.style.setProperty("-webkit-mask-size", maskSize);
               maskContainer.style.setProperty("mask-size", maskSize);
-              gsap.set(maskImage, { scale: imageScale });
+              setMaskImageScale(imageScale);
             } else if (progress < opts.maskRevealStart) {
               maskContainer.style.setProperty("-webkit-mask-size", "0%");
               maskContainer.style.setProperty("mask-size", "0%");
-              gsap.set(maskImage, { scale: opts.maskImageScaleStart });
-            } else if (progress > opts.maskRevealEnd) {
+              setMaskImageScale(opts.maskImageScaleStart);
+            } else {
               maskContainer.style.setProperty(
                 "-webkit-mask-size",
                 `${opts.maskSizeMaxPercent}%`
@@ -174,12 +184,13 @@ export function useSpotlight(options?: UseSpotlightOptions): UseSpotlightReturn 
                 "mask-size",
                 `${opts.maskSizeMaxPercent}%`
               );
-              gsap.set(maskImage, { scale: opts.maskImageScaleEnd });
+              setMaskImageScale(opts.maskImageScaleEnd);
             }
           }
 
           // Mask headline: reveal words one by one between wordRevealStart and wordRevealEnd
-          if (headerSplit?.words?.length) {
+          if (wordSetters?.length) {
+            const totalWords = wordSetters.length;
             const wordSegmentLength =
               opts.wordRevealEnd - opts.wordRevealStart;
             if (
@@ -188,18 +199,14 @@ export function useSpotlight(options?: UseSpotlightOptions): UseSpotlightReturn 
             ) {
               const textProgress =
                 (progress - opts.wordRevealStart) / wordSegmentLength;
-              const totalWords = headerSplit.words.length;
 
-              headerSplit.words.forEach((word, index) => {
-                const wordRevealProgress = index / totalWords;
-                gsap.set(word, {
-                  opacity: textProgress >= wordRevealProgress ? 1 : 0,
-                });
-              });
+              for (let i = 0; i < totalWords; i++) {
+                wordSetters[i]?.(textProgress >= i / totalWords ? 1 : 0);
+              }
             } else if (progress < opts.wordRevealStart) {
-              gsap.set(headerSplit.words, { opacity: 0 });
-            } else if (progress > opts.wordRevealEnd) {
-              gsap.set(headerSplit.words, { opacity: 1 });
+              for (let i = 0; i < totalWords; i++) wordSetters[i]?.(0);
+            } else {
+              for (let i = 0; i < totalWords; i++) wordSetters[i]?.(1);
             }
           }
         },

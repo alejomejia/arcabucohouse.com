@@ -60,7 +60,7 @@ export function HeroHeader() {
   )
 
   return (
-    <Container className="w-full pt-6">
+    <Container className="w-full pt-8 mb-16">
       <div
         ref={containerRef}
         className="text-center flex flex-col justify-center items-center gap-1 opacity-0"
@@ -68,7 +68,7 @@ export function HeroHeader() {
         <h1 className="mb-4">
           <SplitText ref={titleRef} type="lines" onReady={handleSplitReady}>
             <span className="block font-serif text-3xl lg:text-4xl text-primary-base italic text-pretty leading-none">
-              Curated South American Artistry
+              Curated Latin American Artistry
             </span>
             <span className="text-4xl lg:text-5xl leading-none tracking-wider uppercase text-secondary-300">
               for modern interiors

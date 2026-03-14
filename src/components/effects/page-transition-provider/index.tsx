@@ -12,29 +12,63 @@ const ANIMATION_CONFIG = {
   ease: "power3.inOut",
 }
 
+type PageTransitionVariant = "slide" | "fade"
+
 type PageTransitionProviderProps = {
   children: ReactNode;
+  variant?: PageTransitionVariant;
 }
 
-export function PageTransitionProvider({ children }: PageTransitionProviderProps) {
+export function PageTransitionProvider({ children, variant = "fade" }: PageTransitionProviderProps) {
   const transitionRef = useRef<HTMLDivElement>(null)
 
   const onLeave = useCallback((next: () => void) => {
+    if (variant === "fade") {
+      gsap.set(transitionRef.current, { yPercent: -100 })
+
+      const tl = gsap.timeline()
+        .to(transitionRef.current, {
+          opacity: 1,
+          ...ANIMATION_CONFIG,
+          onComplete: () => {
+            requestAnimationFrame(() => startTransition(next))
+          },
+        })
+
+      return () => tl.kill()
+    }
+
     gsap.set(transitionRef.current, { opacity: 1, yPercent: 0 })
 
     const tl = gsap.timeline()
       .to(transitionRef.current, {
         yPercent: -100,
         ...ANIMATION_CONFIG,
-        onComplete: next,
-      }).call(() => {
-        requestAnimationFrame(() => startTransition(next))
+        onComplete: () => {
+          requestAnimationFrame(() => startTransition(next))
+        },
       })
 
     return () => tl.kill()
-  }, [])
+  }, [variant])
 
   const onEnter = useCallback((next: () => void) => {
+    if (variant === "fade") {
+      gsap.set(transitionRef.current, { yPercent: -100 })
+
+      const tl = gsap.timeline()
+        .to(transitionRef.current, {
+          opacity: 0,
+          ...ANIMATION_CONFIG,
+          onComplete: () => {
+            gsap.set(transitionRef.current, { opacity: 0, yPercent: 100 })
+            requestAnimationFrame(() => startTransition(next))
+          },
+        })
+
+      return () => tl.kill()
+    }
+
     gsap.set(transitionRef.current, { opacity: 1, yPercent: -100 })
 
     const tl = gsap.timeline()
@@ -43,25 +77,24 @@ export function PageTransitionProvider({ children }: PageTransitionProviderProps
         ...ANIMATION_CONFIG,
         onComplete: () => {
           gsap.set(transitionRef.current, { yPercent: 0 })
-          next()
+          requestAnimationFrame(() => startTransition(next))
         },
-      }).call(() => {
-        requestAnimationFrame(() => startTransition(next))
       })
 
     return () => tl.kill()
-  }, [])
+  }, [variant])
 
   return (
-    <TransitionRouter auto leave={onLeave} enter={onEnter}>
+    <TransitionRouter leave={onLeave} enter={onEnter} auto>
       <div
         ref={transitionRef}
         className={cn(
           "fixed inset-0",
           Z_INDEX_CLASSNAMES.pageTransition,
           "w-full h-full overflow-hidden",
-          "bg-primary-base opacity-0 will-change-transform",
-          "translate-y-full"
+          variant === "fade"
+            ? "bg-neutral-50 opacity-0 translate-y-full"
+            : "bg-primary-base opacity-0 translate-y-full will-change-transform"
         )} />
       {children}
     </TransitionRouter>

@@ -41,43 +41,57 @@ export function useDialogAnimation({
     if (!overlay || !panel) return
 
     if (animationState === 'opening') {
-      // Set initial states
-      gsap.set(panel, { x: "100%" })
+      // Set initial states and promote to own layer
+      gsap.set(panel, { x: "100%", willChange: "transform" })
+      gsap.set(overlay, { willChange: "opacity" })
 
-      // Create opening timeline
-      const tl = gsap.timeline({
-        onComplete: onOpenComplete,
+      // Defer animation by one GSAP tick so the browser can paint the newly
+      // mounted Dialog Portal before the slide/fade animation starts.
+      // Without this, mount + layout + paint + animation compete in one frame.
+      gsap.delayedCall(0, () => {
+        if (!overlayRef.current || !panelRef.current) return
+
+        const tl = gsap.timeline({
+          onComplete: () => {
+            // Clean up will-change to free GPU memory
+            if (panelRef.current) panelRef.current.style.willChange = "auto"
+            if (overlayRef.current) overlayRef.current.style.willChange = "auto"
+            onOpenComplete()
+          },
+        })
+
+        tl.to(overlay, {
+          opacity: 1,
+          duration: ANIMATION_DURATION,
+          ease: EASE_IN,
+        }, 0)
+
+        tl.to(panel, {
+          x: 0,
+          duration: ANIMATION_DURATION,
+          ease: EASE_IN,
+        }, 0)
       })
-
-      // Animate overlay fade in
-      tl.to(overlay, {
-        opacity: 1,
-        duration: ANIMATION_DURATION,
-        ease: EASE_IN,
-      }, 0)
-
-      // Animate panel slide in
-      tl.to(panel, {
-        x: 0,
-        duration: ANIMATION_DURATION,
-        ease: EASE_IN,
-      }, 0)
     }
 
     if (animationState === 'closing') {
-      // Create closing timeline
+      gsap.set(panel, { willChange: "transform" })
+      gsap.set(overlay, { willChange: "opacity" })
+
       const tl = gsap.timeline({
-        onComplete: onCloseComplete,
+        onComplete: () => {
+          if (panelRef.current) panelRef.current.style.willChange = "auto"
+          if (overlayRef.current) overlayRef.current.style.willChange = "auto"
+          onCloseComplete()
+        },
       })
 
-      // Animate overlay fade out
       tl.to(overlay, {
         opacity: 0,
         duration: ANIMATION_DURATION,
         ease: EASE_OUT,
       }, 0)
 
-      // Animate panel slide out
       tl.to(panel, {
         x: "100%",
         duration: ANIMATION_DURATION,

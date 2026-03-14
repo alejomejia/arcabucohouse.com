@@ -1,6 +1,6 @@
 import { type ReactNode } from "react"
 
-import { CURSOR_SCROLL, CURSOR_SMALL } from "@/components/effects/cursor/cursor-states"
+import { CURSOR_DRAG, CURSOR_SMALL } from "@/components/effects/cursor/cursor-states"
 import { CursorTrigger } from "@/components/effects/cursor/cursor-trigger"
 
 type CarouselCursorProps = {
@@ -10,7 +10,7 @@ type CarouselCursorProps = {
 }
 
 export function CarouselCursor({ isScrolling, children }: CarouselCursorProps) {
-  const conditionalConfig = !isScrolling ? CURSOR_SCROLL : CURSOR_SMALL
+  const conditionalConfig = !isScrolling ? CURSOR_DRAG : CURSOR_SMALL
 
   return (
     <CursorTrigger config={conditionalConfig}>

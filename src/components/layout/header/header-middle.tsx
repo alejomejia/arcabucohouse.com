@@ -1,14 +1,23 @@
-import { ScrollProgressBar } from "@/components/effects/scroll-progress-bar"
+import { DataBoundary } from "@/components/ui/data-boundary"
+import { getMenu } from "@/lib/integrations/shopify/menu"
+import { HeaderCategories, HeaderCategoriesError, HeaderCategoriesLoading } from "./header-categories"
 import { OverlayTopText } from "./navigation/navigation-overlay/overlay-top-text"
 
 /** Intermediate container for header middle content: 
  * ScrollProgressBar and OverlayTopText
  **/
-export function HeaderMiddle() {
+export async function HeaderMiddle() {
+  const categoriesMenu = await getMenu("categories-menu")
+
   return (
     <>
-      <div className="w-full max-w-48 md:max-w-84 mx-auto">
-        <ScrollProgressBar />
+      <div className="relative z-5 w-full mx-auto">
+        <DataBoundary
+          name="header-categories"
+          loading={<HeaderCategoriesLoading />}
+          error={HeaderCategoriesError}>
+          <HeaderCategories categories={categoriesMenu} />
+        </DataBoundary>
       </div>
       <div className="absolute hidden md:block">
         <OverlayTopText />

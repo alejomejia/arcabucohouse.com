@@ -141,7 +141,7 @@ export async function getCategory({
   sortKey?: string
 }): Promise<Category | undefined> {
   'use cache'
-  cacheTag(TAGS.categories, TAGS.products, collection)
+  cacheTag(TAGS.collections, TAGS.products)
   cacheLife('shopify')
 
   const res = await shopifyFetch<ShopifyCategoryOperation>({

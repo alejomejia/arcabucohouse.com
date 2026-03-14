@@ -8,7 +8,7 @@ import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
 import type { SplitTextRef } from "@/components/effects/split-text"
 import { usePreloader } from "@/components/ui/preloader/hooks/use-preloader"
 import { useDisableScroll } from "@/lib/hooks/use-disable-scroll"
-import { useNavigation } from "@/lib/utils/store"
+import { getIsNavOpen, useNavigation } from "@/lib/utils/store"
 
 const MENU_ANIMATION_OPTIONS = {
   stagger: 0.03,
@@ -207,9 +207,10 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
     }
   }
 
-  // Close navigation on route change (skip before intro plays)
+  // Close navigation on route change (skip before intro plays, skip if already closed)
   useEffect(() => {
     if (!hasPlayedIntroRef.current) return
+    if (!getIsNavOpen()) return
 
     closingNav()
     closeAnimation()

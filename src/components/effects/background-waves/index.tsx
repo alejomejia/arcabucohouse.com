@@ -350,9 +350,15 @@ export function BackgroundWaves({
       frameIdRef.current = requestAnimationFrame(tick);
     }
 
+    let resizeTimer: ReturnType<typeof setTimeout> | null = null;
+
     function onResize() {
-      setSize();
-      setLines();
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        setSize();
+        setLines();
+        resizeTimer = null;
+      }, 150);
     }
     function onMouseMove(e: MouseEvent) {
       updateMouse(e.clientX, e.clientY);
@@ -383,9 +389,10 @@ export function BackgroundWaves({
     frameIdRef.current = requestAnimationFrame(tick);
     window.addEventListener('resize', onResize);
     window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
 
     return () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
       window.removeEventListener('resize', onResize);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('touchmove', onTouchMove);

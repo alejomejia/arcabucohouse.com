@@ -1,7 +1,8 @@
 "use client"
 
 import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel"
-import { Children, CSSProperties, type ReactNode, type WheelEvent } from "react"
+export type { EmblaCarouselType }
+import { Children, CSSProperties, type ReactNode, useMemo, type WheelEvent } from "react"
 
 import { cn } from "@/lib/utils/helpers"
 
@@ -34,6 +35,8 @@ export type CarouselProps = CarouselLayout & {
   slideClassName?: string
   /** Callback when the carousel is scrolled (wheel). Omit on tablet/mobile to use drag only. */
   onScroll?: (event: WheelEvent<HTMLElement>, emblaApi: EmblaCarouselType) => void
+  /** Fired once when the Embla instance is ready. Use to store a ref to the API (e.g. for auto-scroll). */
+  onInit?: (emblaApi: EmblaCarouselType) => void
   /** When true, allows horizontal touch drag (pan-x). Use when wheel scroll is disabled (e.g. tablet/mobile). */
   enableTouchDrag?: boolean
 }
@@ -72,20 +75,22 @@ export function Carousel({
   className,
   slideClassName,
   onScroll,
+  onInit,
   enableTouchDrag = false,
 }: CarouselProps) {
   const { emblaRef, carouselRef } = useCarousel({
     options,
     onScroll,
+    onInit,
   })
 
   const slides = Children.toArray(children)
 
-  const cssVariables = {
+  const cssVariables = useMemo<CSSProperties>(() => ({
     "--slide-height": slideHeight,
     "--slide-spacing": slideSpacing,
     "--slide-size": slideSize,
-  } as CSSProperties
+  } as CSSProperties), [slideHeight, slideSpacing, slideSize])
 
   return (
     <div ref={carouselRef} id={id} className={className} style={cssVariables}>

@@ -25,22 +25,40 @@ export function NavigationOverlay({ children }: NavigationOverlayProps) {
   useGSAP(() => {
     if (!containerRef.current) return
 
+    gsap.killTweensOf(containerRef.current, "clipPath")
+
     if (navState === 'opening') {
       gsap.set(containerRef.current, {
-        clipPath: CLIP_PATH_INITIAL
+        clipPath: CLIP_PATH_INITIAL,
+        willChange: "clip-path",
       })
 
-      gsap.to(containerRef.current, {
-        clipPath: CLIP_PATH_OPENED,
-        duration: 1,
-        ease: "smoothSnap"
+      // Defer animation by one GSAP tick so the browser can paint the newly
+      // mounted Portal DOM before the clip-path animation starts.
+      // Without this, the first frame is janky because mount + layout + paint
+      // + animation all compete for the same frame budget.
+      gsap.delayedCall(0, () => {
+        if (!containerRef.current) return
+        gsap.to(containerRef.current, {
+          clipPath: CLIP_PATH_OPENED,
+          duration: 1,
+          ease: "smoothSnap",
+          onComplete: () => {
+            if (containerRef.current) {
+              containerRef.current.style.willChange = "auto"
+            }
+          }
+        })
       })
     } else if (navState === 'closing') {
+      gsap.set(containerRef.current, { willChange: "clip-path" })
       gsap.to(containerRef.current, {
         clipPath: CLIP_PATH_INITIAL,
         duration: 1,
         ease: "smoothSnap",
-        onComplete: () => closeNav()
+        onComplete: () => {
+          closeNav()
+        }
       })
     }
   }, { scope: containerRef, dependencies: [navState] })

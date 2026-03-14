@@ -72,6 +72,7 @@ export type Product = Omit<ShopifyProduct, 'variants' | 'images' | 'collections'
   variants: ProductVariant[];
   images: Image[];
   collections: Collection[];
+  category?: Collection;
 };
 
 export type ProductOption = {

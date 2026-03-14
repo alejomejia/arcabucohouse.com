@@ -55,7 +55,7 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="relative">
         <Image
           className={cn(
-            "relative z-10",
+            "relative z-10 w-full",
             "brand-gradient-primary",
             "transition-opacity duration-1000 ease-in-out",
             {
@@ -69,7 +69,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {hasBackgroundImage ? (
           <Image
             className={cn(
-              "absolute inset-0 z-0",
+              "absolute inset-0 z-0 w-full",
               "brand-gradient-primary",
             )}
             src={backgroundImage.url}

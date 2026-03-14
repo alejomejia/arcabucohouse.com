@@ -25,6 +25,10 @@ export function useFooterAnimation(
     const columns = gsap.utils.toArray<HTMLElement>("[data-footer-col]");
     const bottomBar = footerRef.current.querySelector("[data-footer-bottom]");
 
+    // Collect SplitText instances so they can be reverted on cleanup.
+    // useGSAP reverts tweens/ScrollTriggers automatically but not SplitText DOM mutations.
+    const splits: GSAPSplitText[] = [];
+
     // Master timeline with ScrollTrigger — column staggers are
     // positioned inside the timeline so scroll drives everything.
     const tl = gsap.timeline({
@@ -42,6 +46,7 @@ export function useFooterAnimation(
         type: "lines",
         mask: "lines",
       });
+      splits.push(split);
 
       if (split.lines.length === 0) return;
 
@@ -60,6 +65,7 @@ export function useFooterAnimation(
         type: "lines",
         mask: "lines",
       });
+      splits.push(split);
 
       if (split.lines.length > 0) {
         gsap.set(split.lines, { yPercent: 100 });
@@ -94,5 +100,9 @@ export function useFooterAnimation(
         );
       }
     }
+
+    return () => {
+      splits.forEach((split) => split.revert());
+    };
   }, { scope: footerRef });
 }

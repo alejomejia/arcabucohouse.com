@@ -23,17 +23,14 @@ export function CategoryProducts({ products }: CategoryProductsType) {
 
     const cards = gsap.utils.toArray("[data-product-card]")
 
-    gsap.set(cards, { opacity: 0, y: 48 })
-
     gsap.to(cards, {
       opacity: 1,
-      y: 0,
       delay: 0.5,
       stagger: 0.15,
-      duration: 2,
-      ease: "power3.out",
+      duration: 3,
+      ease: "gentleSlow",
     })
-  }, { scope: containerRef })
+  }, { scope: containerRef, dependencies: [isTransitionReady] })
 
   return (
     <div className="border-t border-primary-100 py-12">
@@ -41,10 +38,12 @@ export function CategoryProducts({ products }: CategoryProductsType) {
         <CategoryNoProducts />
       ) : (
         <div ref={containerRef}>
-          <Grid className="gap-y-12 md:gap-4">
+          <Grid className="gap-x-4 gap-y-12">
             {products.map((product) => (
-              <div key={product.id} className="col-span-full md:col-span-8 lg:col-span-8 xl:col-span-6 opacity-0" data-product-card>
-                <ProductCard product={product} />
+              <div key={product.id} className="col-span-full md:col-span-8 lg:col-span-8 xl:col-span-6">
+                <div className="opacity-0" data-product-card>
+                  <ProductCard product={product} />
+                </div>
               </div>
             ))}
           </Grid>

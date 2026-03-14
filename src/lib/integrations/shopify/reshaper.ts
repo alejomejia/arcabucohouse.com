@@ -131,7 +131,8 @@ export const reshapeProduct = (
     images: reshapeImages(images, product.title),
     variants: removeEdgesAndNodes(variants),
     collections: filterHiddenCollections && collections.length > 0 ? 
-      collections.filter((collection) => !collection.handle.startsWith('hidden')) : collections
+      collections.filter((collection) => !collection.handle.startsWith('hidden')) : collections,
+    category: collections.filter(collection => collection.handle.includes("category-"))[0],
   }
 }
 

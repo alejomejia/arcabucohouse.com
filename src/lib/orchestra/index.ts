@@ -41,3 +41,31 @@ export const orchestraMenuOverlay: Orchestra = {
     duration: 1.5,
   },
 }
+
+/**
+ * Post-preloader intro animation sequence.
+ * Defines the order and relative timing of elements that animate
+ * after the preloader completes. Components using usePreloaderGSAP
+ * should reference these delays for coordinated sequencing.
+ */
+export const orchestraIntro: Orchestra = {
+  header: {
+    delay: 0,
+    duration: 1,
+    ease: "gentleSlow",
+  },
+  scrollProgressBar: {
+    delay: 0.1,
+    duration: 1,
+  },
+  cartTrigger: {
+    delay: 0.15,
+    duration: 1,
+    ease: "gentleSlow",
+  },
+  navigationToggle: {
+    delay: 0.2,
+    duration: 1,
+    ease: "gentleSlow",
+  },
+}

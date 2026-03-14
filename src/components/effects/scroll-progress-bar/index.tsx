@@ -61,15 +61,15 @@ export function ScrollProgressBar(props: HTMLAttributes<HTMLDivElement>) {
       // Refresh to recalculate scroll height for the new page
       ScrollTrigger.refresh();
 
+      const setScaleX = gsap.quickSetter(progressBarRef.current, "scaleX");
+
       const scrollTrigger = ScrollTrigger.create({
         trigger: document.documentElement,
         start: 0,
         end: "max",
         scrub: true,
         onUpdate: (self) => {
-          gsap.set(progressBarRef.current, {
-            scaleX: self.progress,
-          });
+          setScaleX(self.progress);
         },
       });
 
