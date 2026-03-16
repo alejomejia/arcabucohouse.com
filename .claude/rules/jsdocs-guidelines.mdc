@@ -52,6 +52,20 @@ Standards for writing JSDoc comments in this Next.js/React codebase.
 
 **Rule:** When generating code, document all exported entities. Only add `@param` entries when the description adds real value — units, constraints, non-obvious behavior, or side effects.
 
+**Exception — prop field inline docs:** Even inside a `type XProps`, document individual fields when they carry non-obvious constraints (min length, valid range, required format, runtime invariants). Use inline `/** … */` on the field, not `@param` on the function:
+
+```typescript
+type MarqueeProps = {
+  /**
+   * All images in the strip. Must be odd-length and ≥ 13 items.
+   * Validated at runtime — throws if constraints are violated.
+   */
+  images: MarqueeImage[]
+  /** Index within `images` that expands to fill the viewport on scroll. */
+  pinImageIndex: number
+}
+```
+
 ## Components
 
 ### Functional Components
@@ -284,6 +298,84 @@ export type APIRequestConfig = {
 }
 ```
 
+## Compound Components
+
+Use `Object.assign` to attach sub-components as static properties. The root function gets the full JSDoc with a complete usage example. The `Object.assign` export gets a short `@see` back-reference. Each sub-component is documented individually at its definition.
+
+```typescript
+/**
+ * Animated disclosure panel with expand/collapse.
+ *
+ * Client Component — uses CSS transitions and focus management.
+ * Distributes state to sub-components via context.
+ *
+ * @param defaultOpen - Expand on initial render (default: false)
+ *
+ * @example
+ * ```tsx
+ * <Accordion defaultOpen>
+ *   <Accordion.Trigger>Section title</Accordion.Trigger>
+ *   <Accordion.Content>
+ *     <p>Body copy here.</p>
+ *   </Accordion.Content>
+ * </Accordion>
+ * ```
+ */
+function AccordionRoot({ defaultOpen = false, children }: AccordionProps) {
+  // Implementation
+}
+
+/**
+ * Toggle button that opens/closes the Accordion.
+ * Must be rendered inside `<Accordion>`.
+ */
+function AccordionTrigger({ children }: { children: ReactNode }) {
+  // Implementation
+}
+
+/**
+ * Collapsible body of the Accordion.
+ * Must be rendered inside `<Accordion>`.
+ */
+function AccordionContent({ children }: { children: ReactNode }) {
+  // Implementation
+}
+
+/** @see {@link AccordionRoot} for full usage docs. */
+export const Accordion = Object.assign(AccordionRoot, {
+  /** @see {@link AccordionTrigger} */
+  Trigger: AccordionTrigger,
+  /** @see {@link AccordionContent} */
+  Content: AccordionContent,
+})
+```
+
+### Component validation with @throws
+
+When a component enforces runtime invariants (required minimum counts, odd/even constraints, out-of-bounds indexes), document them with `@throws`:
+
+```typescript
+/**
+ * Renders an image strip with a centered pin image.
+ *
+ * @param images        - Odd-length array of images, minimum 13
+ * @param pinImageIndex - Index within `images` to place at center
+ *
+ * @throws if `images.length < 13`
+ * @throws if `images.length` is even
+ * @throws if `pinImageIndex` is out of bounds
+ *
+ * @example
+ * ```tsx
+ * <Marquee images={landscapePhotos} pinImageIndex={6} />
+ * ```
+ */
+export function Marquee({ images, pinImageIndex }: MarqueeProps) {
+  if (images.length < 13) throw new Error('…')
+  // …
+}
+```
+
 ## Context Providers
 
 Explain managed state and consuming hooks:
@@ -313,6 +405,22 @@ Explain managed state and consuming hooks:
  */
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   // Implementation
+}
+```
+
+### Internal context consuming hooks
+
+Compound components often use a private `useXContext()` hook that throws when called outside the provider. Document the throw:
+
+```typescript
+/**
+ * Consumes AccordionContext. Throws a descriptive error when called outside
+ * `<Accordion>`, surfacing misuse at development time.
+ */
+export function useAccordionContext(): AccordionContextValue {
+  const ctx = useContext(AccordionContext)
+  if (!ctx) throw new Error('Accordion sub-components must be rendered inside <Accordion>')
+  return ctx
 }
 ```
 
@@ -505,4 +613,24 @@ Before completing generation:
  * }
  * ```
  */
+```
+
+**Compound component root:**
+```typescript
+/**
+ * [Purpose] with [features].
+ * Distributes state to sub-components via context.
+ *
+ * @param prop1 - Description
+ *
+ * @example
+ * ```tsx
+ * <Component prop1={value}>
+ *   <Component.SubA>…</Component.SubA>
+ *   <Component.SubB src="…" alt="…" />
+ * </Component>
+ * ```
+ */
+// Sub-components documented individually at their definitions.
+// Object.assign export gets only: /** @see {@link ComponentRoot} for full usage docs. */
 ```

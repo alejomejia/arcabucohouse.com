@@ -19,6 +19,7 @@
 import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
 import { CustomEase } from "gsap/CustomEase"
+import { Flip } from "gsap/Flip"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { SplitText } from "gsap/SplitText"
 
@@ -30,7 +31,7 @@ if (typeof window !== "undefined" && !globalThis.__gsap_initialized__) {
   globalThis.__gsap_initialized__ = true
 
   // ── Plugins ──────────────────────────────────────────────────────────
-  gsap.registerPlugin(useGSAP, CustomEase, ScrollTrigger, SplitText)
+  gsap.registerPlugin(useGSAP, CustomEase, Flip, ScrollTrigger, SplitText)
 
   // ── Defaults ─────────────────────────────────────────────────────────
   gsap.defaults({ ease: "none" })

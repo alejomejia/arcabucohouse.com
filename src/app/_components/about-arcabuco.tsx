@@ -19,7 +19,7 @@ export function AboutArcabucoSection() {
           </div>
           <UnderlineLink
             href="/about"
-            className="font-sans text-lg font-bold uppercase tracking-[0.9px] text-secondary-300"
+            className="leading-none font-sans text-lg font-bold uppercase text-secondary-300"
           >
             Discover
           </UnderlineLink>

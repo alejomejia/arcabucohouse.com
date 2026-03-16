@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { AboutArcabucoSection } from "./_components/about-arcabuco";
+import { ArtisansCollabSection } from "./_components/artisans-collab";
 import { HeroSection } from "./_components/hero";
 import { InteriorShowcaseSection } from "./_components/interior-showcase";
 
@@ -17,6 +18,7 @@ export default function HomePage() {
       <HeroSection />
       <AboutArcabucoSection />
       <InteriorShowcaseSection />
+      <ArtisansCollabSection />
       {/* @TODO: [X] Projects section */}
       {/* @TODO: Collabs section with artists and artisans */}
       {/* @TODO: Why Arcabuco section */}

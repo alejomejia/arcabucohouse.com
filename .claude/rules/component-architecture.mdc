@@ -15,20 +15,18 @@ Every reusable UI component must live in its own folder.
 - components/
 -- ui/
 --- component-name/
----- `component-name.tsx`
 ---- `component-name-subpart.tsx`
 ---- `component-name.types.ts`
 ---- `component-name.context.ts`
 ---- `component-name.styles.ts`
 ---- `use-component-name.ts`
----- `index.ts`
+---- `index.tsx`
 
 Example:
 
 - components/
--- ui/`
+-- ui/
 --- tabs/
----- `tabs.tsx`
 ---- `tabs-list.tsx`
 ---- `tabs-trigger.tsx`
 ---- `tabs-panel.tsx`
@@ -36,7 +34,9 @@ Example:
 ---- `tabs.context.ts`
 ---- `tabs.styles.ts`
 ---- `use-tabs.ts`
----- `index.ts`
+---- `index.tsx`
+
+> The root component and the public barrel always live together in `index.tsx`. There is no separate root file.
 
 # 2. Naming Conventions
 
@@ -44,16 +44,19 @@ Example:
 
 Use **kebab-case** for all files.
 
+File names follow a **dot vs hyphen** convention:
+
+| Separator | Use for | Examples |
+|-----------|---------|---------|
+| **Dot** (`.`) | Non-component files — config, context, types, styles, const | `tabs.context.ts`, `tabs.types.ts`, `tabs.const.ts`, `tabs.styles.ts` |
+| **Hyphen** (`-`) | Component files — sub-components | `tabs-list.tsx`, `tabs-trigger.tsx`, `tabs-panel.tsx` |
+
+Use a maximum of two words as main component name.
+
 Examples:
 
-`tabs.tsx`
-`tabs-list.tsx`
-`tabs-trigger.tsx`
-`tabs-panel.tsx`
-`tabs.context.ts`
-`tabs.types.ts`
-`tabs.styles.ts`
-`use-tabs.ts`
+Do: `cinema-scroll`
+Don't: `marquee-horizontal-scroll`
 
 ## Components
 
@@ -86,22 +89,31 @@ Example:
 
 # 3. Barrel Export Rule
 
-Every component folder must contain a **single local barrel export**.
+Every component folder must contain a **single public entry point**: `index.tsx`.
 
-`index.ts`
+The root component is defined inside `index.tsx` and composed into the public `Object.assign` export alongside all sub-components.
 
-```ts
-export { Tabs } from "./tabs"
-export { TabsList } from "./tabs-list"
-export { TabsTrigger } from "./tabs-trigger"
-export { TabsPanel } from "./tabs-panel"
+```tsx
+// index.tsx
+function TabsRoot({ children, defaultValue }: TabsProps) {
+  // Root implementation
+}
 
-export type * from "./tabs.types"
+/** @see {@link TabsRoot} for full usage docs. */
+export const Tabs = Object.assign(TabsRoot, {
+  List:    TabsList,
+  Trigger: TabsTrigger,
+  Panel:   TabsPanel,
+})
+
+// Also export sub-components directly for consumers who prefer named imports
+export { TabsList, TabsTrigger, TabsPanel }
+export type * from './tabs.types'
 ```
 
 Rules:
 - Use explicit exports only
-- Never use export *
+- Never use `export *`
 - Never create global barrels like `components/index.ts`
 
 # 4. Import Rules
@@ -123,14 +135,14 @@ Internal files must **never be imported outside the component folder**.
 
 # 5. File Responsibilities
 
-`component-name.tsx`
-Root component and main logic.
+`index.tsx`
+Root component, `Object.assign` compound export, and public barrel. All in one file.
 
 `component-name-subpart.tsx`
-Compound subcomponents.
+Compound sub-components. Exported from `index.tsx`.
 
 `component-name.context.ts`
-React context and providers.
+React context and the internal consuming hook. Never exported publicly.
 
 `component-name.types.ts`
 TypeScript interfaces and types.
@@ -141,15 +153,11 @@ Classnames, style helpers, variants.
 `use-component-name.ts`
 Internal hooks.
 
-`index.ts`
-Public API for the component.
-
 # 6. Example Implementation
 
 - components/
 -- ui/
 --- tabs/
----- `tabs.tsx`
 ---- `tabs-list.tsx`
 ---- `tabs-trigger.tsx`
 ---- `tabs-panel.tsx`
@@ -157,19 +165,51 @@ Public API for the component.
 ---- `tabs.context.ts`
 ---- `tabs.styles.ts`
 ---- `use-tabs.ts`
----- `index.ts`
+---- `index.tsx`
+
+`index.tsx`:
+
+```tsx
+function TabsRoot({ children, defaultValue }: TabsProps) {
+  const [active, setActive] = useState(defaultValue)
+  return (
+    <TabsContext.Provider value={{ active, setActive }}>
+      {children}
+    </TabsContext.Provider>
+  )
+}
+
+/** @see {@link TabsRoot} for full usage docs. */
+export const Tabs = Object.assign(TabsRoot, {
+  List:    TabsList,
+  Trigger: TabsTrigger,
+  Panel:   TabsPanel,
+})
+
+export { TabsList, TabsTrigger, TabsPanel }
+export type * from './tabs.types'
+```
 
 Usage:
 
-```ts
-import { Tabs, TabsList, TabsTrigger, TabsPanel } from "@/components/ui/tabs"
+```tsx
+import { Tabs } from "@/components/ui/tabs"
+
+<Tabs defaultValue="account">
+  <Tabs.List>
+    <Tabs.Trigger value="account">Account</Tabs.Trigger>
+    <Tabs.Trigger value="password">Password</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Panel value="account">Account content</Tabs.Panel>
+  <Tabs.Panel value="password">Password content</Tabs.Panel>
+</Tabs>
 ```
 
 # 7. Private File Enforcement Rule
 
 Files inside a component folder are private by default.
 
-Only files exported in index.ts are part of the public API.
+Only what is exported from `index.tsx` is part of the public API.
 
 Allowed:
 ```ts
@@ -186,43 +226,59 @@ Internal files must only be used **within the same component folder**.
 
 # 8. Subcomponent Composition Rule
 
-Large components must be split into **compound subcomponents** instead of growing a single large file.
+All components with multiple parts use the **`Object.assign` compound pattern** — not separate named exports only, not `displayName` hacks, not namespace objects.
 
-Example:
-
-Tabs
-TabsList
-TabsTrigger
-TabsPanel
-
-Usage:
 ```tsx
-<Tabs defaultValue="account">
-  <TabsList>
-    <TabsTrigger value="account">Account</TabsTrigger>
-    <TabsTrigger value="password">Password</TabsTrigger>
-  </TabsList>
-
-  <TabsPanel value="account">
-    Account content
-  </TabsPanel>
-
-  <TabsPanel value="password">
-    Password content
-  </TabsPanel>
-</Tabs>
+// index.tsx
+/** @see {@link TabsRoot} for full usage docs. */
+export const Tabs = Object.assign(TabsRoot, {
+  List:    TabsList,
+  Trigger: TabsTrigger,
+  Panel:   TabsPanel,
+})
 ```
+
+Sub-components are also exported directly as named exports so consumers can import them individually if preferred.
 
 This keeps components:
 - scalable
 - readable
 - easier to maintain
 
+## Context for compound components
+
+When sub-components need to read state from the root (refs, tokens, callbacks), use a `.context.ts` file. The root creates the value and wraps children in the provider. Sub-components consume it via a typed hook that throws outside the provider:
+
+```ts
+// tabs.context.ts
+export const TabsContext = createContext<TabsContextValue | null>(null)
+
+export function useTabsContext() {
+  const ctx = useContext(TabsContext)
+  if (!ctx) throw new Error('Tabs sub-components must be rendered inside <Tabs>')
+  return ctx
+}
+```
+
+```tsx
+// index.tsx — root wraps children in provider
+function TabsRoot({ children, defaultValue }: TabsProps) {
+  const [active, setActive] = useState(defaultValue)
+  return (
+    <TabsContext.Provider value={{ active, setActive }}>
+      {children}
+    </TabsContext.Provider>
+  )
+}
+```
+
+Sub-components call `useTabsContext()` internally — consumers never import or interact with the context directly.
+
 # 9. Key Principles
 
-1.	One component = one folder
-2.	Explicit exports only
-3.	No global barrels
-4.	Internal files stay private
-5.	Use compound components for complex UI
-6.	Consistent naming everywhere
+1. One component = one folder
+2. Root + barrel always in `index.tsx`
+3. All compound exports use `Object.assign`
+4. Explicit exports only — no `export *`
+5. Internal files stay private
+6. Consistent naming everywhere

@@ -48,7 +48,7 @@
         "noArrayIndexKey": "warn"
       },
       "complexity": {
-        "noForEach": "off",
+        "noForEach": "off"
       },
       "performance": {
         "noDelete": "warn"

@@ -7,7 +7,6 @@ import { CurrentYear } from "./current-year";
 import { FooterClient } from "./footer.client";
 
 export async function Footer() {
-
   return (
     <FooterClient>
       <Container className="py-8 lg:py-16">
