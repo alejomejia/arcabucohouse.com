@@ -5,7 +5,7 @@ import { useCallback, useEffect, useEffectEvent, useRef, useState, type MouseEve
 import type { Product } from "@/lib/integrations/shopify/types"
 import { twoDigits } from "@/lib/utils/strings"
 
-import { buildLines, createLineBuffer, updateLines } from "./product-slider.utils"
+import { buildLines, createLineBuffer, updateLines } from "./product-carousel.utils"
 
 type DragState = {
   isPointerDown: boolean
@@ -27,7 +27,7 @@ type LayoutCache = {
   itemWidths: number[]
 }
 
-type UseProductSliderOptions = {
+type UseProductCarouselOptions = {
   products: Product[]
   /** Auto-scroll speed in px/frame (default: 0.5). */
   autoScrollSpeed?: number
@@ -36,21 +36,21 @@ type UseProductSliderOptions = {
 }
 
 /**
- * Manages all slider behaviour: auto-scroll, drag with momentum, wheel scroll,
+ * Manages all carousel behaviour: auto-scroll, drag with momentum, wheel scroll,
  * seamless infinite looping, per-slide parallax, and imperative heading/pagination updates.
  *
  * Client-side only — relies on `requestAnimationFrame`, pointer events, and direct DOM writes.
  *
  * @param products - Product list used to resolve active heading text and compute progress.
  * @param autoScrollSpeed - Auto-scroll speed in px/frame (default: 0.5).
- * @returns Refs and event handlers consumed by sub-components via `ProductSliderContext`.
+ * @returns Refs and event handlers consumed by sub-components via `ProductCarouselContext`.
  *
  * @example
  * ```tsx
- * const slider = useProductSlider({ products, autoScrollSpeed: 0.3 })
+ * const carousel = useProductCarousel({ products, autoScrollSpeed: 0.3 })
  * ```
  */
-export function useProductSlider({ products, autoScrollSpeed = 0.5, debug = false }: UseProductSliderOptions) {
+export function useProductCarousel({ products, autoScrollSpeed = 0.5, debug = false }: UseProductCarouselOptions) {
   const itemCount = products.length
   const sliderRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)

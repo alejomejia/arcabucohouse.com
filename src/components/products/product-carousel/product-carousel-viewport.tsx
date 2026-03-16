@@ -5,7 +5,7 @@ import { Children, cloneElement, isValidElement, type ReactElement, type ReactNo
 import { CURSOR_DRAG, CURSOR_MEDIUM } from "@/components/effects/cursor/cursor-states"
 import { CursorTrigger } from "@/components/effects/cursor/cursor-trigger"
 import { cn } from "@/lib/utils/helpers"
-import { useProductSliderContext } from "./product-slider.context"
+import { useProductCarouselContext } from "./product-carousel.context"
 
 type ViewportProps = {
   className?: string
@@ -18,25 +18,25 @@ type SlideProps = {
 }
 
 /**
- * Scrollable viewport for the `ProductSlider` compound component.
+ * Scrollable viewport for the `ProductCarousel` compound component.
  *
  * Client Component — renders slides twice (original + clone) for seamless infinite looping.
  * Attaches drag and wheel event handlers from context.
  *
- * @param children - `ProductSliderSlide` elements to display.
+ * @param children - `ProductCarouselSlide` elements to display.
  *
  * @example
  * ```tsx
- * <ProductSlider products={products}>
- *   <ProductSliderViewport>
+ * <ProductCarousel products={products}>
+ *   <ProductCarouselViewport>
  *     {products.map((p, i) => (
- *       <ProductSliderSlide key={p.handle} index={i} imageSrc={p.images[0]?.url} />
+ *       <ProductCarouselSlide key={p.handle} index={i} product={p} />
  *     ))}
- *   </ProductSliderViewport>
- * </ProductSlider>
+ *   </ProductCarouselViewport>
+ * </ProductCarousel>
  * ```
  */
-export function ProductSliderViewport({ className, children }: ViewportProps) {
+export function ProductCarouselViewport({ className, children }: ViewportProps) {
   const {
     sliderRef,
     containerRef,
@@ -48,7 +48,7 @@ export function ProductSliderViewport({ className, children }: ViewportProps) {
     onLostPointerCapture,
     onClickCapture,
     debug,
-  } = useProductSliderContext()
+  } = useProductCarouselContext()
 
   const childArray = Children.toArray(children)
   const count = childArray.length

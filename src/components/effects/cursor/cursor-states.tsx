@@ -4,14 +4,14 @@ import { ArrowUpRightIcon } from '@heroicons/react/24/outline'
 
 import type { CursorConfig } from './types'
 
-const TEXT_CONTENT_CLASSNAME = 'uppercase font-semibold text-[0.5rem] tracking-widest'
+const TEXT_CONTENT_CLASSNAME = 'uppercase font-semibold text-xs tracking-wider'
 
 /** 
  * Cursor with "Drag" label and large scale. 
  * Use for horizontal/vertical scroll areas (e.g. carousels). */
 export const CURSOR_DRAG: CursorConfig = {
   text: 'Drag',
-  scale: 3,
+  scale: 4,
   contentClassName: TEXT_CONTENT_CLASSNAME,
 }
 

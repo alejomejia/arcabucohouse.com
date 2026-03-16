@@ -1,14 +1,10 @@
 import { DataBoundary } from "@/components/ui/data-boundary";
-import { ProductSlider } from "@/components/ui/product-slider/product-slider";
-import { ProductSliderHeading } from "@/components/ui/product-slider/product-slider-heading";
-import { ProductSliderPagination } from "@/components/ui/product-slider/product-slider-pagination";
-import { ProductSliderSlide } from "@/components/ui/product-slider/product-slider-slide";
-import { ProductSliderViewport } from "@/components/ui/product-slider/product-slider-viewport";
 import { getCollectionProducts } from "@/lib/integrations/shopify/collection";
 
 import { Error } from "./error";
 import { HeroHeader } from "./header";
 import { Loading } from "./loading";
+import { ProductsCarousel } from "./products-carousel";
 
 /**
  * @TODO: Check loading state component and improve the UI
@@ -29,24 +25,7 @@ export async function HeroSection() {
           loading={<Loading />}
           error={Error}
         >
-          <ProductSlider
-            products={featuredProducts}
-            className="font-serif text-primary-base w-full"
-          >
-            <ProductSliderHeading />
-            <ProductSliderViewport>
-              {featuredProducts.map((product, i) => (
-                <ProductSliderSlide
-                  key={product.handle}
-                  index={i}
-                  href={`/product/${product.handle}`}
-                  imageSrc={product.images[0]?.url}
-                  imageAlt={product.title}
-                />
-              ))}
-            </ProductSliderViewport>
-            <ProductSliderPagination />
-          </ProductSlider>
+          <ProductsCarousel products={featuredProducts} />
         </DataBoundary>
       </div>
     </section>

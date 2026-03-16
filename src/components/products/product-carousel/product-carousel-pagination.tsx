@@ -3,8 +3,8 @@
 import { cn, toCSSVars } from "@/lib/utils/helpers"
 import { twoDigits } from "@/lib/utils/strings"
 
-import { useProductSliderContext } from "./product-slider.context"
-import { PROGRESS_WIDTH } from "./product-slider.utils"
+import { useProductCarouselContext } from "./product-carousel.context"
+import { PROGRESS_WIDTH } from "./product-carousel.utils"
 
 type PaginationProps = {
   className?: string
@@ -25,13 +25,13 @@ type PaginationLineProps = {
  *
  * @example
  * ```tsx
- * <ProductSlider products={products}>
- *   <ProductSliderPagination />
- * </ProductSlider>
+ * <ProductCarousel products={products}>
+ *   <ProductCarouselPagination />
+ * </ProductCarousel>
  * ```
  */
-export function ProductSliderPagination({ className }: PaginationProps) {
-  const { activeIndexRef, initialLines, products, setLineRef } = useProductSliderContext()
+export function ProductCarouselPagination({ className }: PaginationProps) {
+  const { activeIndexRef, initialLines, products, setLineRef } = useProductCarouselContext()
 
   return (
     <div

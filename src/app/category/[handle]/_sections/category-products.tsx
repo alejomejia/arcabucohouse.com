@@ -5,7 +5,7 @@ import gsap from 'gsap'
 import { useRef } from "react"
 
 import { UnderlineLink } from "@/components/effects/underline/underline-link"
-import { ProductCard } from "@/components/features/product/product-card"
+import { ProductCard } from "@/components/products/product-card"
 import { Grid } from "@/components/ui/grid"
 import type { Product } from "@/lib/integrations/shopify/types"
 import { useTransitionState } from "next-transition-router"

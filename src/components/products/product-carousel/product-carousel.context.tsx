@@ -4,10 +4,10 @@ import { createContext, use, type MouseEvent, type PointerEvent, type ReactNode,
 
 import type { Product } from "@/lib/integrations/shopify/types"
 
-import type { ProgressLine } from "./product-slider.utils"
-import { useProductSlider } from "./use-product-slider"
+import type { ProgressLine } from "./product-carousel.utils"
+import { useProductCarousel } from "./use-product-carousel"
 
-type ProductSliderContextValue = {
+type ProductCarouselContextValue = {
   products: Product[]
   sliderRef: RefObject<HTMLDivElement | null>
   containerRef: RefObject<HTMLDivElement | null>
@@ -27,9 +27,9 @@ type ProductSliderContextValue = {
   debug: boolean
 }
 
-const ProductSliderContext = createContext<ProductSliderContextValue | null>(null)
+const ProductCarouselContext = createContext<ProductCarouselContextValue | null>(null)
 
-type ProductSliderProviderProps = {
+type ProductCarouselProviderProps = {
   products: Product[]
   autoScrollSpeed?: number
   debug?: boolean
@@ -37,37 +37,37 @@ type ProductSliderProviderProps = {
 }
 
 /**
- * Provides slider state and refs to all `ProductSlider` sub-components.
+ * Provides carousel state and refs to all `ProductCarousel` sub-components.
  *
- * Calls `useProductSlider` internally — mount once per slider instance.
+ * Calls `useProductCarousel` internally — mount once per carousel instance.
  *
- * @param products - Product list forwarded to `useProductSlider`.
+ * @param products - Product list forwarded to `useProductCarousel`.
  * @param autoScrollSpeed - Auto-scroll speed in px/frame (default: 0.5).
  */
-export function ProductSliderProvider({
+export function ProductCarouselProvider({
   products,
   autoScrollSpeed,
   debug,
   children,
-}: ProductSliderProviderProps) {
-  const slider = useProductSlider({ products, autoScrollSpeed, debug })
+}: ProductCarouselProviderProps) {
+  const carousel = useProductCarousel({ products, autoScrollSpeed, debug })
 
   return (
-    <ProductSliderContext value={{ products, ...slider }}>
+    <ProductCarouselContext value={{ products, ...carousel }}>
       {children}
-    </ProductSliderContext>
+    </ProductCarouselContext>
   )
 }
 
 /**
- * Returns the nearest `ProductSliderContext` value.
+ * Returns the nearest `ProductCarouselContext` value.
  *
- * @throws When called outside of a `<ProductSlider>` tree.
+ * @throws When called outside of a `<ProductCarousel>` tree.
  */
-export function useProductSliderContext() {
-  const context = use(ProductSliderContext)
+export function useProductCarouselContext() {
+  const context = use(ProductCarouselContext)
   if (!context) {
-    throw new Error("ProductSlider compound components must be used within <ProductSlider>")
+    throw new Error("ProductCarousel compound components must be used within <ProductCarousel>")
   }
   return context
 }

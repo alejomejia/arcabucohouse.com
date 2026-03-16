@@ -4,7 +4,8 @@ alwaysApply: false
 ---
 # Component Architecture Rule (React / Next.js)
 
-Always follow this architecture when creating React components.
+- Always follow this architecture when creating React components.
+- Use `src/components/effects/cinema-scroll/` component as reference.
 
 --
 

@@ -20,7 +20,6 @@ export default function HomePage() {
       <InteriorShowcaseSection />
       <ArtisansCollabSection />
       {/* @TODO: [X] Projects section */}
-      {/* @TODO: Collabs section with artists and artisans */}
       {/* @TODO: Why Arcabuco section */}
       {/* @TODO: LatinAmerican Design section */}
     </>

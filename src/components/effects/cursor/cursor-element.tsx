@@ -82,7 +82,7 @@ export function CursorElement({
           className={cn(
             'opacity-0',
             'scale-50',
-            'text-sm font-medium',
+            'font-medium',
             'text-primary-600',
             'whitespace-nowrap',
             'select-none',

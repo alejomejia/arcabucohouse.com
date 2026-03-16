@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils/helpers"
 
-import { useProductSliderContext } from "./product-slider.context"
+import { useProductCarouselContext } from "./product-carousel.context"
 
 type HeadingProps = {
   className?: string
@@ -16,13 +16,13 @@ type HeadingProps = {
  *
  * @example
  * ```tsx
- * <ProductSlider products={products}>
- *   <ProductSliderHeading />
- * </ProductSlider>
+ * <ProductCarousel products={products}>
+ *   <ProductCarouselHeading />
+ * </ProductCarousel>
  * ```
  */
-export function ProductSliderHeading({ className }: HeadingProps) {
-  const { categoryRef, titleRef, products } = useProductSliderContext()
+export function ProductCarouselHeading({ className }: HeadingProps) {
+  const { categoryRef, titleRef, products } = useProductCarouselContext()
   const firstProduct = products[0]!
   const categoryTitle = firstProduct.category?.title
 
