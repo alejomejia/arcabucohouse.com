@@ -26,6 +26,18 @@
     cursor: pointer;
   }
 
+  /* Remove browser autofill background on all inputs.
+     Set --autofill-bg on the nearest ancestor to match the section background. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px var(--autofill-bg) inset !important;
+    box-shadow: 0 0 0 1000px var(--autofill-bg) inset !important;
+    transition: background-color 86400s ease-in-out 0s;
+    -webkit-text-fill-color: inherit !important;
+  }
+
   /* Fix split word animations bug */
   .word-mask,
   .line-mask {

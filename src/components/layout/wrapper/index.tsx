@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils/helpers";
 
 import { Footer } from "../footer";
 import { Header } from "../header";
+import { NewsletterSection } from "../newsletter";
 
 type WrapperProps = {
   className?: string;
@@ -55,6 +56,7 @@ export function Wrapper({
           {...props}
         >
           {children}
+          <NewsletterSection />
         </main>
       </PageTransitionProvider>
 
