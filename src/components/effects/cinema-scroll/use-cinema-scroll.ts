@@ -57,6 +57,22 @@ export function useCinemaScroll(startColor: string, endColor: string): CinemaScr
       !horizontalWrapperRef.current
     ) return
 
+    // Explicitly reset all elements to their initial visual state.
+    // This is a safety net for Next.js Router Cache: the component may be
+    // restored from cache without unmounting, leaving stale GSAP inline styles.
+    gsap.set(containerRef.current, { backgroundColor: startColor })
+    gsap.set(horizontalWrapperRef.current, { xPercent: 0 })
+    if (pinImgRef.current) gsap.set(pinImgRef.current, { clearProps: 'opacity' })
+
+    // Remove any dangling clone left over from a cached session.
+    if (isCloneActiveRef.current) {
+      cloneRef.current?.remove()
+      cloneRef.current = null
+      isCloneActiveRef.current = false
+    }
+    flipAnimRef.current?.kill()
+    flipAnimRef.current = null
+
     // Let GSAP own the transform pipeline from the start
     gsap.set(marqueeImagesRef.current, { xPercent: -75, yPercent: -50 })
 
@@ -91,7 +107,7 @@ export function useCinemaScroll(startColor: string, endColor: string): CinemaScr
         transformOrigin: 'center center',
         pointerEvents: 'none',
         willChange: 'transform',
-        zIndex: 100,
+        zIndex: 10,
       })
 
       document.body.appendChild(clone)
@@ -233,6 +249,12 @@ export function useCinemaScroll(startColor: string, endColor: string): CinemaScr
       stClone.kill(true)
       stPin.kill(true)
       stMain.kill(true)
+
+      // Clear all inline styles applied by GSAP callbacks so that cached
+      // components don't carry stale visual state into the next session.
+      if (containerRef.current) gsap.set(containerRef.current, { clearProps: 'backgroundColor' })
+      if (horizontalWrapperRef.current) gsap.set(horizontalWrapperRef.current, { clearProps: 'xPercent,transform' })
+      if (pinImgRef.current) gsap.set(pinImgRef.current, { clearProps: 'opacity' })
 
       flipAnimRef.current?.kill()
       cloneRef.current?.remove()

@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "code-review-graph": {
+      "command": "/Users/alejandromejia/miniconda3/bin/code-review-graph",
+      "args": [
+        "serve"
+      ]
+    }
+  }
+}

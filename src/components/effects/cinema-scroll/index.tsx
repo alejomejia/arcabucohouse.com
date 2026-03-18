@@ -50,7 +50,7 @@ function CinemaScrollRoot({
       <div
         ref={refs.containerRef}
         className={cn('relative w-full bg-(--start-bg-color) will-change-[background-color]', className)}
-        style={toCSSVars({ 'bg-color': startColor })}
+        style={toCSSVars({ 'start-bg-color': startColor })}
       >
         {children}
       </div>
