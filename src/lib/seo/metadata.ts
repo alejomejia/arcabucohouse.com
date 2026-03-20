@@ -1,76 +1,301 @@
 import type { Metadata } from 'next'
 
 import { HIDDEN_PRODUCT_TAG } from '@/lib/integrations/constants'
+import { baseUrl } from '@/lib/integrations/utils'
+import { config } from '@/lib/utils/config'
 
 import type { Collection, Product } from '../integrations/shopify/types'
 
+const siteName = config.siteName ?? 'Arcabuco House'
+
+// ---------------------------------------------------------------------------
+// Product metadata & JSON-LD
+// ---------------------------------------------------------------------------
+
 /**
- * Generate metadata for a product
- * @param product - The product to generate metadata for
- * @returns The metadata for the product
+ * Generate metadata for a product page.
+ * Title and description come from Shopify SEO fields (set in the Shopify admin)
+ * with fallbacks to the product title/description.
  */
 export function generateProductMetadata(product: Product): Metadata {
   const { url, width, height, altText: alt } = product.featuredImage || {}
   const indexable = !product.tags.includes(HIDDEN_PRODUCT_TAG)
+  const title = product.seo.title || product.title
+  const description = product.seo.description || product.description
+  const canonicalUrl = `${baseUrl}/product/${product.handle}`
 
   return {
-    title: product.seo.title || product.title,
-    description: product.seo.description || product.description,
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     robots: {
       index: indexable,
       follow: indexable,
       googleBot: {
         index: indexable,
-        follow: indexable
-      }
+        follow: indexable,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
-    openGraph: url
-      ? {
-        images: [
-          {
-            url,
-            width,
-            height,
-            alt
-          }
-        ]
-      }
-      : null
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      url: canonicalUrl,
+      siteName,
+      ...(url && {
+        images: [{ url, width, height, alt: alt ?? title }],
+      }),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      ...(url && { images: [url] }),
+    },
   }
 }
 
 /**
- * Generate JSON-LD for a product
- * @param product - The product to generate JSON-LD for
- * @returns The JSON-LD for the product
+ * Generate Schema.org Product JSON-LD for a product page.
+ * Includes structured data for rich results (price, availability, brand).
+ *
+ * @see https://schema.org/Product
+ * @see https://developers.google.com/search/docs/appearance/structured-data/product
  */
 export function generateProductJsonLd(product: Product) {
-  const { title, description, featuredImage, availableForSale, priceRange } = product
+  const { title, description, featuredImage, availableForSale, priceRange, handle } = product
+
+  // Use individual variant offers when available for richer structured data
+  const variantOffers = product.variants.map((variant) => ({
+    '@type': 'Offer',
+    name: variant.title,
+    price: variant.price.amount,
+    priceCurrency: variant.price.currencyCode,
+    availability: variant.availableForSale
+      ? 'https://schema.org/InStock'
+      : 'https://schema.org/OutOfStock',
+    url: `${baseUrl}/product/${handle}`,
+    seller: {
+      '@type': 'Organization',
+      name: siteName,
+    },
+  }))
 
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: title,
-    description: description,
-    image: featuredImage.url,
-    offers: {
-      '@type': 'AggregateOffer',
-      availability: availableForSale ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-      priceCurrency: priceRange.minVariantPrice.currencyCode,
-      highPrice: priceRange.maxVariantPrice.amount,
-      lowPrice: priceRange.minVariantPrice.amount
-    }
+    description,
+    url: `${baseUrl}/product/${handle}`,
+    image: featuredImage?.url,
+    brand: {
+      '@type': 'Brand',
+      // TODO: Replace with actual brand name once confirmed (may differ per product)
+      name: siteName,
+    },
+    offers:
+      variantOffers.length > 0
+        ? variantOffers
+        : {
+            '@type': 'AggregateOffer',
+            availability: availableForSale
+              ? 'https://schema.org/InStock'
+              : 'https://schema.org/OutOfStock',
+            priceCurrency: priceRange.minVariantPrice.currencyCode,
+            highPrice: priceRange.maxVariantPrice.amount,
+            lowPrice: priceRange.minVariantPrice.amount,
+            offerCount: product.variants.length,
+            seller: {
+              '@type': 'Organization',
+              name: siteName,
+            },
+          },
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Category metadata & JSON-LD
+// ---------------------------------------------------------------------------
+
+/**
+ * Generate metadata for a category (collection) page.
+ * Title and description come from Shopify SEO fields.
+ */
+export function generateCategoryMetadata(category: Collection): Metadata {
+  const title = category.seo.title || category.title
+  const description = category.seo.description || category.description
+  const canonicalUrl = `${baseUrl}/category/${category.handle.replace(/^category-/, '')}`
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      url: canonicalUrl,
+      siteName,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
   }
 }
 
 /**
- * Generate metadata for a category
- * @param category - The collection category to generate metadata for
- * @returns The metadata for the category
+ * Generate Schema.org BreadcrumbList JSON-LD for a category page.
+ * Helps search engines understand site hierarchy.
+ *
+ * @see https://schema.org/BreadcrumbList
  */
-export function generateCategoryMetadata(category: Collection): Metadata {
+export function generateCategoryBreadcrumbJsonLd(category: Collection) {
+  const handle = category.handle.replace(/^category-/, '')
+
   return {
-    title: category.seo.title || category.title,
-    description: category.seo.description || category.description,
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: baseUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: category.seo.title || category.title,
+        item: `${baseUrl}/category/${handle}`,
+      },
+    ],
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Product breadcrumb JSON-LD
+// ---------------------------------------------------------------------------
+
+/**
+ * Generate Schema.org BreadcrumbList JSON-LD for a product page.
+ * Uses the product's primary category if available.
+ *
+ * @see https://schema.org/BreadcrumbList
+ */
+export function generateProductBreadcrumbJsonLd(product: Product) {
+  const items: { '@type': string; position: number; name: string; item: string }[] = [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: baseUrl,
+    },
+  ]
+
+  // Add category breadcrumb if the product belongs to a category- collection
+  const categoryCollection = product.collections?.find((c) =>
+    c.handle.startsWith('category-')
+  )
+  if (categoryCollection) {
+    const catHandle = categoryCollection.handle.replace(/^category-/, '')
+    items.push({
+      '@type': 'ListItem',
+      position: 2,
+      name: categoryCollection.title,
+      item: `${baseUrl}/category/${catHandle}`,
+    })
+  }
+
+  items.push({
+    '@type': 'ListItem',
+    position: items.length + 1,
+    name: product.seo.title || product.title,
+    item: `${baseUrl}/product/${product.handle}`,
+  })
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Global JSON-LD (rendered in root layout)
+// ---------------------------------------------------------------------------
+
+/**
+ * Generate Schema.org Organization JSON-LD.
+ * Helps search engines understand the business behind the site.
+ *
+ * TODO: Fill in the following with actual values once confirmed:
+ *   - logo: upload an OG/logo image to /public and reference it here
+ *   - contactPoint.telephone: store phone number
+ *   - sameAs: social media URLs (Instagram, Facebook, etc.)
+ *
+ * @see https://schema.org/Organization
+ */
+export function generateOrganizationJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: siteName,
+    url: baseUrl,
+    // TODO: Replace with actual logo URL (e.g. `${baseUrl}/images/logo.png`)
+    logo: `${baseUrl}/logo.png`,
+    // TODO: Add actual contact details
+    contactPoint: {
+      '@type': 'ContactPoint',
+      // telephone: '+57-XXX-XXX-XXXX',
+      contactType: 'customer service',
+      availableLanguage: ['Spanish', 'English'],
+    },
+    // TODO: Add social media profile URLs
+    sameAs: [
+      // 'https://www.instagram.com/arcabucohouse',
+      // 'https://www.facebook.com/arcabucohouse',
+    ],
+  }
+}
+
+/**
+ * Generate Schema.org WebSite JSON-LD with Sitelinks Search Box.
+ * Enables a search box in Google results when someone searches for the brand.
+ *
+ * @see https://schema.org/WebSite
+ * @see https://developers.google.com/search/docs/appearance/structured-data/sitelinks-searchbox
+ */
+export function generateWebSiteJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: siteName,
+    url: baseUrl,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${baseUrl}/search?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
   }
 }

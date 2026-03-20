@@ -4,7 +4,7 @@ import { Suspense } from 'react'
 
 import { Container } from '@/components/ui/container'
 import { getCategory, getCollection } from '@/lib/integrations/shopify/collection'
-import { generateCategoryMetadata } from '@/lib/seo/metadata'
+import { generateCategoryBreadcrumbJsonLd, generateCategoryMetadata } from '@/lib/seo/metadata'
 
 import { CategoryHeading, CategoryHeadingSkeleton } from './_sections/category-heading'
 import { CategoryProducts } from './_sections/category-products'
@@ -32,8 +32,18 @@ export default async function CategoryPage(props: { params: CategoryHandleParams
   // For created categories, title is required
   if (!category?.title) return notFound()
 
+  // We need the Collection shape for breadcrumb (getCollection returns Collection with seo + handle)
+  const collection = await getCollection('category-' + params.handle)
+  const breadcrumbJsonLd = collection ? generateCategoryBreadcrumbJsonLd(collection) : null
+
   return (
     <Container className="pt-24 pb-16">
+      {breadcrumbJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
+      )}
       <div className="min-h-screen">
         <Suspense fallback={<CategoryHeadingSkeleton />}>
           <CategoryHeading category={category} />

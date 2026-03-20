@@ -1,8 +1,16 @@
 import { ReadonlyURLSearchParams } from 'next/navigation'
+import { config } from '../utils/config'
 
-export const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : 'http://localhost:3000'
+export const baseUrl = config.baseUrl ?? 'http://localhost:3000'
+
+/**
+ * True on any non-production deployment (e.g. dev.arcabucohouse.com, localhost).
+ * Used to block crawlers and hide sitemaps until the production site is live.
+ *
+ * Set NEXT_PUBLIC_BASE_URL=https://arcabucohouse.com in the production Coolify instance
+ * and NEXT_PUBLIC_BASE_URL=https://dev.arcabucohouse.com in the dev instance.
+ */
+export const isDevEnvironment = !baseUrl.includes('arcabucohouse.com') || baseUrl.includes('dev.')
 
 export const createUrl = (pathname: string, params: URLSearchParams | ReadonlyURLSearchParams) => {
   const paramsString = params.toString()

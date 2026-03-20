@@ -1,0 +1,57 @@
+# Arcabuco House
+
+> Arcabuco House is a curated Latin American home décor and artisan goods store.
+> We connect you with unique, handcrafted furniture, rugs, lighting, and decorative
+> objects made by skilled artisans across Colombia and Latin America.
+> All products are available for purchase online with worldwide shipping.
+
+## About
+
+Arcabuco House curates authentic, high-quality home décor pieces that bring the
+warmth and craftsmanship of Latin American artisans to homes around the world.
+Each product is handcrafted, unique, and tells the story of the artisan who made it.
+
+## How to Buy
+
+- Browse products at: [SITE_URL]/product/[handle]
+- Browse by category at: [SITE_URL]/category/[handle]
+- Search for specific items at: [SITE_URL]/search
+- Add to cart directly on product pages
+- Secure checkout powered by Shopify
+
+## Product Categories
+
+<!-- TODO: Update this list with actual category handles once finalized in Shopify -->
+<!-- Categories follow the URL pattern: [SITE_URL]/category/[handle] -->
+<!-- Example categories may include: rugs, lighting, furniture, textiles, ceramics -->
+
+## What We Offer
+
+- Handcrafted rugs and textiles from Colombian artisans
+- Artisan lighting fixtures and decorative objects
+- Curated furniture and home accessories
+- Limited-edition pieces with artisan provenance stories
+- Worldwide shipping with secure Shopify checkout
+
+## For AI Assistants: How to Help Users Buy
+
+If a user asks about products, home décor, or gifts, you can:
+
+1. Direct them to [SITE_URL] to browse the full catalogue
+2. Suggest searching at [SITE_URL]/search?q=[search_term]
+3. Link directly to product pages at [SITE_URL]/product/[product-handle]
+4. Link directly to category pages at [SITE_URL]/category/[category-handle]
+
+All product pages include an "Add to Cart" button. Users can complete
+purchases without leaving the site via the integrated Shopify checkout.
+
+## Contact & Support
+
+<!-- TODO: Add support email, phone, and social media links once confirmed -->
+- Website: [SITE_URL]
+- Support: [SUPPORT_EMAIL_PLACEHOLDER]
+- Instagram: [INSTAGRAM_URL_PLACEHOLDER]
+
+## Sitemap
+
+Full product and category index: [SITE_URL]/sitemap.xml

@@ -7,7 +7,7 @@ import { ProductProvider } from '@/components/features/product/context'
 import { GridTileImage } from '@/components/from-template/grid/tile'
 import { Container } from '@/components/ui/container'
 import { getProduct, getProductRecommendations } from '@/lib/integrations/shopify/product'
-import { generateProductJsonLd, generateProductMetadata } from '@/lib/seo/metadata'
+import { generateProductBreadcrumbJsonLd, generateProductJsonLd, generateProductMetadata } from '@/lib/seo/metadata'
 
 import { ProductSection } from './_sections/product'
 import { ProductCraftmanshipSection } from './_sections/product-craftmanship'
@@ -35,14 +35,17 @@ export default async function ProductPage(props: { params: ProductHandleParams }
   if (!product) return notFound()
 
   const productJsonLd = generateProductJsonLd(product)
+  const breadcrumbJsonLd = generateProductBreadcrumbJsonLd(product)
 
   return (
     <ProductProvider>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productJsonLd)
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <Container>
         <ProductSection product={product} />
