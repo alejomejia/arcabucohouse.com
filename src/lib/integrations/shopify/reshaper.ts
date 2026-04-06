@@ -122,7 +122,7 @@ export const reshapeProduct = (
     return undefined
   }
 
-  const { images, variants, collections: rawCollections, ...rest } = product
+  const { images, variants, collections: rawCollections, downloads, ...rest } = product
 
   const collections = rawCollections ? reshapeCollections(removeEdgesAndNodes(rawCollections)) : []
 
@@ -130,9 +130,10 @@ export const reshapeProduct = (
     ...rest,
     images: reshapeImages(images, product.title),
     variants: removeEdgesAndNodes(variants),
-    collections: filterHiddenCollections && collections.length > 0 ? 
+    collections: filterHiddenCollections && collections.length > 0 ?
       collections.filter((collection) => !collection.handle.startsWith('hidden')) : collections,
     category: collections.filter(collection => collection.handle.includes("category-"))[0],
+    downloads: downloads?.references ? removeEdgesAndNodes(downloads.references) : [],
   }
 }
 

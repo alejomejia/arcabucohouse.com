@@ -68,11 +68,20 @@ export type Page = {
   updatedAt: string;
 };
 
-export type Product = Omit<ShopifyProduct, 'variants' | 'images' | 'collections'> & {
+export type ProductDownloadFile = {
+  id: string;
+  url: string;
+  alt: string | null;
+  mimeType: string | null;
+  originalFileSize: number | null;
+};
+
+export type Product = Omit<ShopifyProduct, 'variants' | 'images' | 'collections' | 'productDownloads'> & {
   variants: ProductVariant[];
   images: Image[];
   collections: Collection[];
   category?: Collection;
+  downloads: ProductDownloadFile[];
 };
 
 export type ProductOption = {
@@ -137,6 +146,9 @@ export type ShopifyProduct = {
   tags: string[];
   updatedAt: string;
   collections: Connection<ShopifyCollection>;
+  downloads: Maybe<{
+    references: Connection<ProductDownloadFile>;
+  }>;
 };
 
 export type ShopifyCartOperation = {

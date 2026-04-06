@@ -65,6 +65,21 @@ const productFragment = /* GraphQL */ `
     }
     tags
     updatedAt
+    downloads: metafield(namespace: "custom", key: "product_downloads") {
+      references(first: 10) {
+        edges {
+          node {
+            ... on GenericFile {
+              id
+              url
+              alt
+              mimeType
+              originalFileSize
+            }
+          }
+        }
+      }
+    }
   }
   ${imageFragment}
   ${seoFragment}

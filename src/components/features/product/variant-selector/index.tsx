@@ -31,7 +31,7 @@ export function VariantSelector({ options, variants }: VariantSelectorProps) {
   return options.map((option) => (
     <form key={option.id} className="border-b border-neutral-200 py-3">
       <dl className="flex items-center gap-4">
-        <dt className="basis-16 uppercase text-sm font-semibold tracking-wider text-zinc-500">
+        <dt className="basis-16 shrink-0 uppercase text-sm font-semibold tracking-wider text-zinc-500">
           {option.name}
         </dt>
         <dd className="flex flex-wrap gap-2">

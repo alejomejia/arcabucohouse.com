@@ -22,7 +22,7 @@ export function ProductContent({ product }: ProductDescriptionProps) {
         <div className="mb-8">
           <div className="border-b border-neutral-200 py-3">
             <div className="flex items-center gap-4">
-              <Text as="span" className="basis-16 uppercase text-sm font-semibold tracking-wider text-zinc-500">
+              <Text as="span" className="basis-16 shrink-0 uppercase text-sm font-semibold tracking-wider text-zinc-500">
                 Price
               </Text>
               <Price className="text-xl text-zinc-700" amount={amount} currencyCode={currencyCode} />
