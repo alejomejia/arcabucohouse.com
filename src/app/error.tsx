@@ -1,23 +1,25 @@
 'use client';
 
+import { UnderlineButton } from "@/components/effects/underline";
+import { Text } from "@/components/ui/text";
+
 type ErrorProps = {
   reset: () => void;
 }
 
 export default function Error({ reset }: ErrorProps) {
   return (
-    <div className="mx-auto my-4 flex max-w-xl flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 dark:border-neutral-800 dark:bg-black">
-      <h2 className="text-xl font-bold">Oh no!</h2>
-      <p className="my-2">
-        There was an issue with our storefront. This could be a temporary issue, please try your
-        action again.
-      </p>
-      <button
-        className="mx-auto mt-4 flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white hover:opacity-90"
-        onClick={() => reset()}
-      >
-        Try Again
-      </button>
-    </div>
+    <section className="px-6 pt-16 min-h-screen flex flex-col justify-center text-zinc-700 bg-zinc-50">
+      <div className="flex max-w-xl flex-col gap-4 mx-auto my-4 p-8 md:p-12 border border-zinc-200">
+        <Text as="h1" className="text-3xl md:text-4xl">Oh no!</Text>
+        <Text preset="body">
+          There was an issue with our storefront. This could be a temporary issue, please try your
+          action again.
+        </Text>
+        <UnderlineButton onClick={() => reset()}>
+          <Text as="span" preset="cta">Try Again</Text>
+        </UnderlineButton>
+      </div>
+    </section>
   );
 }

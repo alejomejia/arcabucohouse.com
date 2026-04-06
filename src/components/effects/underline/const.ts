@@ -26,7 +26,7 @@ export const UNDERLINE_ANIMATION_CLASSES = cn(
   "group relative inline-block w-fit",
 
   // Pseudo-element setup
-  'before:content-[""] before:absolute before:left-0 before:-bottom-0.5',
+  'before:content-[""] before:pointer-events-none before:absolute before:left-0 before:-bottom-0.5',
 
   // Underline dimensions
   "before:w-full before:h-px before:bg-current",

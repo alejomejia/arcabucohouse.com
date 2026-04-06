@@ -21,16 +21,16 @@ export function FormCheckbox({
         <div
           className={cn(
             'size-6 border-2 transition-colors duration-200',
-            'peer-focus-visible:ring-1 peer-focus-visible:ring-primary-100/50',
+            'peer-focus-visible:ring-1 peer-focus-visible:ring-zinc-400',
             hasError
               ? 'border-red-400'
-              : 'border-primary-base/80 group-hover:border-primary-base',
-            'peer-checked:bg-primary-base peer-checked:border-primary-base',
+              : 'border-zinc-700 group-hover:border-zinc-700',
+            'peer-checked:bg-zinc-700 peer-checked:border-zinc-700',
           )}
         />
-        <CheckIcon className="size-6 p-1 absolute inset-0 text-primary-100 opacity-0 peer-checked:opacity-100 transition-opacity duration-200 pointer-events-none" />
+        <CheckIcon className="size-6 p-1 absolute inset-0 text-zinc-100 opacity-0 peer-checked:opacity-100 transition-opacity duration-200 pointer-events-none" />
       </div>
-      <span className={cn('block font-serif text-primary-300 leading-none', className)}>
+      <span className={cn('block text-zinc-500 leading-none', className)}>
         {children}
       </span>
     </label>

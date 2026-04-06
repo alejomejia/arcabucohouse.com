@@ -50,7 +50,7 @@ export function CartItem({ item, onUpdateItem, onCloseCart }: CartItemProps) {
   const hasVariantTitle = variantTitle !== DEFAULT_OPTION
 
   return (
-    <li className="py-4 not-last:border-b border-primary-300/50">
+    <li className="py-4 not-last:border-b border-zinc-700">
       <div className="w-full flex flex-col text-center xs:text-left xs:flex-row gap-4">
         <Link
           href={merchandiseUrl}
@@ -75,22 +75,22 @@ export function CartItem({ item, onUpdateItem, onCloseCart }: CartItemProps) {
               className={cn(
                 "mb-3",
                 "opacity-90 hover:opacity-100 transition-opacity duration-300 ease-in-out",
-                FOCUS_RING_ON_DARK_BG)}
+                FOCUS_RING_ON_DARK_BG
+              )}
             >
-              <div className="flex flex-1 flex-col font-serif">
-                <span className={cn("leading-tight", {
-                  "text-lg md:text-2xl": !hasVariantTitle,
-                  "text-sm text-secondary-200": hasVariantTitle
-                })}>{productTitle}</span>
+              <div className="flex flex-1 flex-col">
+                <span className="leading-tight text-lg md:text-xl text-zinc-200">
+                  {productTitle}
+                </span>
                 {hasVariantTitle ? (
-                  <p className="text-lg md:text-2xl text-primary-100">
+                  <p className="text-lg md:text-base text-zinc-400">
                     {variantTitle}
                   </p>
                 ) : null}
               </div>
             </Link>
             <Price
-              className="text-lg md:text-2xl text-primary-100"
+              className="text-lg md:text-2xl text-zinc-100"
               amount={amount}
               currencyCode={currencyCode}
             />
@@ -108,12 +108,12 @@ export function CartItem({ item, onUpdateItem, onCloseCart }: CartItemProps) {
                   handleMouseLeave()
                   setDefault()
                 }}
-                className={cn(underlineClassName, 'text-lg font-serif text-secondary-100 leading-none')}
+                className={cn(underlineClassName, 'text-base text-zinc-300 leading-none')}
               >
                 Remove
               </span>
             </DeleteFromCartButton>
-            <div className="xs:ml-auto flex h-12 flex-row border border-primary-300">
+            <div className="xs:ml-auto flex h-12 flex-row border border-zinc-700">
               <EditItemQuantityButton
                 item={item}
                 type="minus"

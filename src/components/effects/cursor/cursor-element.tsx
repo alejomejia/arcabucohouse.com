@@ -71,7 +71,7 @@ export function CursorElement({
           'flex items-center justify-center',
           'w-[calc(var(--cursor-size)*var(--cursor-scale))]',
           'h-[calc(var(--cursor-size)*var(--cursor-scale))]',
-          'bg-white rounded-full',
+          'bg-zinc-100 rounded-full',
           'transition-[width,height] duration-150 ease-out',
           config.followerClassName
         )}
@@ -83,7 +83,7 @@ export function CursorElement({
             'opacity-0',
             'scale-50',
             'font-medium',
-            'text-primary-600',
+            'text-zinc-900',
             'whitespace-nowrap',
             'select-none',
             'flex items-center justify-center',

@@ -5,6 +5,7 @@ import gsap from "gsap"
 import { useCallback, useRef } from "react"
 
 import { SplitText, type SplitTextRef } from "@/components/effects/split-text"
+import { Text } from "@/components/ui/text"
 import { useBreakpoint } from "@/lib/hooks/use-breakpoint"
 import { orchestraMenuOverlay } from "@/lib/orchestra"
 import { cn } from "@/lib/utils/helpers"
@@ -87,11 +88,11 @@ export function OverlayTopText() {
       type="words"
       onReady={handleReady}
       className={cn(
-        "italic font-normal tracking-wide text-lg text-primary-100 leading-none",
+        "font-normal tracking-wide text-zinc-300 leading-normal",
         "opacity-0 word:inline-block"
       )}
     >
-      <p>Curated artistry for modern interiors</p>
+      <Text preset="body">Curated artistry for modern interiors</Text>
     </SplitText>
   )
 }

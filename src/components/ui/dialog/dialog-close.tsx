@@ -39,7 +39,7 @@ export function DialogClose({
       className={cn(
         "group relative flex items-center justify-center",
         "size-11",
-        "text-white bg-primary-400",
+        "text-zinc-50 bg-zinc-800",
         "transition-colors",
         FOCUS_RING_ON_DARK_BG,
         className

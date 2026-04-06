@@ -54,7 +54,7 @@ export function DialogPanel({
       tabIndex={-1}
       className={cn(
         "fixed top-0 bottom-0 right-0 flex flex-col",
-        "bg-primary-600/95 backdrop-blur-sm",
+        "bg-zinc-900 backdrop-blur-sm border-l border-zinc-800",
         "focus-visible:outline-none",
         className
       )}

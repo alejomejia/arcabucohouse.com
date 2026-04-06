@@ -2,6 +2,7 @@
 
 import { SplitText } from "@/components/effects/split-text"
 import { UnderlineButton } from "@/components/effects/underline/underline-button"
+import { Text } from "@/components/ui/text"
 import { cn } from "@/lib/utils/helpers"
 
 import { useNavigationToggle } from "./use-navigation-toggle"
@@ -23,7 +24,7 @@ export function NavigationToggle() {
   return (
     <div ref={containerRef} className="flex items-center">
       <UnderlineButton
-        className={cn("transition-opacity duration-500", {
+        className={cn("transition-opacity duration-500 min-w-12", {
           "pointer-events-none opacity-60": disabled,
           "pointer-events-auto opacity-100": !disabled,
         })}
@@ -36,7 +37,7 @@ export function NavigationToggle() {
             className="opacity-0"
             onReady={onSplitReady}
           >
-            <span>Menu</span>
+            <Text preset="headerLink">Menu</Text>
           </SplitText>
           <SplitText
             ref={closeRef}
@@ -44,7 +45,7 @@ export function NavigationToggle() {
             className="opacity-0 absolute top-0 left-0"
             onReady={onSplitReady}
           >
-            <span>Close</span>
+            <Text preset="headerLink">Close</Text>
           </SplitText>
         </div>
       </UnderlineButton>

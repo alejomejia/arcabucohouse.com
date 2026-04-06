@@ -16,7 +16,7 @@ export function Header() {
       "fixed top-0 left-0 right-0",
       Z_INDEX_CLASSNAMES.header,
       "h-16 py-4",
-      "text-lg text-white font-serif font-semibold leading-none",
+      "text-lg text-zinc-100 font-semibold leading-none",
       "select-none mix-blend-difference",
     )}>
       <Container className="flex justify-between items-center gap-4 md:gap-12">

@@ -1,6 +1,6 @@
 import { COMPANY } from '@/lib/constants/legal';
 
-import { ContactEmail } from "../_components/contact-email";
+import { LegalContactEmail } from "../_components/legal-contact-email";
 
 const DAMAGE_CLAIM_WINDOW_HOURS = 72;
 const DEPOSIT_PERCENT_STANDARD = 50;
@@ -64,7 +64,7 @@ export default function ShippingPolicyPage() {
 
       <h2>Damage In Transit</h2>
       <p>
-        All claims for shipping damage must be submitted in writing to <ContactEmail /> within {DAMAGE_CLAIM_WINDOW_HOURS} hours of receipt. Claims must include photographs and a detailed written description of the damage. All original packaging must be retained, as failure to do so may void the claim.
+        All claims for shipping damage must be submitted in writing to <LegalContactEmail /> within {DAMAGE_CLAIM_WINDOW_HOURS} hours of receipt. Claims must include photographs and a detailed written description of the damage. All original packaging must be retained, as failure to do so may void the claim.
       </p>
       <p>
         Delivery terms are F.O.B. Miami. Risk of loss and title transfer to the Buyer once the freight carrier takes possession of the goods. {COMPANY.NAME} is not liable for goods collected by a third-party carrier arranged by the Buyer.
@@ -118,7 +118,7 @@ export default function ShippingPolicyPage() {
 
       <h2>Order Initiation</h2>
       <p>
-        Orders may be placed through online checkout or by contacting <ContactEmail />. Inquiry-based orders require a non-refundable deposit of {DEPOSIT_PERCENT_STANDARD}%, except for in-stock items, which require {PAYMENT_PERCENT_IN_STOCK}% non-refundable payment.
+        Orders may be placed through online checkout or by contacting <LegalContactEmail />. Inquiry-based orders require a non-refundable deposit of {DEPOSIT_PERCENT_STANDARD}%, except for in-stock items, which require {PAYMENT_PERCENT_IN_STOCK}% non-refundable payment.
       </p>
       <p>
         Remaining balances and shipping charges must be paid prior to scheduling delivery. Payment receipt confirms acceptance of all order details. {COMPANY.NAME} is not responsible for errors not identified by the Buyer prior to payment. Accepted payment methods include credit card and wire transfer. Wire transfers may require up to {WIRE_TRANSFER_CLEARING_DAYS} working days to clear.

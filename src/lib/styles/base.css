@@ -14,7 +14,6 @@
   }
 
   body {
-    font-family: var(--font-sans);
     font-weight: 400;
   }
 
@@ -52,20 +51,11 @@
   /** Custom scrollbars */
   /** Default */
   ::-webkit-scrollbar-track {
-    background-color: var(--color-neutral-100);
-  }
-
-  ::-webkit-scrollbar {
-    width: 3px;
+    background-color: var(--color-neutral-950);
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: var(--color-neutral-800);
-  }
-
-  /** Cart dialog */
-  ::-webkit-scrollbar-track {
-    background-color: var(--color-primary-base);
+    background-color: var(--color-zinc-700);
   }
 
   ::-webkit-scrollbar {
@@ -73,22 +63,18 @@
     height: 5px;
   }
 
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--color-secondary-base);
-  }
-
   /** Legal layout */
   .legal-layout {
     h1 {
-      @apply my-16 pb-4 text-3xl lg:text-4xl italic leading-none border-b border-primary-100;
+      @apply my-16 pb-4 text-4xl lg:text-5xl border-b border-zinc-200;
     }
 
     h2 {
-      @apply mt-8 mb-4 text-2xl border-b border-primary-100;
+      @apply my-12 pb-4 mb-4 text-2xl lg:text-3xl border-b border-zinc-200;
     }
 
     p {
-      @apply text-lg font-normal not-last:mb-2;
+      @apply text-zinc-500 text-lg font-normal not-last:mb-2;
     }
 
     a {

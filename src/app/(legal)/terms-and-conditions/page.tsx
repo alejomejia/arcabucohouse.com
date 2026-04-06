@@ -1,7 +1,7 @@
 import { UnderlineLink } from '@/components/effects/underline/underline-link';
 import { COMPANY } from '@/lib/constants/legal';
 
-import { ContactEmail } from '../_components/contact-email';
+import { LegalContactEmail } from '../_components/legal-contact-email';
 
 const LAST_UPDATED_DATE = "February 16, 2026";
 const CURRENCY = "USD"
@@ -28,7 +28,7 @@ export default function TermsAndConditionsPage() {
       <p>
         For questions regarding these Terms or the Site, please contact us at:
         <br />
-        Email: <ContactEmail />
+        Email: <LegalContactEmail />
         <br />
         Address: {COMPANY.ADDRESS}
       </p>

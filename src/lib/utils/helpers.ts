@@ -49,26 +49,6 @@ export function preloadImage(src: string): Promise<void> {
 }
 
 /**
- * Pluralizes a word based on the count.
- * @param count - The count of the word
- * @param singular - The singular form of the word
- * @param plural - The plural form of the word
- * @returns The pluralized word
- */
-
-type PluralizeProps = {
-  count: number;
-  singular: string;
-  plural?: string;
-}
-
-export const pluralize = ({count, singular, plural }: PluralizeProps) => {
-  if (count === 1) return singular
-
-  return plural ?? `${singular}s`;
-};
-
-/**
  * Converts a plain object into a CSS custom-properties map.
  *
  * Number values are converted to the specified unit (`rem` by default, dividing by 16);

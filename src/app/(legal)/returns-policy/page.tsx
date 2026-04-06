@@ -1,6 +1,6 @@
 import { COMPANY } from '@/lib/constants/legal';
 
-import { ContactEmail } from '../_components/contact-email';
+import { LegalContactEmail } from '../_components/legal-contact-email';
 
 const LAST_UPDATED_DATE = "February 16, 2026";
 const DAMAGE_REPORT_PERIOD_DAYS = 7;
@@ -32,7 +32,7 @@ export default function ReturnsPolicyPage() {
 
       <h2>Damaged Or Defective Items</h2>
       <p>
-        If you receive an item that is damaged or defective upon delivery, you must notify us in writing at <ContactEmail /> within {DAMAGE_REPORT_PERIOD_DAYS} days of receipt.
+        If you receive an item that is damaged or defective upon delivery, you must notify us in writing at <LegalContactEmail /> within {DAMAGE_REPORT_PERIOD_DAYS} days of receipt.
         Please include your order number and clear photographic evidence of the issue.
       </p>
       <p>

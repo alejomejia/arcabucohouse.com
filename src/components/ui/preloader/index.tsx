@@ -138,7 +138,7 @@ export function Preloader() {
       className={cn(
         "fixed inset-0",
         Z_INDEX_CLASSNAMES.preloader,
-        "bg-primary-100 text-secondary-600"
+        "bg-zinc-100 text-zinc-700"
       )}
     >
       <div className="px-4 md:px-6 py-4">
@@ -146,7 +146,7 @@ export function Preloader() {
           <Logo className="w-full" />
         </div>
         <SplitText type="lines" onReady={handleDescriptionReady}>
-          <p className="text-base font-medium text-primary-400 max-w-54">
+          <p className="text-base font-medium text-zinc-500 max-w-54">
             Artisan-made interiors from the heart of Latin America
           </p>
         </SplitText>

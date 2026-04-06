@@ -28,7 +28,7 @@ export function Prose({ html, className }: ProseProps) {
   return (
     <div
       className={cn(
-        'prose font-serif text-xl text-primary-base',
+        'prose text-lg text-zinc-500',
         proseClasses,
         className
       )}

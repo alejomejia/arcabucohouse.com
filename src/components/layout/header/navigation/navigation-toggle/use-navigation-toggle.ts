@@ -10,6 +10,8 @@ import { usePreloader } from "@/components/ui/preloader/hooks/use-preloader"
 import { useDisableScroll } from "@/lib/hooks/use-disable-scroll"
 import { getIsNavOpen, useNavigation } from "@/lib/utils/store"
 
+const TOGGLE_ENABLE_DELAY = 400 //ms
+
 const MENU_ANIMATION_OPTIONS = {
   stagger: 0.03,
   duration: 0.4,
@@ -72,7 +74,7 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
   // Schedule the enable of the button after a delay
   const scheduleEnable = useCallback(() => {
     clearTimeout(disableTimeoutRef.current ?? undefined)
-    disableTimeoutRef.current = setTimeout(() => setDisabled(false), 200)
+    disableTimeoutRef.current = setTimeout(() => setDisabled(false), TOGGLE_ENABLE_DELAY)
   }, [])
 
   // Cleanup the timeout on unmount

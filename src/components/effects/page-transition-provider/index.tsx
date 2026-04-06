@@ -93,8 +93,8 @@ export function PageTransitionProvider({ children, variant = "fade" }: PageTrans
           Z_INDEX_CLASSNAMES.pageTransition,
           "w-full h-full overflow-hidden",
           variant === "fade"
-            ? "bg-neutral-50 opacity-0 translate-y-full"
-            : "bg-primary-base opacity-0 translate-y-full will-change-transform"
+            ? "bg-zinc-50 opacity-0 translate-y-full"
+            : "bg-zinc-950 opacity-0 translate-y-full will-change-transform"
         )} />
       {children}
     </TransitionRouter>

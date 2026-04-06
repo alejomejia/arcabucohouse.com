@@ -2,6 +2,7 @@ import { SplitText } from '@/components/effects/split-text'
 import { UnderlineButton } from '@/components/effects/underline/underline-button'
 import { useCart } from '@/components/features/cart/hooks/use-cart'
 
+import { Text } from '@/components/ui/text'
 import { useCartTriggerAnimation } from '../hooks/use-cart-trigger-animation'
 
 type CartTriggerProps = {
@@ -30,11 +31,11 @@ export function CartTrigger({ onOpen }: CartTriggerProps) {
         className="flex items-center opacity-0"
       >
         <div className="overflow-hidden">
-          <span>Cart</span>
+          <Text preset="headerLink">Cart</Text>
           {!!quantity ? (
-            <span className="inline-block ml-1">
+            <Text preset="small" className="inline-block ml-1">
               [{quantity}]
-            </span>
+            </Text>
           ) : null}
         </div>
       </SplitText>

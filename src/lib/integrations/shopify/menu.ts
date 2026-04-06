@@ -19,24 +19,20 @@ function defaultMenuPath(url: string): string {
     .replace('/pages', '')
 }
 
-function categoriesMenuPath(url: string): string {
-  return url
-    .replace(domain, '')
-    .replace('category-', '')
-    .replace("/collections", "/category")
-}
-
 /**
- * Menu-specific path transformation chosen by handle.
- * Add cases here when a menu needs different URL behavior.
+ * Menu-specific path transformation chosen by URL content.
+ * - Category collection URLs (/collections/category-*) → /category/slug
+ * - All other URLs → defaultMenuPath
  */
-function resolveMenuPath(url: string, handle: string): string {
-  switch (handle) {
-    case 'categories-menu':
-      return categoriesMenuPath(url)
-    default:
-      return defaultMenuPath(url)
+function resolveMenuPath(url: string): string {
+  if (url.includes('/collections/category-')) {
+    return url
+      .replace(domain, '')
+      .replace('category-', '')
+      .replace('/collections', '/category')
   }
+
+  return defaultMenuPath(url)
 }
 
 /**
@@ -62,7 +58,7 @@ export async function getMenu(handle: string): Promise<Menu[]> {
     return (
       res.body?.data?.menu?.items.map((item: { title: string; url: string }) => ({
         title: item.title,
-        path: resolveMenuPath(item.url, handle)
+        path: resolveMenuPath(item.url)
       })) || []
     )
   } catch (error) {

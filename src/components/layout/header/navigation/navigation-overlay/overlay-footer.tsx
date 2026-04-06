@@ -5,10 +5,10 @@ import { Fragment, useRef } from "react"
 
 import { SplitText } from "@/components/effects/split-text"
 import { UnderlineLink } from "@/components/effects/underline/underline-link"
+import { Text } from "@/components/ui/text"
 import { POLICIES_LINKS, SOCIAL_MEDIA_LINKS } from "@/lib/constants/links"
 import { orchestraMenuOverlay } from "@/lib/orchestra"
 import { cn } from "@/lib/utils/helpers"
-
 
 export function OverlayFooter() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -38,6 +38,7 @@ export function OverlayFooter() {
             ))}
           </div>
         </div>
+        <Text preset="body" className="text-zinc-300 text-base">Curated artistry for modern interiors</Text>
         <div className="flex items-center gap-2">
           {POLICIES_LINKS.map(({ id, href, label }, index) => (
             <Fragment key={id}>
@@ -46,7 +47,6 @@ export function OverlayFooter() {
             </Fragment>
           ))}
         </div>
-        <span>Designed with purpose</span>
       </SplitText>
     </footer>
   )

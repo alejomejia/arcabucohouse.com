@@ -38,7 +38,7 @@ function SpotlightRoot({ options, children, className }: SpotlightRootProps) {
     <SpotlightContext.Provider value={contextValue}>
       <section
         ref={sectionRef}
-        className={cn("relative w-full min-h-dvh overflow-hidden bg-primary-base text-white", className)}
+        className={cn("relative w-full min-h-dvh overflow-hidden bg-zinc-900 text-zinc-100", className)}
       >
         {children}
       </section>

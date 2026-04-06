@@ -8,9 +8,9 @@ import { useUpdateURL } from "@/components/features/product/hooks/use-update-url
 
 import { Combination } from "./helpers"
 
-const ACTIVE_CLASSNAME = "cursor-default bg-primary-base text-primary-100 border-primary-base"
-const AVAILABLE_FOR_SALE_CLASSNAME = "text-primary-300 border-primary-100 hover:bg-primary-base hover:text-primary-100 hover:border-primary-base"
-const NOT_AVAILABLE_FOR_SALE_CLASSNAME = "cursor-default bg-primary-100 text-primary-300 border-primary-100"
+const ACTIVE_CLASSNAME = "cursor-default bg-zinc-900 text-zinc-100 border-zinc-900"
+const AVAILABLE_FOR_SALE_CLASSNAME = "text-zinc-500 border-zinc-200 hover:bg-zinc-900 hover:text-zinc-100 hover:border-zinc-900"
+const NOT_AVAILABLE_FOR_SALE_CLASSNAME = "cursor-default bg-zinc-200 text-zinc-400 border-zinc-200"
 
 type VariantSelectorOptionProps = {
   option: ProductOption

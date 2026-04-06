@@ -6,12 +6,22 @@ import { toast } from 'sonner'
 
 import { UnderlineButton } from '@/components/effects/underline/underline-button'
 import { Form } from '@/components/ui/form'
-import { Link } from '@/components/ui/link'
 import { cn } from '@/lib/utils/helpers'
 
+import { UnderlineLink } from '@/components/effects/underline'
+import { Text } from '@/components/ui/text'
 import { subscribeToNewsletter } from './newsletter.action'
 import { type NewsletterFormData, newsletterSchema } from './newsletter.schema'
 
+/**
+ * Client-side newsletter subscription form.
+ *
+ * Collects name, email, and terms acceptance. On submit it calls the
+ * `subscribeToNewsletter` server action and surfaces feedback via toasts:
+ * - success → welcome toast + form reset
+ * - already_subscribed → neutral toast
+ * - any other error → error toast
+ */
 export function NewsletterForm() {
   const {
     register,
@@ -27,6 +37,8 @@ export function NewsletterForm() {
 
   const onSubmit = async (data: NewsletterFormData) => {
     const result = await subscribeToNewsletter(data)
+
+    console.log({ result, errors })
 
     if (result.success) {
       toast.success('Welcome to Arcabuco', {
@@ -44,6 +56,8 @@ export function NewsletterForm() {
       })
     }
   }
+
+
 
   return (
     <form
@@ -77,25 +91,27 @@ export function NewsletterForm() {
       </div>
 
       {/* Terms checkbox */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 select-none">
         <Form.Checkbox
           hasError={!!errors.acceptTerms}
           {...register('acceptTerms')}
         >
           I have read and agree to the{' '}
-          <Link
+          <UnderlineLink
             href="/terms-and-conditions"
-            className="inline-block underline text-primary-300 hover:text-primary-base transition-colors duration-200"
+            target="_blank"
+            className="inline-block text-zinc-600 hover:text-zinc-700 transition-colors duration-200"
           >
             Terms &amp; Conditions
-          </Link>{' '}
+          </UnderlineLink>{' '}
           and{' '}
-          <Link
+          <UnderlineLink
             href="/privacy-policy"
-            className="inline-block underline text-primary-300 hover:text-primary-base transition-colors duration-200"
+            target="_blank"
+            className="inline-block text-zinc-600 hover:text-zinc-700 transition-colors duration-200"
           >
             Privacy Policy
-          </Link>
+          </UnderlineLink>
         </Form.Checkbox>
       </div>
 
@@ -114,12 +130,11 @@ export function NewsletterForm() {
         type="submit"
         disabled={isSubmitting}
         className={cn(
-          'w-fit text-primary-base',
-          'uppercase tracking-wider font-medium',
+          'w-fit text-zinc-700',
           'disabled:opacity-40 disabled:pointer-events-none',
         )}
       >
-        {isSubmitting ? 'Sending…' : 'Subscribe'}
+        <Text preset="cta">{isSubmitting ? 'Sending…' : 'Subscribe'}</Text>
       </UnderlineButton>
     </form>
   )

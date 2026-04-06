@@ -27,12 +27,7 @@
 
   /* Custom gradients */
   .brand-gradient-primary {
-    background: var(--color-primary-400);
-    background: radial-gradient(circle at 100% 100%, #565454 0%, #252525 100%);
-  }
-
-  .brand-gradient-secondary {
-    background: var(--color-secondary-400);
-    background: radial-gradient(circle at 100% 100%, #AA9B8D 0%, #6F5F54 100%);
+    background: var(--color-zinc-900);
+    background: radial-gradient(circle at 100% 100%, oklch(27.4% 0.006 286.033) 0%, oklch(21% 0.006 285.885) 100%);
   }
 }

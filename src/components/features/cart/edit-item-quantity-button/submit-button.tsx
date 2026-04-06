@@ -45,8 +45,8 @@ export function SubmitButton({ type }: SubmitButtonProps) {
       className={cn(
         "flex-none flex items-center justify-center",
         "w-12 h-full p-3",
-        "text-white hover:text-primary-400",
-        "opacity-100 hover:bg-secondary-300 ",
+        "text-zinc-200",
+        "opacity-100 hover:bg-zinc-800",
         "ease transition-all duration-200",
         "disabled:opacity-50 disabled:cursor-default",
         FOCUS_RING_ON_DARK_BG,

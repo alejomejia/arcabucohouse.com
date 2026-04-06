@@ -3,6 +3,7 @@
 import { cn, toCSSVars } from "@/lib/utils/helpers"
 import { twoDigits } from "@/lib/utils/strings"
 
+import { Text } from "@/components/ui/text"
 import { useProductCarouselContext } from "./product-carousel.context"
 import { PROGRESS_WIDTH } from "./product-carousel.utils"
 
@@ -38,9 +39,9 @@ export function ProductCarouselPagination({ className }: PaginationProps) {
       className={cn("w-full h-6 flex gap-4 justify-center items-center select-none", className)}
       style={toCSSVars({ "progress-bar-width": PROGRESS_WIDTH })}
     >
-      <span ref={activeIndexRef} className="flex items-center justify-center min-w-4 text-sm">
+      <Text ref={activeIndexRef} preset="small" className="flex items-center justify-center min-w-4">
         0
-      </span>
+      </Text>
       <div className="relative flex justify-center w-(--progress-bar-width) h-full">
         <div className="relative w-full h-full">
           {initialLines.map((line, i) => (
@@ -54,9 +55,9 @@ export function ProductCarouselPagination({ className }: PaginationProps) {
           ))}
         </div>
       </div>
-      <span className="flex items-center justify-center min-w-4 text-sm">
+      <Text preset="small" className="flex items-center justify-center min-w-4">
         {twoDigits(products.length)}
-      </span>
+      </Text>
     </div>
   )
 }
@@ -72,12 +73,12 @@ function PaginationLine({ x, scaleY, opacity, lineRef }: PaginationLineProps) {
     <div
       ref={lineRef}
       className={cn(
-        "absolute top-0 left-0 w-px h-4",
-        "bg-primary-base origin-center",
+        "absolute top-1 left-0 w-px h-4",
+        "bg-zinc-500 origin-center",
         "translate-x-(--x) scale-y-(--scale-y) opacity-(--opacity)",
         "transition-[opacity,scale] duration-1000 ease-in-out"
       )}
-      style={toCSSVars({ "x": x, "scale-y": `${scaleY}`, "opacity": `${opacity}` }, "px")}
+      style={toCSSVars({ "x": x, "scale-y": scaleY, "opacity": opacity }, "px")}
     />
   )
 }

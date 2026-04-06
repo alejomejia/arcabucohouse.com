@@ -9,9 +9,21 @@ import { Footer } from "../footer";
 import { Header } from "../header";
 import { NewsletterSection } from "../newsletter";
 
+type WrapperVariant = "default" | "minimal";
+
 type WrapperProps = {
   className?: string;
   children: ReactNode;
+  /**
+   * Controls which sections are included in the layout shell.
+   *
+   * - `"default"` — full layout with header, footer, and newsletter section.
+   * - `"minimal"` — header and footer only; newsletter section is omitted.
+   *    Use for pages where the newsletter would be out of context (404, legal, error).
+   *
+   * @default "default"
+   */
+  variant?: WrapperVariant;
 }
 
 /**
@@ -40,6 +52,7 @@ type WrapperProps = {
 export function Wrapper({
   children,
   className,
+  variant = "default",
   ...props
 }: WrapperProps) {
   return (
@@ -50,13 +63,13 @@ export function Wrapper({
         <main
           id="main"
           className={cn(
-            "relative z-10 flex grow flex-col bg-neutral-50",
+            "relative z-10 flex grow flex-col bg-zinc-50",
             className
           )}
           {...props}
         >
           {children}
-          <NewsletterSection />
+          {variant === "default" && <NewsletterSection />}
         </main>
       </PageTransitionProvider>
 

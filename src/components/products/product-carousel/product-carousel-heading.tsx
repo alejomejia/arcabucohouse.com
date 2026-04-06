@@ -1,5 +1,6 @@
 "use client"
 
+import { Text } from "@/components/ui/text"
 import { cn } from "@/lib/utils/helpers"
 
 import { useProductCarouselContext } from "./product-carousel.context"
@@ -27,19 +28,17 @@ export function ProductCarouselHeading({ className }: HeadingProps) {
   const categoryTitle = firstProduct.category?.title
 
   return (
-    <div className={cn("w-full flex flex-col gap-2 items-center select-none", className)}>
+    <div className={cn("w-full flex flex-col gap-8 items-center select-none", className)}>
       <div className="flex flex-col items-center gap-1">
-        <span className="text-md text-primary-300">
-          <span>[</span>
-          <span ref={categoryRef}>{categoryTitle}</span>
-          <span>]</span>
-        </span>
-        <h3 className="text-5xl italic" ref={titleRef}>
+        <Text ref={categoryRef} preset="small" className="text-zinc-500">
+          {categoryTitle}
+        </Text>
+        <Text ref={titleRef} as="h3" className="text-5xl uppercase tracking-wider">
           {firstProduct.title}
-        </h3>
+        </Text>
       </div>
       <div className="flex justify-center">
-        <div className="w-px h-12 bg-primary-200" />
+        <div className="w-px h-12 bg-zinc-300" />
       </div>
     </div>
   )

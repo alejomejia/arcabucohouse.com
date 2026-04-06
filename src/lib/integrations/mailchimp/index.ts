@@ -52,5 +52,16 @@ export async function subscribeMailchimpMember({
     return { success: false, error: 'already_subscribed' }
   }
 
+  if (response.status === 400 && body?.title === 'Forgotten Email Not Subscribed') {
+    return { success: false, error: 'already_subscribed' }
+  }
+
+  console.error('[Mailchimp] Unexpected response:', {
+    status: response.status,
+    title: body?.title,
+    detail: body?.detail,
+    errors: body?.errors,
+  })
+
   return { success: false, error: 'server_error' }
 }

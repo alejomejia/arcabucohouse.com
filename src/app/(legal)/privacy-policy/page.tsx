@@ -1,6 +1,6 @@
 import { COMPANY } from '@/lib/constants/legal'
 
-import { ContactEmail } from '../_components/contact-email'
+import { LegalContactEmail } from '../_components/legal-contact-email'
 
 const PRIMARY_COUNTRY = "United States"
 
@@ -24,7 +24,7 @@ export default function PrivacyPolicyPage() {
       <h2>Policy Regarding Children</h2>
       <p>
         {COMPANY.NAME} does not knowingly collect, request, or market to children under the age of thirteen (13).
-        If you believe we have inadvertently collected personal data from a child under 13, please contact us at <ContactEmail /> so that we may promptly delete such information.
+        If you believe we have inadvertently collected personal data from a child under 13, please contact us at <LegalContactEmail /> so that we may promptly delete such information.
       </p>
 
       <h2>About This Privacy Policy</h2>
@@ -87,7 +87,7 @@ export default function PrivacyPolicyPage() {
 
       <h2>Your Rights And Access To Information</h2>
       <p>
-        You may request confirmation of whether we hold Personally Identifiable Information about you by contacting us at <ContactEmail />.
+        You may request confirmation of whether we hold Personally Identifiable Information about you by contacting us at <LegalContactEmail />.
         Where applicable by law, you may request access, correction, deletion, or restriction of your personal data.
       </p>
 
@@ -97,7 +97,7 @@ export default function PrivacyPolicyPage() {
 
       <h2>Opt-Out Procedures</h2>
       <p>
-        If you wish to opt out of receiving promotional communications or request removal of your Personally Identifiable Information from our active databases (where legally permissible), please email <ContactEmail /> with the subject line “Opt-Out Request.”
+        If you wish to opt out of receiving promotional communications or request removal of your Personally Identifiable Information from our active databases (where legally permissible), please email <LegalContactEmail /> with the subject line “Opt-Out Request.”
       </p>
 
       <h2>Security Of Information</h2>
@@ -145,7 +145,7 @@ export default function PrivacyPolicyPage() {
       <h2>California Residents</h2>
       <p>
         If you are a California resident, you may have additional rights under applicable California privacy laws, including the right to request information about disclosures of personal data for direct marketing purposes.
-        To exercise these rights, please contact us at <ContactEmail />.
+        To exercise these rights, please contact us at <LegalContactEmail />.
       </p>
 
       <h2>International Users</h2>
@@ -161,7 +161,7 @@ export default function PrivacyPolicyPage() {
 
       <p>
         {COMPANY.ADDRESS}<br />
-        Email: <ContactEmail />
+        Email: <LegalContactEmail />
       </p>
     </>
   )

@@ -9,22 +9,12 @@ export const FOOTER_COLUMNS = [
       {
         id: "rugs",
         label: "Rugs",
-        href: "/collections/rugs",
+        href: "/category/rugs",
       },
       {
-        id: "lights",
-        label: "Lights",
-        href: "/collections/lights",
-      },
-      {
-        id: "ceramics",
-        label: "Ceramics",
-        href: "/collections/ceramics",
-      },
-      {
-        id: "accessories",
-        label: "Accessories",
-        href: "/collections/accessories",
+        id: "lighting",
+        label: "Lighting",
+        href: "/category/lighting",
       },
     ]
   },
@@ -54,4 +44,4 @@ export const FOOTER_COLUMNS = [
   },
 ]
 
-export const FOOTER_COLUMN_HEADING_CLASSNAME = "text-primary-100 text-sm uppercase font-sans font-semibold tracking-wider mb-6"
+export const FOOTER_COLUMN_HEADING_CLASSNAME = "text-zinc-200 text-base uppercase font-semibold tracking-wider mb-4"

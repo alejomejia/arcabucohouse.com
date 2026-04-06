@@ -4,7 +4,7 @@ type SkeletonProps = {
   className?: string
 }
 
-const SKELETON_BASE_CLASSNAME = "w-full bg-primary-100 animate-pulse"
+const SKELETON_BASE_CLASSNAME = "w-full bg-zinc-200 animate-pulse"
 
 export function Skeleton({ className }: SkeletonProps) {
   return <div className={cn(SKELETON_BASE_CLASSNAME, className)} />

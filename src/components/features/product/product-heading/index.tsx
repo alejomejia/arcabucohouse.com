@@ -1,4 +1,5 @@
 import { UnderlineLink } from "@/components/effects/underline/underline-link";
+import { Text } from "@/components/ui/text";
 
 import type { Product } from "@/lib/integrations/shopify/types";
 
@@ -18,17 +19,15 @@ export function ProductHeading({ product }: ProductHeadingProps) {
   const productTitle = product.title
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-4">
       {categoryTitle && categoryPath && (
-        <UnderlineLink href={categoryPath}>
-          <span className="block text-3xl lg:text-base uppercase text-primary-base tracking-widest font-medium">
+        <UnderlineLink href={categoryPath} className="text-zinc-500">
+          <Text preset="eyebrow">
             {categoryTitle}
-          </span>
+          </Text>
         </UnderlineLink>
       )}
-      <h1 className="block font-serif text-3xl pt-4 lg:text-6xl text-secondary-base italic text-pretty leading-none">
-        {productTitle}
-      </h1>
+      <Text preset="h1">{productTitle}</Text>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { Link } from "@/components/ui/link"
 import type { Product } from "@/lib/integrations/shopify/types"
 import { cn } from "@/lib/utils/helpers"
 
+import { Text } from "@/components/ui/text"
 import { ProductCardImage } from "./product-card-image"
 
 type ProductCardProps = {
@@ -39,7 +40,7 @@ export function ProductCardRoot({ product, className }: ProductCardProps) {
       onMouseEnter={() => setHover(CURSOR_MEDIUM)}
       onMouseLeave={() => setDefault()}
     >
-      <h2 className="font-serif italic text-2xl mb-1">{title}</h2>
+      <Text as="h2" preset="h5" className="mb-3 text-zinc-500 tracking-wider uppercase">{title}</Text>
       <ProductCardImage
         coverSrc={coverImage.url}
         backgroundSrc={backgroundImage?.url}

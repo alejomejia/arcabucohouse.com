@@ -47,14 +47,13 @@ export function CartDialog({ isOpen, onClose, onUpdateItem }: CartDialogProps) {
         position="right"
         className={cn(
           'flex flex-col w-full h-full p-6 overflow-hidden',
-          'text-white',
-          'md:w-140'
+          'text-zinc-50 md:w-140',
         )}
       >
         <div
           className={cn(
             'flex shrink-0 items-center justify-between',
-            'border-b border-primary-300/50 pb-4'
+            'border-b border-zinc-700 pb-4'
           )}
         >
           <DialogTitle className="mt-1">Cart</DialogTitle>

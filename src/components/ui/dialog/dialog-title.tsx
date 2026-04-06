@@ -27,7 +27,7 @@ export function DialogTitle({
   return (
     <Heading
       id={`${dialogId}-title`}
-      className={cn("text-white text-2xl font-semibold font-serif", className)}
+      className={cn("text-zinc-50 text-2xl font-semibold", className)}
     >
       {children}
     </Heading>

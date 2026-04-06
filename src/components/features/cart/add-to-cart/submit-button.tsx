@@ -5,6 +5,7 @@ import { useFormStatus } from 'react-dom'
 
 import { useCursor } from '@/components/effects/cursor/context'
 import { CURSOR_MEDIUM } from '@/components/effects/cursor/cursor-states'
+import { Button } from '@/components/ui/button'
 import { LoadingDots } from '@/components/ui/loading-dots'
 import { cn } from '@/lib/utils/helpers'
 
@@ -17,7 +18,6 @@ import { cn } from '@/lib/utils/helpers'
 const BUTTON_CLASSNAMES = [
   'relative w-full p-4',
   'flex items-center justify-center',
-  'bg-secondary-base text-white',
   'uppercase font-semibold tracking-wide',
   'transition-all duration-300 ease-in-out',
 ].join(' ')
@@ -62,22 +62,20 @@ export function SubmitButton({
   // Out of stock state
   if (!availableForSale) {
     return (
-      <button
-        type="button"
+      <Button
         disabled
         className={cn(BUTTON_CLASSNAMES, DISABLED_CLASSNAMES)}
         aria-label="Product is out of stock"
       >
         Out Of Stock
-      </button>
+      </Button>
     )
   }
 
   // Variant selection required state
   if (!selectedVariantId) {
     return (
-      <button
-        type="button"
+      <Button
         disabled
         className={cn(BUTTON_CLASSNAMES, DISABLED_CLASSNAMES)}
         aria-label="Select an option"
@@ -86,7 +84,7 @@ export function SubmitButton({
           <PlusIcon className="h-5" />
         </div>
         Add To Cart
-      </button>
+      </Button>
     )
   }
 
@@ -94,7 +92,7 @@ export function SubmitButton({
 
   // Ready to submit state
   return (
-    <button
+    <Button
       type="submit"
       disabled={pending}
       aria-label={pendingLabel}
@@ -110,12 +108,12 @@ export function SubmitButton({
     >
       <div className="absolute left-0 ml-4">
         {pending ? (
-          <LoadingDots className="bg-white" />
+          <LoadingDots className="bg-zinc-100" />
         ) : (
           <PlusIcon className="h-5" />
         )}
       </div>
       {pendingLabel}
-    </button>
+    </Button>
   )
 }

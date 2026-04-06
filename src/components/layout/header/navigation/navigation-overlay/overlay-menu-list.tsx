@@ -7,6 +7,7 @@ import { useCursor } from "@/components/effects/cursor/context"
 import { CURSOR_MEDIUM } from "@/components/effects/cursor/cursor-states"
 import { SplitText, type SplitTextRef } from "@/components/effects/split-text"
 import { Link } from "@/components/ui/link"
+import { Text } from "@/components/ui/text"
 import type { Menu } from "@/lib/integrations/shopify/types"
 import { orchestraMenuOverlay } from "@/lib/orchestra"
 import { cn } from "@/lib/utils/helpers"
@@ -64,10 +65,9 @@ export function OverlayMenuList({
   return (
     <ul
       className={cn(
-        "group/list flex flex-col items-center justify-center gap-4 h-full",
-        "font-serif italic text-5xl leading-tighter text-center md:text-left",
-        "md:w-fit md:h-fit md:items-start md:justify-start md:gap-2 md:text-[7vw]",
-        "lg:text-7xl",
+        "group/list flex flex-col items-center justify-center h-full",
+        "text-zinc-200 text-5xl md:text-[7vw] lg:text-6xl text-center md:text-left",
+        "md:w-fit md:h-fit md:items-start md:justify-start",
         className
       )}
       onMouseEnter={() => setHover(CURSOR_MEDIUM)}
@@ -85,10 +85,10 @@ export function OverlayMenuList({
               href={path}
               onMouseEnter={() => onItemHover?.(index)}
               className={cn(
-                "group/link relative overflow-hidden",
+                "group/link relative overflow-clip",
                 "opacity-100 group-hover/list:opacity-50 hover:opacity-100",
                 "transition-opacity duration-500",
-                "char:translate-y-full",
+                "char:translate-y-full char:leading-tight",
               )}
             >
               <SplitText
@@ -98,15 +98,15 @@ export function OverlayMenuList({
                 type="chars"
                 onReady={handleSplitReady}
               >
-                <span>{title}</span>
+                <Text as="span">{title}</Text>
               </SplitText>
               <div className={cn(
                 "overflow-hidden leading-0",
-                "-translate-y-4 font-sans not-italic",
+                "-translate-y-4  not-italic",
                 "hidden md:inline-block md:mx-3"
               )}>
                 <span className={cn(
-                  "text-sm text-primary-300",
+                  "text-sm text-zinc-400",
                   "inline-block -translate-y-8 group-hover/link:translate-y-0",
                   "transition-transform duration-300 ease-in-out"
                 )}>[{digits}]</span>

@@ -2,25 +2,6 @@
   --color-black: #000000;
   --color-white: #ffffff;
 
-  /* Primary color scale */
-  --color-primary-100: #D6D6D6;
-  --color-primary-200: #AFAFAF;
-  --color-primary-300: #6E6E6E;
-  --color-primary-base: #252525;
-  --color-primary-400: #1E1E1E;
-  --color-primary-500: #171717;
-  --color-primary-600: #0F0F0F;
-
-  /* Secondary color scale */
-  --color-secondary-50: #F0EEEC;
-  --color-secondary-100: #D9CDC9;
-  --color-secondary-200: #C2AFA8;
-  --color-secondary-300: #B0968D;
-  --color-secondary-base: #9B7B6F;
-  --color-secondary-400: #81645A;
-  --color-secondary-500: #664F47;
-  --color-secondary-600: #483832;
-
   /* Custom breakpoints */
   --breakpoint-xs: 30rem;
 }

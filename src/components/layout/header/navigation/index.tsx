@@ -9,7 +9,7 @@ import { OverlayImagePreloader } from './navigation-overlay/overlay-image-preloa
 import { NavigationToggle } from './navigation-toggle';
 
 export async function Navigation() {
-  const menu = await getMenu(SHOPIFY_MENU_HANDLERS.main)
+  const menu = await getMenu(SHOPIFY_MENU_HANDLERS.overlay)
 
   return (
     <>

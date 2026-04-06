@@ -35,9 +35,9 @@ export function OverlayBackground() {
   return (
     <div ref={containerRef} className="absolute inset-0 opacity-0">
       <BackgroundWaves
-        lineColor="#c2bcbc"
+        lineColor="#52525c"
         backgroundColor="transparent"
-        waveSpeedX={0.02}
+        waveSpeedX={0.01}
         waveSpeedY={0.01}
         waveAmpX={40}
         waveAmpY={20}

@@ -25,10 +25,10 @@ export function FooterClient({ children }: FooterClientProps) {
       className={cn(
         "overflow-hidden sticky bottom-0 left-0 right-0",
         Z_INDEX_CLASSNAMES.footer,
-        "flex h-full min-h-screen flex-col bg-primary-base text-primary-100"
+        "flex h-full min-h-screen flex-col bg-zinc-900 text-zinc-100"
       )}
     >
-      <div className="bg-primary-100 min-h-0 flex-1" aria-hidden />
+      <div className="bg-zinc-200 min-h-0 flex-1" aria-hidden />
       {children}
       <FooterLogo containerRef={logoContainerRef} />
     </footer>

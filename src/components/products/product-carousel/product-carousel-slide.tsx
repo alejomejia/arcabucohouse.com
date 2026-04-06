@@ -3,8 +3,8 @@
 import Link from "next/link"
 
 import { ProductCardImage } from "@/components/products/product-card"
-import { cn } from "@/lib/utils/helpers"
 import type { Product } from "@/lib/integrations/shopify/types"
+import { cn } from "@/lib/utils/helpers"
 
 import { useProductCarouselContext } from "./product-carousel.context"
 
@@ -48,7 +48,7 @@ export function ProductCarouselSlide({
 
   return (
     <div
-      className={cn("w-110 aspect-4/3 shrink-0", className)}
+      className={cn("w-90 aspect-4/3 shrink-0", className)}
       ref={setItemRef(index + _indexOffset)}
       style={{ "--p": "1" } as React.CSSProperties}
     >

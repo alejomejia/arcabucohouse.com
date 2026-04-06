@@ -34,7 +34,7 @@ Group Tailwind classes **functionally** in this order:
 1. **Positioning** - `position`, `top`, `left`, `right`, `bottom`, `inset`
 2. **Z-Index & Layout** - `z-*`, `flex`, `grid`, `w-*`, `h-*`, `gap-*`
 3. **Spacing** - `p-*`, `m-*`, `px-*`, `py-*` (padding/margin)
-4. **Typography** - `text-*`, `font-*`, `leading-*`, `font-serif`, `font-semibold`
+4. **Typography** - `text-*`, `font-*`, `leading-*`, `font-semibold`
 5. **Colors** - `bg-*`, `text-*`, `border-*`, `fill-*`
 6. **Effects & States** - `opacity-*`, `mix-blend-*`, `transition`, `duration-*`, `ease-*`
 7. **Utilities** - `select-none`, `will-change-*`, `cursor-*`
@@ -46,8 +46,8 @@ className={cn(
   "fixed top-0 left-0 right-0",           // Positioning
   "z-80 h-16",                            // Z-index & Layout
   "py-4",                                 // Spacing
-  "text-lg font-serif font-semibold",     // Typography
-  "text-white",                           // Colors
+  "text-lg font-semibold",     // Typography
+  "text-zinc-100",                           // Colors
   "mix-blend-difference select-none",     // Effects & utilities
 )}
 ```
@@ -57,24 +57,6 @@ className={cn(
 **Use numeric spacing (TailwindCSS v4):**
 - ✅ `p-4`, `px-6`, `py-2`, `gap-8`, `m-0`, `ml-2.5`
 - ❌ Avoid arbitrary `[px]` values unless absolutely necessary
-
-## Color System
-
-Use the project's defined color scale:
-
-- **Primary colors** (grays): `primary-100` through `primary-600`
-  - `primary-base` for default dark background
-  - `primary-100` for light text
-  - `primary-300` for borders
-
-- **Secondary colors** (browns): `secondary-100` through `secondary-600`
-  - `secondary-600` for darker elements
-
-**Examples:**
-- `bg-primary-base` (dark background)
-- `text-primary-100` (light foreground)
-- `border-primary-300` (medium borders)
-- `bg-secondary-600/95` (semi-transparent)
 
 ## Responsive Design (Mobile-First)
 
@@ -104,7 +86,7 @@ cn(
   {
     "class-when-true": isActive,
     "class-when-false": !isActive,
-    "hover:bg-primary-base": isInteractive,
+    "hover:bg-zinc-700": isInteractive,
   }
 )
 ```
@@ -112,8 +94,8 @@ cn(
 **Or use predefined class constants for complex states:**
 
 ```tsx
-const ACTIVE_VARIANT = "bg-primary-base text-primary-100 border-primary-base";
-const INACTIVE_VARIANT = "text-primary-300 border-primary-100 hover:bg-primary-base";
+const ACTIVE_VARIANT = "bg-zinc-700 text-zinc-100 border-zinc-700";
+const INACTIVE_VARIANT = "text-zinc-300 border-zinc-100 hover:bg-zinc-700";
 
 // In component:
 className={cn(
@@ -126,7 +108,7 @@ className={cn(
 
 ### Hover States
 ```tsx
-"hover:bg-primary-base hover:text-primary-100 hover:border-primary-base"
+"hover:bg-zinc-700 hover:text-zinc-100 hover:border-zinc-700"
 ```
 
 ### Transition Classes
@@ -204,8 +186,7 @@ Available custom utilities from `/src/lib/styles/utilities.css`:
 - `.visually-hidden` - Screen reader only text
 - `.leading-tighter` - Tighter line-height (1.05)
 - `.arc-images-animation` - Complex clip-path animation
-- `.brand-gradient-primary` - Primary radial gradient
-- `.brand-gradient-secondary` - Secondary radial gradient
+- `.brand-gradient-zinc` - Primary radial gradient
 
 Available custom variants from `/src/lib/styles/variants.css`:
 - `first-child:` - First child pseudo-element
@@ -228,9 +209,9 @@ className={cn("px-4 md:px-6", className)}
 ### Card/Component Base
 ```tsx
 className={cn(
-  "rounded border border-primary-300",
+  "rounded border border-zinc-300",
   "px-4 py-3 md:px-6 md:py-4",
-  "bg-primary-base text-primary-100",
+  "bg-zinc-700 text-zinc-100",
   "transition duration-300 ease-in-out"
 )}
 ```
@@ -280,7 +261,7 @@ className={cn(
 |------|---------|
 | Merge classes | `cn(classA, classB, { conditional: true })` |
 | Spacing | `p-4`, `px-6`, `gap-8` (numeric only) |
-| Colors | `bg-primary-base`, `text-primary-100` |
+| Colors | `bg-zinc-700`, `text-zinc-100` |
 | Responsive | `px-4 md:px-6 lg:px-8` |
 | States | Conditional objects or predefined constants |
 | Z-Index | `Z_INDEX_CLASSNAMES.header` |
