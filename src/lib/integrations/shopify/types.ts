@@ -76,7 +76,7 @@ export type ProductDownloadFile = {
   originalFileSize: number | null;
 };
 
-export type Product = Omit<ShopifyProduct, 'variants' | 'images' | 'collections' | 'productDownloads'> & {
+export type Product = Omit<ShopifyProduct, 'variants' | 'images' | 'collections' | 'downloads'> & {
   variants: ProductVariant[];
   images: Image[];
   collections: Collection[];

@@ -87,6 +87,7 @@ export function createMockProduct(overrides?: Partial<Product>): Product {
       minVariantPrice: defaultVariant.price,
     },
     collections: [],
+    downloads: [],
     seo: {
       title: 'Test Product',
       description: 'Test description',
