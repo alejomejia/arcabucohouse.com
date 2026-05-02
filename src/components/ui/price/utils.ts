@@ -12,9 +12,13 @@ export function formatPrice(amount: string, currencyCode: string): string {
     return amount
   }
 
+  const hasDecimals = numericAmount % 1 !== 0
+
   return new Intl.NumberFormat(undefined, {
     style: 'currency',
     currency: currencyCode,
     currencyDisplay: 'narrowSymbol',
+    minimumFractionDigits: hasDecimals ? 2 : 0,
+    maximumFractionDigits: hasDecimals ? 2 : 0,
   }).format(numericAmount)
 }

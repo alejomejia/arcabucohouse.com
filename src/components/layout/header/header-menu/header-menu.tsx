@@ -6,7 +6,6 @@ import { useRef, useState } from "react";
 
 import { type SplitTextRef, SplitText } from "@/components/effects/split-text";
 import { UnderlineLink } from "@/components/effects/underline/underline-link";
-import { Container } from "@/components/ui/container";
 import { usePreloader } from "@/components/ui/preloader/hooks/use-preloader";
 import { Text } from "@/components/ui/text";
 import type { Menu } from '@/lib/integrations/shopify/types';
@@ -81,31 +80,29 @@ export function HeaderMenu({ menu }: HeroFooterProps) {
 
   return (
     <div ref={wrapperRef}>
-      <Container className="w-full font-medium">
-        <div ref={containerRef} className="opacity-0">
-          <SplitText
-            ref={textRef}
-            type="words"
-            onReady={() => setSplitReady(true)}
-          >
-            <ul className={cn(
-              "flex flex-col gap-4 justify-center items-center",
-              "md:flex-row md:gap-4",
-            )}>
-              {menu.map(({ title, path }, index) => (
-                <li key={title} className="flex flex-col md:flex-row items-center gap-4">
-                  <UnderlineLink href={path} className="tracking-wider">
-                    <Text as="span" preset="headerLink">{title}</Text>
-                  </UnderlineLink>
-                  {index < menu.length - 1 && (
-                    <span className="text-zinc-600 hidden md:inline-block">|</span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </SplitText>
-        </div>
-      </Container>
+      <div ref={containerRef} className="w-full font-medium opacity-0">
+        <SplitText
+          ref={textRef}
+          type="words"
+          onReady={() => setSplitReady(true)}
+        >
+          <ul className={cn(
+            "flex flex-col gap-4 justify-center items-center",
+            "md:flex-row md:gap-4",
+          )}>
+            {menu.map(({ title, path }, index) => (
+              <li key={title} className="flex flex-col md:flex-row items-center gap-4">
+                <UnderlineLink href={path} className="tracking-wider text-nowrap">
+                  <Text as="span" preset="headerLink">{title}</Text>
+                </UnderlineLink>
+                {index < menu.length - 1 && (
+                  <span className="text-zinc-600 hidden md:inline-block">|</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </SplitText>
+      </div>
     </div>
   )
 }

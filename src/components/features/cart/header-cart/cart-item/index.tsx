@@ -66,7 +66,7 @@ export function CartItem({ item, onUpdateItem, onCloseCart }: CartItemProps) {
             fill
           />
         </Link>
-        <div className="my-2 flex-1 flex flex-col justify-between gap-3">
+        <div className="my-1 flex-1 flex flex-col justify-between gap-3">
           <div>
             <Link
               href={merchandiseUrl}

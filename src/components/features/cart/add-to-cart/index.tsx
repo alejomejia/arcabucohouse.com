@@ -3,8 +3,8 @@
 import { useActionState } from 'react'
 
 import { addItem } from '@/components/features/cart/server/actions'
-import { useProduct } from '@/components/features/product/hooks/use-product'
-import type { Product, ProductVariant } from '@/lib/integrations/shopify/types'
+import { useSelectedVariant } from '@/components/features/product/hooks/use-selected-variant'
+import type { Product } from '@/lib/integrations/shopify/types'
 
 import { useCart } from '../hooks/use-cart'
 import { SubmitButton } from './submit-button'
@@ -38,22 +38,17 @@ export function AddToCart({ product }: AddToCartProps) {
   const { variants, availableForSale } = product
 
   const { addCartItem } = useCart()
-  const { state } = useProduct()
   const [message, formAction] = useActionState(addItem, null)
 
-  const variant = variants.find((variant: ProductVariant) =>
-    variant.selectedOptions.every((option) => option.value === state[option.name.toLowerCase()])
-  )
-  const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined
-  const selectedVariantId = variant?.id || defaultVariantId
+  const selectedVariant = useSelectedVariant(variants)
+  const selectedVariantId = selectedVariant?.id
   const addItemAction = formAction.bind(null, selectedVariantId)
-  const finalVariant = variants.find((variant) => variant.id === selectedVariantId)
 
   return (
     <form
       action={async () => {
-        if (finalVariant) {
-          addCartItem(finalVariant, product)
+        if (selectedVariant) {
+          addCartItem(selectedVariant, product)
           addItemAction()
         }
       }}

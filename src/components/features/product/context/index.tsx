@@ -29,22 +29,26 @@ export function ProductProvider({ children }: ProductProviderProps) {
 
   const [state, setOptimisticState] = useOptimistic(
     initialState,
-    (prevState: ProductState, update: ProductState) => ({
-      ...prevState,
-      ...update
-    })
+    (_prevState: ProductState, newState: ProductState) => newState
   );
 
   const updateOption = useCallback((name: string, value: string) => {
-    const newState = { [name]: value };
+    const newState = { ...state, [name]: value };
     setOptimisticState(newState);
-    return { ...state, ...newState };
+    return newState;
+  }, [state, setOptimisticState]);
+
+  const removeOption = useCallback((name: string) => {
+    const { [name]: _, ...newState } = state;
+    setOptimisticState(newState as ProductState);
+    return newState as ProductState;
   }, [state, setOptimisticState]);
 
   const value = useMemo(
     () => ({
       state,
       updateOption,
+      removeOption,
     }),
     [state]
   );

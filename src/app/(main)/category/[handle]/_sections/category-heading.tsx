@@ -34,7 +34,7 @@ export function CategoryHeading({ category }: CategoryHeadingProps) {
     <CategoryShell
       titleSlot={<Text preset="h1">{title}</Text>}
       descriptionSlot={
-        <Text preset="body" className="text-zinc-500">{description}</Text>
+        <Text preset="body" className="text-zinc-600">{description}</Text>
       }
     />
   )

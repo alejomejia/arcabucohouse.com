@@ -4,7 +4,6 @@ import { useFormStatus } from "react-dom";
 
 import { useCursor } from "@/components/effects/cursor/context";
 import { CURSOR_MEDIUM } from "@/components/effects/cursor/cursor-states";
-import { Button } from "@/components/ui/button";
 import { FOCUS_RING_ON_DARK_BG } from "@/lib/styles/const";
 import { cn } from "@/lib/utils/helpers";
 
@@ -31,7 +30,7 @@ export function SubmitButton({ children }: SubmitButtonProps) {
   const { pending } = useFormStatus();
 
   return (
-    <Button
+    <button
       type="submit"
       aria-label="Remove cart item"
       disabled={pending}
@@ -47,6 +46,6 @@ export function SubmitButton({ children }: SubmitButtonProps) {
       onMouseLeave={() => setDefault()}
     >
       {children ?? <XMarkIcon className="mx-px size-4 text-black" />}
-    </Button>
+    </button>
   );
 }

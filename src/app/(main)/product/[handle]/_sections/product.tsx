@@ -26,7 +26,7 @@ export function ProductSection({ product }: ProductSectionProps) {
             </Suspense>
           </div>
         </div>
-        <div className="col-start-12 col-end-25 pt-16">
+        <div className="overflow-x-hidden col-start-12 col-end-25 pt-16">
           <Suspense fallback={null}>
             <ProductGallery images={galleryImages} />
           </Suspense>
