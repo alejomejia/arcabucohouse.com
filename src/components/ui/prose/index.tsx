@@ -28,7 +28,7 @@ export function Prose({ html, className }: ProseProps) {
   return (
     <div
       className={cn(
-        'prose text-lg text-zinc-500',
+        'prose max-w-full text-base leading-normal text-zinc-500',
         proseClasses,
         className
       )}
