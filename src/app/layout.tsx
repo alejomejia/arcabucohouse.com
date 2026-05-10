@@ -2,25 +2,25 @@ import type { Metadata } from "next";
 import { Suspense, type ReactNode } from "react";
 
 import { CursorProvider } from "@/components/effects/cursor";
+import { PageTransitionProvider } from "@/components/effects/page-transition-provider";
 import { GSAPRuntime } from "@/components/effects/gsap";
 import { CartProvider } from "@/components/features/cart/context";
+import { Header } from "@/components/layout/header";
 import { Lenis } from "@/components/layout/lenis";
 import { Toaster } from "@/components/toast/toaster";
 import { PortalRoot } from "@/components/ui/portal/portal-root";
+import { PreloaderProvider } from "@/components/ui/preloader/hooks/preloader-context";
+import { PreloaderGate } from "@/components/ui/preloader/preloader-gate";
 import { getCart } from "@/lib/integrations/shopify/cart";
 import { baseUrl } from "@/lib/integrations/utils";
 import { generateOrganizationJsonLd, generateWebSiteJsonLd } from "@/lib/seo/metadata";
 import { PORTAL_IDS } from "@/lib/styles/const";
 import { sans } from "@/lib/styles/fonts";
 import "@/lib/styles/globals.css";
-import { assertRequiredEnvVars, config } from "@/lib/utils/config";
+import { config } from "@/lib/utils/config";
 import { cn } from "@/lib/utils/helpers";
 
 const { siteName } = config;
-
-// Validate required environment variables at application startup
-// This will fail fast during build or at runtime if any are missing
-assertRequiredEnvVars();
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -71,7 +71,13 @@ export default async function RootLayout({
           <CursorProvider>
             <Lenis root>
               <CartProvider cartPromise={cart}>
-                {children}
+                <PreloaderProvider>
+                  <PreloaderGate />
+                  <Header />
+                  <PageTransitionProvider>
+                    {children}
+                  </PageTransitionProvider>
+                </PreloaderProvider>
               </CartProvider>
             </Lenis>
           </CursorProvider>

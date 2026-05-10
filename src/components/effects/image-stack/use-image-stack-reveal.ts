@@ -1,7 +1,7 @@
 "use client"
 
 import gsap from "gsap"
-import { useCallback, useRef, type RefObject } from "react"
+import { useCallback, useEffect, useRef, type RefObject } from "react"
 
 /**
  * Configuration options for the image stack reveal animation
@@ -257,6 +257,19 @@ export function useImageStackReveal({
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current)
       debounceTimerRef.current = null
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+        debounceTimerRef.current = null
+      }
+      if (timelineRef.current) {
+        timelineRef.current.kill()
+        timelineRef.current = null
+      }
     }
   }, [])
 

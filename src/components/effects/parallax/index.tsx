@@ -14,13 +14,14 @@ type ParallaxProps = {
 
 export function Parallax({ children }: ParallaxProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
 
   useGSAP(() => {
-    if (!containerRef.current) return
+    if (!containerRef.current || !contentRef.current) return
 
     const randomNumber = getRandomNumber(10, 20)
 
-    gsap.set("[data-parallax-content]", {
+    gsap.set(contentRef.current, {
       yPercent: -10
     })
 
@@ -36,12 +37,12 @@ export function Parallax({ children }: ParallaxProps) {
       }
     }
 
-    gsap.fromTo("[data-parallax-content]", from, to)
+    gsap.fromTo(contentRef.current, from, to)
   }, { scope: containerRef })
 
   return (
     <div ref={containerRef} className="w-full h-full flex items-center justify-center overflow-hidden">
-      <div className="w-full h-full scale-110" data-parallax-content>
+      <div ref={contentRef} className="w-full h-full scale-110">
         {children}
       </div>
     </div>

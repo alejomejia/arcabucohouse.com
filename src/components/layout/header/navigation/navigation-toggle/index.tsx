@@ -34,7 +34,7 @@ export function NavigationToggle() {
           <SplitText
             ref={menuRef}
             type="chars"
-            className="opacity-0"
+            className="opacity-0 tracking-widest"
             onReady={onSplitReady}
           >
             <Text preset="headerLink">Menu</Text>

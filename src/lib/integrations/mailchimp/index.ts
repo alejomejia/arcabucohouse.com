@@ -1,8 +1,25 @@
-import { config } from '@/lib/utils/config';
+'use server'
 
-export type MailchimpSubscribeResult =
+import { config } from '@/lib/utils/config';
+import {
+  LOG_PREFIX,
+  MAILCHIMP_API_VERSION,
+  MAILCHIMP_BASIC_AUTH_USER,
+  MAILCHIMP_DOUBLE_OPT_IN_STATUS,
+  MAILCHIMP_ERROR_TITLE_FORGOTTEN_EMAIL,
+  MAILCHIMP_ERROR_TITLE_MEMBER_EXISTS,
+  MAILCHIMP_SUBSCRIPTION_TAG,
+} from './mailchimp.const'
+
+type MailchimpSubscribeResult =
   | { success: true }
   | { success: false; error: 'already_subscribed' | 'server_error' }
+
+type MailchimpErrorResponseBody = {
+  title?: string
+  detail?: string
+  errors?: unknown
+}
 
 /**
  * Subscribes an email address to the Mailchimp audience list.
@@ -22,23 +39,22 @@ export async function subscribeMailchimpMember({
   const [firstName, ...rest] = name.trim().split(' ')
   const lastName = rest.join(' ')
 
-  const url = `https://${config.mailchimpServerPrefix}.api.mailchimp.com/3.0/lists/${config.mailchimpAudienceId}/members`
+  const url = `https://${config.mailchimpServerPrefix}.api.mailchimp.com/${MAILCHIMP_API_VERSION}/lists/${config.mailchimpAudienceId}/members`
 
   const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Basic ${Buffer.from(`anystring:${config.mailchimpApiKey}`).toString('base64')}`,
+      Authorization: `Basic ${Buffer.from(`${MAILCHIMP_BASIC_AUTH_USER}:${config.mailchimpApiKey}`).toString('base64')}`,
     },
     body: JSON.stringify({
       email_address: email,
-      /* Pending instead of Subscribed allows double-opt in */
-      status: 'pending',
+      status: MAILCHIMP_DOUBLE_OPT_IN_STATUS,
       merge_fields: {
         FNAME: firstName,
         LNAME: lastName,
       },
-      tags: ['website'],
+      tags: [MAILCHIMP_SUBSCRIPTION_TAG],
     }),
   })
 
@@ -46,17 +62,26 @@ export async function subscribeMailchimpMember({
     return { success: true }
   }
 
-  const body = await response.json()
+  let body: MailchimpErrorResponseBody | null = null
+  try {
+    body = await response.json()
+  } catch (err) {
+    console.error(`${LOG_PREFIX} Failed to parse error response body:`, {
+      status: response.status,
+      err,
+    })
+    return { success: false, error: 'server_error' }
+  }
 
-  if (response.status === 400 && body?.title === 'Member Exists') {
+  if (response.status === 400 && body?.title === MAILCHIMP_ERROR_TITLE_MEMBER_EXISTS) {
     return { success: false, error: 'already_subscribed' }
   }
 
-  if (response.status === 400 && body?.title === 'Forgotten Email Not Subscribed') {
+  if (response.status === 400 && body?.title === MAILCHIMP_ERROR_TITLE_FORGOTTEN_EMAIL) {
     return { success: false, error: 'already_subscribed' }
   }
 
-  console.error('[Mailchimp] Unexpected response:', {
+  console.error(`${LOG_PREFIX} Unexpected response:`, {
     status: response.status,
     title: body?.title,
     detail: body?.detail,

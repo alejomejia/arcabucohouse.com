@@ -38,22 +38,50 @@ export function useUnderlineAnimation<T extends HTMLElement = HTMLElement>() {
   const elementRef = useRef<T>(null)
   const [direction, setDirection] = useState<Direction | null>(null)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const rectRef = useRef<{ left: number; width: number } | null>(null)
+
+  // Cache rect on mount and refresh on element/viewport resize so handleMouseEnter
+  // doesn't force a layout reflow on every hover.
+  useEffect(() => {
+    const el = elementRef.current
+    if (!el) return
+
+    const updateRect = () => {
+      const rect = el.getBoundingClientRect()
+      rectRef.current = { left: rect.left, width: rect.width }
+    }
+
+    updateRect()
+
+    const resizeObserver = new ResizeObserver(updateRect)
+    resizeObserver.observe(el)
+    window.addEventListener('resize', updateRect)
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener('resize', updateRect)
+    }
+  }, [])
 
   const handleMouseEnter = (e: MouseEvent<T>) => {
-    if (!elementRef.current) return
-
     // Clear any pending timeout to prevent resetting direction during re-entry
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
       timeoutRef.current = null
     }
 
-    const { clientX } = e
-    const { left, width } = elementRef.current.getBoundingClientRect()
+    // Fall back to a one-shot measure if the cache hasn't populated yet
+    // (e.g. hover fires before the layout effect runs).
+    let rect = rectRef.current
+    if (!rect) {
+      const measured = e.currentTarget.getBoundingClientRect()
+      rect = { left: measured.left, width: measured.width }
+      rectRef.current = rect
+    }
+    if (rect.width <= 0) return
 
-    const centerX = left + width / 2
-    const newDirection = clientX < centerX ? 'left' : 'right'
-
+    const offsetX = e.clientX - rect.left
+    const newDirection: Direction = offsetX < rect.width / 2 ? 'left' : 'right'
     setDirection(newDirection)
   }
 

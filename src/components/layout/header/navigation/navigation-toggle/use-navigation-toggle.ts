@@ -3,6 +3,7 @@
 import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
 import { usePathname } from "next/navigation"
+import { useTransitionState } from "next-transition-router"
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
 
 import type { SplitTextRef } from "@/components/effects/split-text"
@@ -46,6 +47,7 @@ export interface UseNavigationToggleReturn {
  */
 export function useNavigationToggle(): UseNavigationToggleReturn {
   const pathname = usePathname()
+  const { stage } = useTransitionState()
   const { navState, isNavOpen, openNav, openingNav, closingNav } = useNavigation()
   const { isReady: preloaderReady } = usePreloader()
   const [disabled, setDisabled] = useState(true)
@@ -209,7 +211,21 @@ export function useNavigationToggle(): UseNavigationToggleReturn {
     }
   }
 
-  // Close navigation on route change (skip before intro plays, skip if already closed)
+  // Primary: close on transition start, while the component is still mounted and
+  // all refs are valid. Fires before next-transition-router commits the new pathname,
+  // which prevents the cross-route-group remount from resetting hasPlayedIntroRef.
+  useEffect(() => {
+    if (stage !== 'leaving') return
+    if (!hasPlayedIntroRef.current) return
+    if (!getIsNavOpen()) return
+
+    closingNav()
+    closeAnimation()
+  }, [stage])
+
+  // Fallback: covers back/forward navigation that bypasses TransitionRouter.
+  // By the time pathname changes after a stage-triggered close, getIsNavOpen()
+  // is already false, so this is a no-op in the normal flow.
   useEffect(() => {
     if (!hasPlayedIntroRef.current) return
     if (!getIsNavOpen()) return

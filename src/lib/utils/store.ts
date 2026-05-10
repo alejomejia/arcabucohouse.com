@@ -67,6 +67,7 @@ const useNavState = () => {
 export const useNavigation = () => {
   const navState = useNavState()
   const isNavOpen = useIsNavOpen()
+  const setNavState = useAppStore((state) => state.setNavState)
 
   const openingNav = () => setNavState('opening')
   const openNav = () => setNavState('open')
