@@ -4,8 +4,9 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline"
 
 import { cn } from "@/lib/utils/helpers"
 
-import { useTabsContext } from "./context"
-import type { TabsTriggerProps } from "./types"
+import { TABS_PANEL_ID_PREFIX, TABS_TRIGGER_ID_PREFIX } from "./tabs.const"
+import { useTabsContext } from "./tabs.context"
+import type { TabsTriggerProps } from "./tabs.types"
 
 /**
  * Clickable trigger that opens/closes the matching TabsContent.
@@ -34,9 +35,9 @@ export function TabsTrigger({ id, children, icon, className }: TabsTriggerProps)
     <button
       type="button"
       role="tab"
-      id={`tab-${id}`}
+      id={`${TABS_TRIGGER_ID_PREFIX}-${id}`}
       aria-selected={isTabOpen}
-      aria-controls={`tabpanel-${id}`}
+      aria-controls={`${TABS_PANEL_ID_PREFIX}-${id}`}
       onClick={() => toggleTab(id)}
       className={cn(
         "group relative flex items-center gap-2",

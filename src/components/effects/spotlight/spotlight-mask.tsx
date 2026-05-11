@@ -5,7 +5,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { SHOPIFY_CDN_ASSETS } from "@/lib/integrations/shopify/config";
 import { cn } from "@/lib/utils/helpers";
 
-import { useSpotlightContext } from "./spotlight-context";
+import { useSpotlightContext } from "./spotlight.context";
 import s from "./spotlight.module.css";
 
 /**

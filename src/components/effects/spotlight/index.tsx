@@ -1,38 +1,42 @@
-"use client";
+"use client"
 
-import { type ReactNode } from "react";
+import { type ReactNode } from "react"
 
-import { cn } from "@/lib/utils/helpers";
+import { cn } from "@/lib/utils/helpers"
 
-import { useSpotlight, type UseSpotlightOptions } from "./hooks/use-spotlight";
-import { SpotlightContext } from "./spotlight-context";
-import { SpotlightHeading } from "./spotlight-heading";
-import { SpotlightImages } from "./spotlight-images";
-import { SpotlightMask } from "./spotlight-mask";
-import { SpotlightMaskHeading } from "./spotlight-mask-heading";
-import { SpotlightMaskImage } from "./spotlight-mask-image";
+import { useSpotlight, type UseSpotlightOptions } from "./hooks/use-spotlight"
+import { SpotlightContext } from "./spotlight.context"
+import { SpotlightHeading } from "./spotlight-heading"
+import { SpotlightImages } from "./spotlight-images"
+import { SpotlightMask } from "./spotlight-mask"
+import { SpotlightMaskHeading } from "./spotlight-mask-heading"
+import { SpotlightMaskImage } from "./spotlight-mask-image"
 
-/**
- * Props for Spotlight.Root.
- *
- * @property children - Compound subcomponents (Heading, Images, Mask, etc.)
- * @property className - Optional class for the pinned section wrapper
- */
 export type SpotlightRootProps = {
-  children: ReactNode;
-  className?: string;
-  options?: UseSpotlightOptions;
-};
+  children: ReactNode
+  className?: string
+  options?: UseSpotlightOptions
+}
 
 /**
- * Root of the Spotlight compound component. Uses useSpotlight for refs and
- * GSAP scroll animations (pin, image scroll, mask reveal, word reveal).
+ * Root of the Spotlight compound component. Pins the section while the
+ * user scrolls through it, animating an image strip, a mask reveal, and
+ * a per-word headline animation via {@link useSpotlight}.
  *
- * @param children - Compound subcomponents
- * @param className - Optional section class (default: min-h-dvh, overflow hidden, bg)
+ * @example
+ * ```tsx
+ * <Spotlight>
+ *   <Spotlight.Heading>Our work</Spotlight.Heading>
+ *   <Spotlight.Images>…</Spotlight.Images>
+ *   <Spotlight.Mask>
+ *     <Spotlight.MaskImage src="/banner.jpg" alt="" />
+ *     <Spotlight.MaskHeading>Headline that reveals as you scroll</Spotlight.MaskHeading>
+ *   </Spotlight.Mask>
+ * </Spotlight>
+ * ```
  */
 function SpotlightRoot({ options, children, className }: SpotlightRootProps) {
-  const { contextValue, sectionRef } = useSpotlight(options);
+  const { contextValue, sectionRef } = useSpotlight(options)
 
   return (
     <SpotlightContext.Provider value={contextValue}>
@@ -43,14 +47,19 @@ function SpotlightRoot({ options, children, className }: SpotlightRootProps) {
         {children}
       </section>
     </SpotlightContext.Provider>
-  );
+  )
 }
 
-export const Spotlight = {
-  Root: SpotlightRoot,
+/** @see {@link SpotlightRoot} for full usage docs. */
+export const Spotlight = Object.assign(SpotlightRoot, {
+  /** @see {@link SpotlightHeading} */
   Heading: SpotlightHeading,
+  /** @see {@link SpotlightImages} */
   Images: SpotlightImages,
+  /** @see {@link SpotlightMask} */
   Mask: SpotlightMask,
+  /** @see {@link SpotlightMaskImage} */
   MaskImage: SpotlightMaskImage,
+  /** @see {@link SpotlightMaskHeading} */
   MaskHeading: SpotlightMaskHeading,
-};
+})

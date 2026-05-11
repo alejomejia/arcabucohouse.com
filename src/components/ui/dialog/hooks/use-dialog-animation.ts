@@ -2,7 +2,8 @@ import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
 import type { RefObject } from "react"
 
-import type { DialogAnimationState } from "../types"
+import { DIALOG_ANIMATION_DURATION, DIALOG_EASE_IN, DIALOG_EASE_OUT } from "../dialog.const"
+import type { DialogAnimationState } from "../dialog.types"
 
 type UseDialogAnimationOptions = {
   /** Current animation state */
@@ -16,10 +17,6 @@ type UseDialogAnimationOptions = {
   /** Called when closing animation completes */
   onCloseComplete: () => void
 }
-
-const ANIMATION_DURATION = 1
-const EASE_IN = "gentleSlow"
-const EASE_OUT = "power3.inOut"
 
 /**
  * Hook that handles GSAP animations for dialog open/close transitions.
@@ -62,14 +59,14 @@ export function useDialogAnimation({
 
         tl.to(overlay, {
           opacity: 1,
-          duration: ANIMATION_DURATION,
-          ease: EASE_IN,
+          duration: DIALOG_ANIMATION_DURATION,
+          ease: DIALOG_EASE_IN,
         }, 0)
 
         tl.to(panel, {
           x: 0,
-          duration: ANIMATION_DURATION,
-          ease: EASE_IN,
+          duration: DIALOG_ANIMATION_DURATION,
+          ease: DIALOG_EASE_IN,
         }, 0)
       })
     }
@@ -88,15 +85,15 @@ export function useDialogAnimation({
 
       tl.to(overlay, {
         opacity: 0,
-        duration: ANIMATION_DURATION,
-        ease: EASE_OUT,
+        duration: DIALOG_ANIMATION_DURATION,
+        ease: DIALOG_EASE_OUT,
       }, 0)
 
       tl.to(panel, {
         x: "100%",
-        duration: ANIMATION_DURATION,
-        ease: EASE_OUT,
+        duration: DIALOG_ANIMATION_DURATION,
+        ease: DIALOG_EASE_OUT,
       }, 0)
     }
-  }, { dependencies: [animationState] })
+  }, { scope: panelRef, dependencies: [animationState] })
 }

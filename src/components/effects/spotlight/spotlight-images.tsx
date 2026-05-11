@@ -4,7 +4,7 @@ import { type ImageProps } from "@/components/ui/image";
 import { cn } from "@/lib/utils/helpers";
 
 import { ParallaxImage } from "../parallax";
-import { useSpotlightContext } from "./spotlight-context";
+import { useSpotlightContext } from "./spotlight.context";
 
 /**
  * One row of the spotlight grid: exactly 4 cells.

@@ -1,3 +1,5 @@
+'use client'
+
 import { SplitText } from '@/components/effects/split-text'
 import { UnderlineButton } from '@/components/effects/underline/underline-button'
 import { useCart } from '@/components/features/cart/hooks/use-cart'

@@ -3,7 +3,7 @@
 import { Image, ImageProps } from "@/components/ui/image";
 import { cn } from "@/lib/utils/helpers";
 
-import { useSpotlightContext } from "./spotlight-context";
+import { useSpotlightContext } from "./spotlight.context";
 
 const DEFAULT_IMAGE_SRC =
   "https://cdn.shopify.com/s/files/1/0723/4578/0420/files/spotlight-default-banner.webp";

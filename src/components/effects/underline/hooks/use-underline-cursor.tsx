@@ -2,7 +2,7 @@
 
 import { useCallback } from "react"
 
-import { useCursor } from "@/components/effects/cursor/context"
+import { useCursor } from "@/components/effects/cursor/cursor.context"
 import { CURSOR_LINK_EXTERNAL, CURSOR_MEDIUM } from "@/components/effects/cursor/cursor-states"
 
 export type UnderlineCursorVariant = "internal" | "external"

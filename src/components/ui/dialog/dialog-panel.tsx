@@ -2,9 +2,9 @@
 
 import { cn } from "@/lib/utils/helpers"
 
-import { useDialogContext } from "./context"
+import { useDialogContext } from "./dialog.context"
+import type { DialogPanelProps } from "./dialog.types"
 import { useDialogAnimation } from "./hooks/use-dialog-animation"
-import type { DialogPanelProps } from "./types"
 
 /**
  * Dialog panel component.

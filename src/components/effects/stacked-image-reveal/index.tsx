@@ -19,6 +19,23 @@ interface StackedImageRevealProps {
   onComplete?: () => void
 }
 
+/**
+ * Stack of fill-images that reveal one after the other via clip-path,
+ * each layer also scaling down from `scale-200` to `1` for a subtle
+ * push-back effect. Optionally driven by `ScrollTrigger`.
+ *
+ * The GSAP timeline is created inside `useGSAP`'s scoped context, so
+ * its tweens (and any `ScrollTrigger`) are killed on unmount; the
+ * timeline itself is returned from the callback to make cleanup explicit.
+ *
+ * @example
+ * ```tsx
+ * <StackedImageReveal
+ *   images={[{ src: '/a.jpg', alt: '' }, { src: '/b.jpg', alt: '' }]}
+ *   scrollStart="top 70%"
+ * />
+ * ```
+ */
 export function StackedImageReveal({
   images,
   priority = false,
@@ -84,6 +101,8 @@ export function StackedImageReveal({
         `start-=0.25`
       )
     })
+
+    return tl
   }, [images.length, delay, onStart, onComplete])
 
   useGSAP(createAnimation, { scope: containerRef })

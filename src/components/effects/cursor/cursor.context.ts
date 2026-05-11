@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from 'react'
 
-import type { CursorContextValue } from './types'
+import type { CursorContextValue } from "./cursor.types"
 
 /**
  * Context for sharing cursor state and controls across the component tree.

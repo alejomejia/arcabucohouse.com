@@ -3,10 +3,9 @@
 import gsap from "gsap";
 import { useRef } from "react";
 
-import { useCursor } from "@/components/effects/cursor/context";
+import { useCursor } from "@/components/effects/cursor/cursor.context";
 import { Link } from "@/components/ui/link";
 import { Logo } from "@/components/ui/logo";
-import { MinimalLogo } from "@/components/ui/logo/minimal";
 import { usePreloaderGSAP } from "@/components/ui/preloader/hooks/use-preloader-gsap";
 import { useBreakpoint } from "@/lib/hooks/use-breakpoint";
 
@@ -52,7 +51,7 @@ export function HeaderLogo() {
       onMouseLeave={handleMouseLeave}
     >
       {isMobile ? (
-        <MinimalLogo className="block md:hidden w-full direct-children:translate-y-full" />
+        <Logo.Minimal className="block md:hidden w-full direct-children:translate-y-full" />
       ) : (
         <Logo className="hidden md:block w-full direct-children:translate-y-full" />
       )}

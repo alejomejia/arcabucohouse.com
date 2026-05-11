@@ -56,19 +56,25 @@ type UseImageStackReveal = {
 /**
  * Hook for managing animated image stack reveals with GSAP.
  * Provides smooth clip-path and scale animations for transitioning between stacked images.
- * 
+ *
  * @param imageCount - Total number of images in the stack
  * @param config - Animation configuration options
  * @returns Animation controls and refs for the image stack
- * 
+ *
+ * **Performance trade-off**: the reveal animates `clip-path`, which forces
+ * a repaint per frame on the affected layer. That's acceptable for short
+ * reveals (`revealDuration` ≤ 1s) at the typical card size — for long or
+ * full-bleed reveals consider `mask-image` plus a `transform` on a
+ * sibling, which can stay on the compositor.
+ *
  * @example
  * ```tsx
- * const { wrapperRefs, imageRefs, initializeStack, animateToIndex } = useImageStackReveal(5)
- * 
+ * const { wrapperRefs, imageRefs, initializeStack, animateToIndex } = useImageStackReveal({ imageCount: 5 })
+ *
  * useGSAP(() => {
  *   initializeStack()
  * }, { scope: containerRef })
- * 
+ *
  * // On hover
  * animateToIndex(2)
  * ```

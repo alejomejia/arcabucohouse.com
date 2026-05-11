@@ -12,6 +12,22 @@ type ParallaxProps = {
   children: ReactNode
 }
 
+/**
+ * Wraps `children` in a clipped container that translates vertically as
+ * the user scrolls past it. The translation range is randomized per
+ * mount (`-10%` → `[10%, 20%]`) so identical components on the same page
+ * don't move in lock-step.
+ *
+ * The inner content is scaled `1.1×` so the parallax shift never exposes
+ * a transparent gap at the top or bottom of the container.
+ *
+ * @example
+ * ```tsx
+ * <Parallax>
+ *   <div className="bg-[url(/hero.jpg)] bg-cover w-full h-full" />
+ * </Parallax>
+ * ```
+ */
 export function Parallax({ children }: ParallaxProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -49,6 +65,16 @@ export function Parallax({ children }: ParallaxProps) {
   )
 }
 
+/**
+ * `Parallax` wrapper around an `Image` rendered with `fill`.
+ *
+ * @example
+ * ```tsx
+ * <div className="aspect-video">
+ *   <ParallaxImage src="/banner.jpg" alt="" />
+ * </div>
+ * ```
+ */
 export function ParallaxImage({ src, alt, ...imageProps }: ImageProps) {
   return (
     <Parallax>
@@ -57,6 +83,17 @@ export function ParallaxImage({ src, alt, ...imageProps }: ImageProps) {
   )
 }
 
+/**
+ * `Parallax` wrapper around a `Video` configured for autoplay-friendly
+ * defaults (`muted`, `playsInline`, no controls, viewport `threshold=0`).
+ *
+ * @example
+ * ```tsx
+ * <div className="aspect-video">
+ *   <ParallaxVideo src="/hero.mp4" loop />
+ * </div>
+ * ```
+ */
 export function ParallaxVideo({ className, ...props }: VideoHTMLAttributes<HTMLVideoElement>) {
   return (
     <Parallax>

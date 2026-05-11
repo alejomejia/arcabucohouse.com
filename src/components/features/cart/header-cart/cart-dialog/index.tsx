@@ -1,11 +1,9 @@
+'use client'
+
 import { useCart } from '@/components/features/cart/hooks/use-cart'
 import { redirectToCheckout } from '@/components/features/cart/server/actions'
 import type { UpdateType } from '@/components/features/cart/types'
 import { Dialog } from '@/components/ui/dialog'
-import { DialogClose } from '@/components/ui/dialog/dialog-close'
-import { DialogOverlay } from '@/components/ui/dialog/dialog-overlay'
-import { DialogPanel } from '@/components/ui/dialog/dialog-panel'
-import { DialogTitle } from '@/components/ui/dialog/dialog-title'
 import { cn } from '@/lib/utils/helpers'
 
 import { CartEmptyState } from '../cart-empty-state'
@@ -42,8 +40,8 @@ export function CartDialog({ isOpen, onClose, onUpdateItem }: CartDialogProps) {
 
   return (
     <Dialog className="cart-dialog" isOpen={isOpen} onClose={onClose}>
-      <DialogOverlay />
-      <DialogPanel
+      <Dialog.Overlay />
+      <Dialog.Panel
         position="right"
         className={cn(
           'flex flex-col w-full h-full p-6 overflow-hidden',
@@ -56,8 +54,8 @@ export function CartDialog({ isOpen, onClose, onUpdateItem }: CartDialogProps) {
             'border-b border-zinc-700 pb-4'
           )}
         >
-          <DialogTitle className="mt-1">Cart</DialogTitle>
-          <DialogClose aria-label="Close cart" />
+          <Dialog.Title className="mt-1">Cart</Dialog.Title>
+          <Dialog.Close aria-label="Close cart" />
         </div>
 
         {isEmpty ? (
@@ -77,7 +75,7 @@ export function CartDialog({ isOpen, onClose, onUpdateItem }: CartDialogProps) {
             </div>
           </div>
         )}
-      </DialogPanel>
+      </Dialog.Panel>
     </Dialog>
   )
 }

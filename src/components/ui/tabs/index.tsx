@@ -1,76 +1,55 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
-
 import { cn } from "@/lib/utils/helpers"
 
-import { TabsContext } from "./context"
-import type { TabsContextValue, TabsProps } from "./types"
+import { TabsContent } from "./tabs-content"
+import { TabsList } from "./tabs-list"
+import { TabsTrigger } from "./tabs-trigger"
+import { TabsContext } from "./tabs.context"
+import type { TabsProps } from "./tabs.types"
+import { useTabs } from "./use-tabs"
 
 /**
- * Root Tabs component using compound pattern.
+ * Compound tabs primitive. Compose with `Tabs.List`, `Tabs.Trigger`, and
+ * `Tabs.Content`; pair each trigger and content by `id`. State lives in
+ * the root via {@link useTabs} — sub-components subscribe via context.
  *
- * Wrap all tab pieces — TabsList, TabsTrigger, TabsContent — inside this component.
- * Order TabsTrigger and TabsContent elements in the same sequence to swap tabs easily.
+ * Two modes:
+ * - **single** — one tab open at a time; the active trigger stays selected.
+ * - **multiple** — accordion-style; triggers independently toggle their content.
  *
- * @example — single mode (one tab visible at a time)
+ * @example — single mode
  * ```tsx
  * <Tabs mode="single" defaultOpen="downloads">
- *   <TabsList>
- *     <TabsTrigger id="downloads" icon={<ArrowDownTrayIcon className="size-4" />}>Downloads</TabsTrigger>
- *     <TabsTrigger id="composition" icon={<SwatchIcon className="size-4" />}>Composition & Color</TabsTrigger>
- *   </TabsList>
- *   <TabsContent id="downloads">…</TabsContent>
- *   <TabsContent id="composition">…</TabsContent>
+ *   <Tabs.List>
+ *     <Tabs.Trigger id="downloads">Downloads</Tabs.Trigger>
+ *     <Tabs.Trigger id="composition">Composition</Tabs.Trigger>
+ *   </Tabs.List>
+ *   <Tabs.Content id="downloads">…</Tabs.Content>
+ *   <Tabs.Content id="composition">…</Tabs.Content>
  * </Tabs>
  * ```
  *
- * @example — multiple mode (any number of tabs open simultaneously)
+ * @example — multiple mode (accordion)
  * ```tsx
  * <Tabs mode="multiple" defaultOpen={["downloads", "care"]}>
- *   <TabsList>
- *     <TabsTrigger id="downloads" icon={<ArrowDownTrayIcon className="size-4" />}>Downloads</TabsTrigger>
- *     <TabsTrigger id="care" icon={<HeartIcon className="size-4" />}>Care & Handling</TabsTrigger>
- *   </TabsList>
- *   <TabsContent id="downloads">…</TabsContent>
- *   <TabsContent id="care">…</TabsContent>
+ *   <Tabs.List>
+ *     <Tabs.Trigger id="downloads">Downloads</Tabs.Trigger>
+ *     <Tabs.Trigger id="care">Care</Tabs.Trigger>
+ *   </Tabs.List>
+ *   <Tabs.Content id="downloads">…</Tabs.Content>
+ *   <Tabs.Content id="care">…</Tabs.Content>
  * </Tabs>
  * ```
  */
-export function Tabs({ mode = "single", orientation = "horizontal", defaultOpen, children, className }: TabsProps) {
-  const initialOpen = useMemo(() => {
-    if (!defaultOpen) return new Set<string>()
-    return new Set(Array.isArray(defaultOpen) ? defaultOpen : [defaultOpen])
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const [openTabs, setOpenTabs] = useState<Set<string>>(initialOpen)
-
-  const toggleTab = useCallback(
-    (id: string) => {
-      setOpenTabs((prev) => {
-        const next = new Set(prev)
-
-        if (mode === "single") {
-          if (next.has(id)) return prev // active tab stays open in single mode
-          next.clear()
-          next.add(id)
-        } else {
-          if (next.has(id)) next.delete(id)
-          else next.add(id)
-        }
-
-        return next
-      })
-    },
-    [mode],
-  )
-
-  const isOpen = useCallback((id: string) => openTabs.has(id), [openTabs])
-
-  const contextValue = useMemo<TabsContextValue>(
-    () => ({ mode, orientation, openTabs, toggleTab, isOpen }),
-    [mode, orientation, openTabs, toggleTab, isOpen],
-  )
+function TabsRoot({
+  mode = "single",
+  orientation = "horizontal",
+  defaultOpen,
+  children,
+  className,
+}: TabsProps) {
+  const contextValue = useTabs({ mode, orientation, defaultOpen })
 
   return (
     <TabsContext.Provider value={contextValue}>
@@ -87,6 +66,14 @@ export function Tabs({ mode = "single", orientation = "horizontal", defaultOpen,
   )
 }
 
-export { TabsList } from "./tabs-list"
-export { TabsTrigger } from "./tabs-trigger"
-export { TabsContent } from "./tabs-content"
+/** @see {@link TabsRoot} for full usage docs. */
+export const Tabs = Object.assign(TabsRoot, {
+  /** @see {@link TabsList} */
+  List: TabsList,
+  /** @see {@link TabsTrigger} */
+  Trigger: TabsTrigger,
+  /** @see {@link TabsContent} */
+  Content: TabsContent,
+})
+
+export type * from "./tabs.types"

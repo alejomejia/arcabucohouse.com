@@ -1,16 +1,16 @@
 "use client"
 
-import type { ReactNode } from "react";
+import type { ReactNode } from "react"
 
-import type { Product } from "@/lib/integrations/shopify/types";
+import type { Product } from "@/lib/integrations/shopify/types"
+import { cn } from "@/lib/utils/helpers"
 
-import { ProductCarouselHeading } from "./product-carousel-heading";
-import { ProductCarouselPagination } from "./product-carousel-pagination";
-import { ProductCarouselSlide } from "./product-carousel-slide";
-import { ProductCarouselViewport } from "./product-carousel-viewport";
-import { ProductCarouselProvider } from "./product-carousel.context";
-
-import { cn } from "@/lib/utils/helpers";
+import { ProductCarouselHeading } from "./product-carousel-heading"
+import { ProductCarouselPagination } from "./product-carousel-pagination"
+import { ProductCarouselSlide } from "./product-carousel-slide"
+import { ProductCarouselViewport } from "./product-carousel-viewport"
+import { ProductCarouselContext } from "./product-carousel.context"
+import { useProductCarousel } from "./use-product-carousel"
 
 type ProductCarouselProps = {
   products: Product[]
@@ -21,19 +21,19 @@ type ProductCarouselProps = {
 }
 
 /**
- * Root client component of the `ProductCarousel` compound component.
+ * Root of the `ProductCarousel` compound component. Owns carousel state
+ * via {@link useProductCarousel} and distributes it through context to
+ * `Heading`, `Viewport`, `Slide`, and `Pagination` sub-components.
  *
- * Wraps sub-components with `ProductCarouselProvider`. Renders nothing when `products` is empty.
- *
- * @param products - Products to display. Renders nothing when empty.
- * @param autoScrollSpeed - Auto-scroll speed in px/frame (default: 0.5).
+ * Renders `null` when `products` is empty — the heavy hook never runs in
+ * that case so empty rails are zero-cost.
  *
  * @example
  * ```tsx
  * <ProductCarousel products={featuredProducts}>
  *   <ProductCarousel.Heading />
  *   <ProductCarousel.Viewport>
- *     {products.map((p, i) => (
+ *     {featuredProducts.map((p, i) => (
  *       <ProductCarousel.Slide key={p.handle} index={i} product={p} />
  *     ))}
  *   </ProductCarousel.Viewport>
@@ -41,21 +41,26 @@ type ProductCarouselProps = {
  * </ProductCarousel>
  * ```
  */
-export function ProductCarouselRoot({
+function ProductCarouselRoot(props: ProductCarouselProps) {
+  if (props.products.length === 0) return null
+  return <ProductCarouselContent {...props} />
+}
+
+function ProductCarouselContent({
   products,
   autoScrollSpeed,
   className,
   children,
   debug,
 }: ProductCarouselProps) {
-  if (products.length === 0) return null
+  const carousel = useProductCarousel({ products, autoScrollSpeed, debug })
 
   return (
-    <ProductCarouselProvider products={products} autoScrollSpeed={autoScrollSpeed} debug={debug}>
+    <ProductCarouselContext value={{ products, ...carousel }}>
       <div className={cn("flex flex-col gap-8", className)}>
         {children}
       </div>
-    </ProductCarouselProvider>
+    </ProductCarouselContext>
   )
 }
 
@@ -68,7 +73,5 @@ export const ProductCarousel = Object.assign(ProductCarouselRoot, {
   /** @see {@link ProductCarouselViewport} */
   Viewport: ProductCarouselViewport,
   /** @see {@link ProductCarouselSlide} */
-  Slide: ProductCarouselSlide
+  Slide: ProductCarouselSlide,
 })
-
-export { ProductCarouselHeading, ProductCarouselPagination, ProductCarouselViewport, ProductCarouselSlide }

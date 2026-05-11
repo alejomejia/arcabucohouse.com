@@ -4,7 +4,7 @@ import { type ReactNode } from "react";
 
 import { cn } from "@/lib/utils/helpers";
 
-import { useSpotlightContext } from "./spotlight-context";
+import { useSpotlightContext } from "./spotlight.context";
 
 /**
  * Props for the spotlight mask heading.

@@ -5,7 +5,7 @@ import gsap from 'gsap'
 import { useCallback, useRef, type RefObject } from 'react'
 import { useTempus } from 'tempus/react'
 
-import type { CursorInternalState } from '../types'
+import type { CursorInternalState } from "../cursor.types"
 
 type UseCursorAnimationProps = {
   animationDuration: number
@@ -20,10 +20,33 @@ type UseCursorAnimationReturn = {
 
 /**
  * Hook that handles cursor position tracking and GSAP animations.
- * Uses lerp for smooth cursor following and GSAP for state transitions.
+ * - Mouse position is tracked into `mousePos` (no re-renders).
+ * - A Tempus frame loop lerps `currentPos` toward `mousePos` and writes
+ *   the result via direct `transform` so per-frame updates stay off the
+ *   GSAP timeline.
+ * - State transitions (default ↔ hover ↔ hidden) animate the
+ *   `--cursor-scale` CSS variable and the inner content opacity via GSAP.
  *
  * @param props - Animation configuration
  * @returns Refs and update function for the cursor
+ *
+ * @example
+ * ```tsx
+ * function CursorElement({ cursorState, defaultSize, animationDuration, lerpFactor }) {
+ *   const { cursorRef, contentRef, updateCursorState } = useCursorAnimation({
+ *     animationDuration,
+ *     lerpFactor,
+ *   })
+ *
+ *   useEffect(() => updateCursorState(cursorState), [cursorState, updateCursorState])
+ *
+ *   return (
+ *     <div ref={cursorRef} style={{ '--cursor-scale': 1 } as CSSProperties}>
+ *       <div ref={contentRef}>{cursorState.config.text}</div>
+ *     </div>
+ *   )
+ * }
+ * ```
  */
 export function useCursorAnimation({
   animationDuration,

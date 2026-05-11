@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 
-import { ProductCardImage } from "@/components/products/product-card"
+import { ProductCard } from "@/components/products/product-card"
 import type { Product } from "@/lib/integrations/shopify/types"
 import { cn } from "@/lib/utils/helpers"
 
@@ -53,7 +53,7 @@ export function ProductCarouselSlide({
       style={{ "--p": "1" } as React.CSSProperties}
     >
       <Link href={`/product/${product.handle}`} className="block overflow-hidden" draggable={false}>
-        <ProductCardImage
+        <ProductCard.Image
           coverSrc={coverImage.url}
           backgroundSrc={backgroundImage?.url}
           alt={product.title}

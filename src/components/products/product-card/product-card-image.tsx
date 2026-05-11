@@ -5,12 +5,7 @@ import { useState } from "react"
 import { Image } from "@/components/ui/image"
 import { cn } from "@/lib/utils/helpers"
 
-type ProductCardImageProps = {
-  coverSrc: string
-  backgroundSrc?: string
-  alt?: string
-  className?: string
-}
+import type { ProductCardImageProps } from "./product-card.types"
 
 /**
  * Product cover image with optional hover swap to a secondary image.

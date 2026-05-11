@@ -21,6 +21,13 @@ import { cn } from "@/lib/utils/helpers"
 const splitTypes = ["chars", "words", "lines"] as const
 export type SplitType = (typeof splitTypes)[number]
 
+/**
+ * Maximum time (ms) we wait for `document.fonts.ready` before giving up
+ * and splitting anyway. A stuck font load (e.g. flaky CDN, browser bug)
+ * must not block the text from ever appearing.
+ */
+const FONT_READY_TIMEOUT_MS = 2000
+
 export interface SplitTextProps {
   /** Content to split - can be single element or multiple elements */
   children: ReactNode
@@ -78,8 +85,12 @@ export interface SplitTextRef {
  * Splits text into characters, words, or lines using GSAP SplitText.
  *
  * Waits for fonts to load (when `waitForFonts` is enabled) before splitting
- * to ensure accurate measurements. Fires the `onReady` callback when done,
- * with any GSAP animations created inside automatically tracked for cleanup.
+ * to ensure accurate measurements. The wait races against a
+ * `FONT_READY_TIMEOUT_MS` fallback so a stuck `document.fonts.ready`
+ * promise can never prevent the split from running.
+ *
+ * Fires the `onReady` callback when done, with any GSAP animations
+ * created inside automatically tracked for cleanup.
  *
  * @example
  * ```tsx
@@ -253,9 +264,14 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(
         }
       }
 
-      // Wait for fonts to load before splitting (if enabled)
+      // Wait for fonts to load before splitting (if enabled). Race the
+      // promise against a timeout fallback so we never hang if the
+      // browser's font loading promise stalls.
       if (waitForFonts && document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(initializeSplit)
+        Promise.race([
+          document.fonts.ready,
+          new Promise<void>((resolve) => setTimeout(resolve, FONT_READY_TIMEOUT_MS)),
+        ]).then(initializeSplit)
       } else {
         // Fallback for browsers without Font Loading API or if waitForFonts is false
         initializeSplit()

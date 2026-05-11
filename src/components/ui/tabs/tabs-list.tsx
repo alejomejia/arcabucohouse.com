@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils/helpers"
 
-import { useTabsContext } from "./context"
-import type { TabsListProps } from "./types"
+import { useTabsContext } from "./tabs.context"
+import type { TabsListProps } from "./tabs.types"
 
 /**
  * Container for TabsTrigger elements.

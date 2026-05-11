@@ -11,6 +11,17 @@ type ProductGalleryProps = {
   images: { src: string; altText: string }[]
 }
 
+/**
+ * Vertical column of product images that slides up from below the fold
+ * on first paint (and after a route transition completes). The slide is
+ * driven by GSAP and gated on `useTransitionState`'s `stage === "none"`,
+ * so it doesn't fire mid-route-change.
+ *
+ * @example
+ * ```tsx
+ * <ProductGallery images={product.images.map((img) => ({ src: img.url, altText: img.altText ?? '' }))} />
+ * ```
+ */
 export function ProductGallery({ images }: ProductGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const { stage } = useTransitionState()

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils/helpers'
 
 import { Z_INDEX_CLASSNAMES } from '@/lib/styles/const'
 import { useCursorAnimation } from './hooks/use-cursor-animation'
-import type { CursorInternalState } from './types'
+import type { CursorInternalState } from "./cursor.types"
 
 type CursorElementProps = {
   cursorState: CursorInternalState
@@ -61,6 +61,9 @@ export function CursorElement({
         '-translate-x-1/2 -translate-y-1/2',
         'opacity-0',
         'mix-blend-difference',
+        // Per-frame `transform` is written by useCursorAnimation; hint the
+        // compositor so the browser keeps this element on its own layer.
+        'will-change-transform',
         config.className
       )}
       style={style}

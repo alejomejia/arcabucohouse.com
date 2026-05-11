@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from "react"
 
-import type { DialogContextValue } from "./types"
+import type { DialogContextValue } from "./dialog.types"
 
 /**
  * Context for sharing dialog state across the component tree.

@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils/helpers"
 
-import { useDialogContext } from "./context"
-import type { DialogOverlayProps } from "./types"
+import { useDialogContext } from "./dialog.context"
+import type { DialogOverlayProps } from "./dialog.types"
 
 /**
  * Dialog overlay/backdrop component.

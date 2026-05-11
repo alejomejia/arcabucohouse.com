@@ -2,8 +2,8 @@
 
 import { useEffect, useEffectEvent, useRef, type ElementType } from 'react'
 
-import { useCursor } from './context'
-import type { CursorConfig, CursorTriggerProps } from './types'
+import { useCursor } from "./cursor.context"
+import type { CursorConfig, CursorTriggerProps } from "./cursor.types"
 
 /**
  * Wrapper component that triggers cursor state changes on hover.

@@ -11,8 +11,8 @@ import {
   type ReactNode
 } from "react";
 
-import { ENABLE_PRELOADER_DEBUG, PRELOADER_SHOWN_KEY } from "../const";
-import type { PreloaderStatus } from "../types";
+import { ENABLE_PRELOADER_DEBUG, PRELOADER_SHOWN_KEY } from "../preloader.const";
+import type { PreloaderStatus } from "../preloader.types";
 
 export interface PreloaderContextValue {
   /**

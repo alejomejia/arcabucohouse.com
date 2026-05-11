@@ -10,18 +10,10 @@ import { usePreloaderGSAP } from "@/components/ui/preloader/hooks/use-preloader-
 import { cn } from "@/lib/utils/helpers";
 import { useNavigation } from "@/lib/utils/store";
 
-const CLIP_PATH = {
-  initial: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)",
-  show: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-  hideToRight: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
-  setBeforeIn: "polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)",
-  showFromLeft: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-} as const;
-
-const ANIMATION_CONFIG = {
-  duration: 1,
-  ease: "power3.inOut",
-} as const;
+import {
+  SCROLL_PROGRESS_BAR_CLIP_PATH,
+  SCROLL_PROGRESS_BAR_MOUNT_ANIMATION,
+} from "./scroll-progress-bar.const";
 
 /**
  * Displays a progress bar that scales from 0 to 1
@@ -46,8 +38,8 @@ export function ScrollProgressBar(props: HTMLAttributes<HTMLDivElement>) {
       if (!containerRef.current) return;
 
       return gsap.to(containerRef.current, {
-        clipPath: CLIP_PATH.show,
-        ...ANIMATION_CONFIG,
+        clipPath: SCROLL_PROGRESS_BAR_CLIP_PATH.show,
+        ...SCROLL_PROGRESS_BAR_MOUNT_ANIMATION,
       });
     },
     { scope: containerRef }
@@ -99,14 +91,14 @@ export function ScrollProgressBar(props: HTMLAttributes<HTMLDivElement>) {
       // Set clip path before animation when closing nav
       if (prevIsNavOpen) {
         gsap.set(containerRef.current, {
-          clipPath: CLIP_PATH.setBeforeIn,
+          clipPath: SCROLL_PROGRESS_BAR_CLIP_PATH.setBeforeIn,
         });
       }
 
       prevNavStateRef.current = navState;
 
       gsap.to(containerRef.current, {
-        clipPath: isNavOpen ? CLIP_PATH.hideToRight : CLIP_PATH.showFromLeft,
+        clipPath: isNavOpen ? SCROLL_PROGRESS_BAR_CLIP_PATH.hideToRight : SCROLL_PROGRESS_BAR_CLIP_PATH.showFromLeft,
         duration: isNavOpen ? 0.25 : 0.75,
         delay: isNavOpen ? 0 : 0.75,
         ease: "smoothSnap",
@@ -118,7 +110,7 @@ export function ScrollProgressBar(props: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       ref={containerRef}
-      style={{ clipPath: CLIP_PATH.initial }}
+      style={{ clipPath: SCROLL_PROGRESS_BAR_CLIP_PATH.initial }}
       {...props}
     >
       <div className="relative w-full h-px bg-neutral-800">

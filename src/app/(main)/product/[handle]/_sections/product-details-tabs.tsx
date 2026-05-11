@@ -1,3 +1,5 @@
+"use client"
+
 import {
   ArrowDownTrayIcon,
   DocumentTextIcon,
@@ -6,7 +8,7 @@ import {
   SwatchIcon,
 } from "@heroicons/react/24/outline"
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs } from "@/components/ui/tabs"
 import { Text } from "@/components/ui/text"
 import type { Product, ProductDownloadFile } from "@/lib/integrations/shopify/types"
 
@@ -186,36 +188,36 @@ export function ProductDetailsTabs({ product }: ProductDetailsTabsProps) {
   return (
     <section className="py-16">
       <Tabs mode="single" orientation="vertical" defaultOpen="downloads">
-        <TabsList>
-          <TabsTrigger id="downloads" icon={<ArrowDownTrayIcon className="size-4" />}>
+        <Tabs.List>
+          <Tabs.Trigger id="downloads" icon={<ArrowDownTrayIcon className="size-4" />}>
             Downloads
-          </TabsTrigger>
-          <TabsTrigger id="composition" icon={<SwatchIcon className="size-4" />}>
+          </Tabs.Trigger>
+          <Tabs.Trigger id="composition" icon={<SwatchIcon className="size-4" />}>
             Composition & Color
-          </TabsTrigger>
-          <TabsTrigger id="care" icon={<HeartIcon className="size-4" />}>
+          </Tabs.Trigger>
+          <Tabs.Trigger id="care" icon={<HeartIcon className="size-4" />}>
             Care & Handling
-          </TabsTrigger>
-          <TabsTrigger id="customization" icon={<PencilSquareIcon className="size-4" />}>
+          </Tabs.Trigger>
+          <Tabs.Trigger id="customization" icon={<PencilSquareIcon className="size-4" />}>
             Customization
-          </TabsTrigger>
-        </TabsList>
+          </Tabs.Trigger>
+        </Tabs.List>
 
-        <TabsContent id="downloads">
+        <Tabs.Content id="downloads">
           <DownloadsContent downloads={product.downloads} />
-        </TabsContent>
+        </Tabs.Content>
 
-        <TabsContent id="composition">
+        <Tabs.Content id="composition">
           <CompositionContent />
-        </TabsContent>
+        </Tabs.Content>
 
-        <TabsContent id="care">
+        <Tabs.Content id="care">
           <CareContent />
-        </TabsContent>
+        </Tabs.Content>
 
-        <TabsContent id="customization">
+        <Tabs.Content id="customization">
           <CustomizationContent />
-        </TabsContent>
+        </Tabs.Content>
       </Tabs>
     </section>
   )

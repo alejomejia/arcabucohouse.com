@@ -1,32 +1,27 @@
 "use client"
 
-import { useCursor } from "@/components/effects/cursor/context"
+import { useCursor } from "@/components/effects/cursor/cursor.context"
 import { CURSOR_MEDIUM } from "@/components/effects/cursor/cursor-states"
 import { Link } from "@/components/ui/link"
-import type { Product } from "@/lib/integrations/shopify/types"
+import { Text } from "@/components/ui/text"
 import { cn } from "@/lib/utils/helpers"
 
-import { Text } from "@/components/ui/text"
 import { ProductCardImage } from "./product-card-image"
-
-type ProductCardProps = {
-  product: Product
-  className?: string
-}
+import type { ProductCardProps } from "./product-card.types"
 
 /**
  * Product card with title, cover image, hover image swap, and custom cursor.
  *
- * Returns null if the product has no cover image.
- * `ProductCard.Image` is available as a standalone image block for contexts
- * where the title and link wrapper are handled externally (e.g. a carousel slide).
+ * Returns `null` if the product has no cover image.
+ * `ProductCard.Image` is exposed for contexts that need the image block
+ * alone (e.g. a carousel slide that provides its own link wrapper).
  *
  * @example
  * ```tsx
  * <ProductCard product={product} />
  * ```
  */
-export function ProductCardRoot({ product, className }: ProductCardProps) {
+function ProductCardRoot({ product, className }: ProductCardProps) {
   const { title, handle, images } = product
   const [coverImage, backgroundImage] = images ?? []
   const { setHover, setDefault } = useCursor()
@@ -56,4 +51,4 @@ export const ProductCard = Object.assign(ProductCardRoot, {
   Image: ProductCardImage,
 })
 
-export { ProductCardImage }
+export type * from "./product-card.types"

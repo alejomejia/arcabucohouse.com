@@ -1,5 +1,7 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { useDialogContext } from "@/components/ui/dialog/context";
+import { useDialogContext } from "@/components/ui/dialog/dialog.context";
 import { Text } from "@/components/ui/text";
 
 /**

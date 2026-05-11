@@ -3,7 +3,7 @@
 import gsap from "gsap"
 import { useRef } from "react"
 
-import { useCursor } from "@/components/effects/cursor/context"
+import { useCursor } from "@/components/effects/cursor/cursor.context"
 import { CURSOR_MEDIUM } from "@/components/effects/cursor/cursor-states"
 import { SplitText, type SplitTextRef } from "@/components/effects/split-text"
 import { Link } from "@/components/ui/link"

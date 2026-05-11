@@ -2,7 +2,7 @@
 
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline'
 
-import type { CursorConfig } from './types'
+import type { CursorConfig } from "./cursor.types"
 
 const TEXT_CONTENT_CLASSNAME = 'uppercase font-semibold text-xs tracking-wider'
 

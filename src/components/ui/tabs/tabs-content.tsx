@@ -2,8 +2,9 @@
 
 import { cn } from "@/lib/utils/helpers"
 
-import { useTabsContext } from "./context"
-import type { TabsContentProps } from "./types"
+import { TABS_PANEL_ID_PREFIX, TABS_TRIGGER_ID_PREFIX } from "./tabs.const"
+import { useTabsContext } from "./tabs.context"
+import type { TabsContentProps } from "./tabs.types"
 
 /**
  * Content panel for a tab. Must have an `id` matching its `<TabsTrigger>`.
@@ -31,8 +32,8 @@ export function TabsContent({ id, children, className }: TabsContentProps) {
     return (
       <div
         role="tabpanel"
-        id={`tabpanel-${id}`}
-        aria-labelledby={`tab-${id}`}
+        id={`${TABS_PANEL_ID_PREFIX}-${id}`}
+        aria-labelledby={`${TABS_TRIGGER_ID_PREFIX}-${id}`}
         aria-hidden={!isTabOpen}
         // grid-template-rows animates between 0fr and 1fr — works for any height
         className={cn(
@@ -55,8 +56,8 @@ export function TabsContent({ id, children, className }: TabsContentProps) {
   return (
     <div
       role="tabpanel"
-      id={`tabpanel-${id}`}
-      aria-labelledby={`tab-${id}`}
+      id={`${TABS_PANEL_ID_PREFIX}-${id}`}
+      aria-labelledby={`${TABS_TRIGGER_ID_PREFIX}-${id}`}
       aria-hidden={!isTabOpen}
       className={cn(
         isVertical ? "flex-1 min-w-0" : "",

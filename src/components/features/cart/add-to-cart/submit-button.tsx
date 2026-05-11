@@ -3,7 +3,7 @@
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { useFormStatus } from 'react-dom'
 
-import { useCursor } from '@/components/effects/cursor/context'
+import { useCursor } from '@/components/effects/cursor/cursor.context'
 import { CURSOR_MEDIUM } from '@/components/effects/cursor/cursor-states'
 import { Button } from '@/components/ui/button'
 import { LoadingDots } from '@/components/ui/loading-dots'

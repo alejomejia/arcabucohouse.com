@@ -5,10 +5,11 @@ import { useLayoutEffect, useState } from 'react'
 import { Portal } from '@/components/ui/portal'
 import { PORTAL_IDS } from '@/lib/styles/const'
 
-import { CursorContext } from './context'
+import { CURSOR_ANIMATION_DURATION, CURSOR_DEFAULT_SIZE, CURSOR_LERP_FACTOR } from "./cursor.const"
+import { CursorContext } from "./cursor.context"
 import { CursorElement } from './cursor-element'
+import type { CursorProviderProps } from "./cursor.types"
 import { useCursorProvider } from './hooks/use-cursor-provider'
-import type { CursorProviderProps } from './types'
 
 /**
  * Provider component that enables custom cursor functionality.
@@ -41,9 +42,9 @@ import type { CursorProviderProps } from './types'
  */
 export function CursorProvider({
   children,
-  defaultSize = 8,
-  animationDuration = 0.15,
-  lerpFactor = 0.15,
+  defaultSize = CURSOR_DEFAULT_SIZE,
+  animationDuration = CURSOR_ANIMATION_DURATION,
+  lerpFactor = CURSOR_LERP_FACTOR,
 }: CursorProviderProps) {
   const { contextValue, isMounted, cursorState } = useCursorProvider()
   const [hasPointer, setHasPointer] = useState(false)

@@ -6,7 +6,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { type RefObject, useMemo, useRef } from "react";
 
-import type { SpotlightContextValue } from "../spotlight-context";
+import { SPOTLIGHT_DEFAULT_OPTIONS } from "../spotlight.const";
+import type { SpotlightContextValue } from "../spotlight.context";
 
 /**
  * Optional configuration for spotlight scroll animation. All fields have defaults.
@@ -35,20 +36,6 @@ export type UseSpotlightOptions = {
   maskImageScaleEnd?: number;
   wordRevealStart?: number;
   wordRevealEnd?: number;
-};
-
-const DEFAULT_OPTIONS: Required<UseSpotlightOptions> = {
-  pinHeightMultiplier: 7,
-  scrub: 1,
-  imageScrollEndProgress: 0.5,
-  initialImagesYPercent: 5,
-  maskRevealStart: 0.25,
-  maskRevealEnd: 0.75,
-  maskSizeMaxPercent: 600,
-  maskImageScaleStart: 1.5,
-  maskImageScaleEnd: 1,
-  wordRevealStart: 0.75,
-  wordRevealEnd: 0.95,
 };
 
 type UseSpotlightReturn = {
@@ -88,7 +75,7 @@ export function useSpotlight(options?: UseSpotlightOptions): UseSpotlightReturn 
     maskHeaderRef,
   }), []);
 
-  const opts = { ...DEFAULT_OPTIONS, ...options };
+  const opts = { ...SPOTLIGHT_DEFAULT_OPTIONS, ...options };
 
   useGSAP(
     () => {
@@ -123,6 +110,9 @@ export function useSpotlight(options?: UseSpotlightOptions): UseSpotlightReturn 
       const setMaskImageScale = maskImage
         ? gsap.quickSetter(maskImage, "scale")
         : null;
+      const setMaskSize = maskContainer
+        ? gsap.quickSetter(maskContainer, "maskSize")
+        : null;
 
       // Cache words as HTMLElements once to avoid repeated casting in onUpdate
       const words = headerSplit?.words as HTMLElement[] | undefined;
@@ -141,6 +131,11 @@ export function useSpotlight(options?: UseSpotlightOptions): UseSpotlightReturn 
         pin: true,
         pinSpacing: true,
         scrub: opts.scrub,
+        // Recompute the cached layout reads (`viewportHeight`,
+        // `spotlightContainerHeight`, `totalMovement`) when ScrollTrigger
+        // refreshes. Without this, the initial computation is locked in
+        // even if marquee images load late and the section grows.
+        invalidateOnRefresh: true,
         onUpdate: (self) => {
           const progress = self.progress;
 
@@ -153,7 +148,7 @@ export function useSpotlight(options?: UseSpotlightOptions): UseSpotlightReturn 
           }
 
           // Mask: grow from 0% to max size and scale banner from start to end scale
-          if (maskContainer && maskImage && setMaskImageScale) {
+          if (maskContainer && maskImage && setMaskImageScale && setMaskSize) {
             const maskSegmentLength =
               opts.maskRevealEnd - opts.maskRevealStart;
             if (
@@ -162,28 +157,18 @@ export function useSpotlight(options?: UseSpotlightOptions): UseSpotlightReturn 
             ) {
               const maskProgress =
                 (progress - opts.maskRevealStart) / maskSegmentLength;
-              const maskSize = `${maskProgress * opts.maskSizeMaxPercent}%`;
               const imageScale =
                 opts.maskImageScaleStart +
                 (opts.maskImageScaleEnd - opts.maskImageScaleStart) *
                   maskProgress;
 
-              maskContainer.style.setProperty("-webkit-mask-size", maskSize);
-              maskContainer.style.setProperty("mask-size", maskSize);
+              setMaskSize(`${maskProgress * opts.maskSizeMaxPercent}%`);
               setMaskImageScale(imageScale);
             } else if (progress < opts.maskRevealStart) {
-              maskContainer.style.setProperty("-webkit-mask-size", "0%");
-              maskContainer.style.setProperty("mask-size", "0%");
+              setMaskSize("0%");
               setMaskImageScale(opts.maskImageScaleStart);
             } else {
-              maskContainer.style.setProperty(
-                "-webkit-mask-size",
-                `${opts.maskSizeMaxPercent}%`
-              );
-              maskContainer.style.setProperty(
-                "mask-size",
-                `${opts.maskSizeMaxPercent}%`
-              );
+              setMaskSize(`${opts.maskSizeMaxPercent}%`);
               setMaskImageScale(opts.maskImageScaleEnd);
             }
           }

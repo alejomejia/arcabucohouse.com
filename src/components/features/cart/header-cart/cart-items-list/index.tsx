@@ -1,9 +1,11 @@
+'use client'
+
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { useMemo } from 'react'
 
 import type { UpdateType } from '@/components/features/cart/types'
-import { useDialogContext } from '@/components/ui/dialog/context'
+import { useDialogContext } from '@/components/ui/dialog/dialog.context'
 import { useElementHasScrollbar } from '@/lib/hooks/use-element-has-scrollbar'
 import type { CartItem as CartItemType } from '@/lib/integrations/shopify/types'
 import { cn } from '@/lib/utils/helpers'

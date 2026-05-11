@@ -10,8 +10,8 @@ import type { ProductState } from '@/components/features/product/types'
 import { findCheapestVariant } from '@/components/features/product/utils'
 
 import { getCombinations, productHasNoOptionsOrJustOneOption } from './helpers'
-import { VariantSelectorOption } from './option'
-import { UnitToggle } from './unit-toggle'
+import { VariantSelectorOption } from './variant-selector-option'
+import { UnitToggle } from './variant-selector-unit-toggle'
 
 type VariantSelectorProps = {
   options: ProductOption[]
@@ -31,14 +31,26 @@ function getUnitCategory(handle?: string): UnitCategory | null {
 }
 
 /**
- * VariantSelector component that allows the user to select a variant of the product.
- * For numeric dimension options, a unit toggle is shown when the product belongs to
- * a recognised unit category (lighting: mm/in, rug: cm/ft).
- * Each category remembers its preferred unit independently.
+ * Renders one form per product option, with each value exposed as a
+ * `<VariantSelectorOption>`. For numeric dimension options on recognised
+ * categories (lighting: mm/in; rug: cm/ft) a `<UnitToggle>` lets the
+ * customer switch units; each category remembers its preferred unit
+ * independently via `useUnit`.
+ *
+ * Returns `null` when the product has no options or a single trivial option.
  *
  * @param options  - The product options.
  * @param variants - The product variants.
  * @param category - The product category collection handle (e.g. "category-rugs").
+ *
+ * @example
+ * ```tsx
+ * <VariantSelector
+ *   options={product.options}
+ *   variants={product.variants}
+ *   category={product.category?.handle}
+ * />
+ * ```
  */
 export function VariantSelector({ options, variants, category }: VariantSelectorProps) {
   const combinations = useMemo(() => getCombinations(variants), [variants])

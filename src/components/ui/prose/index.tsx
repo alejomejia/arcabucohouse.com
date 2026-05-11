@@ -1,38 +1,40 @@
-import { cn } from '@/lib/utils/helpers';
+import { cn } from '@/lib/utils/helpers'
 
-const proseClasses = cn(
-  /** Heading styles */
-  "prose-headings:mt-8 prose-headings:font-semibold prose-headings:tracking-wide prose-headings:text-black",
-  "prose-h1:text-5xl",
-  "prose-h2:text-4xl",
-  "prose-h3:text-3xl",
-  "prose-h4:text-2xl",
-  "prose-h5:text-xl",
-  "prose-h6:text-lg",
-  /** Link styles */
-  "prose-a:text-bold prose-a:underline prose-a:hover:text-neutral-300",
-  /** Strong styles */
-  "prose-strong:text-bold",
-  /** Ordered list styles */
-  "prose-ol:mt-8 prose-ol:list-decimal prose-ol:pl-6",
-  /** Unordered list styles */
-  "prose-ul:mt-8 prose-ul:list-disc prose-ul:pl-6"
-)
+import { PROSE_VARIANT_CLASSES } from './prose.const'
 
 type ProseProps = {
+  /**
+   * Pre-sanitized HTML string to render. See the safety invariant on
+   * {@link Prose} — passing unsanitized user input here is an XSS vector.
+   */
   html: string
   className?: string
 }
 
+/**
+ * Renders pre-sanitized HTML with the Tailwind Typography variant table
+ * applied. The single consumer in the app today is product description
+ * HTML returned by the Shopify Storefront API, which Shopify sanitizes on
+ * its side — see {@link https://shopify.dev/docs/api/storefront/reference/products/product#field-descriptionhtml}.
+ *
+ * @example
+ * ```tsx
+ * <Prose className="mb-6" html={product.descriptionHtml} />
+ * ```
+ *
+ * **Safety invariant**: `html` must be sanitized before reaching this
+ * component. Never pass arbitrary user input directly — pipe it through
+ * a sanitizer (e.g. `isomorphic-dompurify`) at the boundary first.
+ */
 export function Prose({ html, className }: ProseProps) {
   return (
     <div
       className={cn(
         'prose max-w-full text-base leading-normal text-zinc-500',
-        proseClasses,
-        className
+        PROSE_VARIANT_CLASSES,
+        className,
       )}
       dangerouslySetInnerHTML={{ __html: html }}
     />
-  );
-};
+  )
+}

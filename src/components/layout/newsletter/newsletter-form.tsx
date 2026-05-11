@@ -33,12 +33,8 @@ export function NewsletterForm() {
     defaultValues: { acceptTerms: false },
   })
 
-  const hasErrors = !!Object.entries(errors).length
-
   const onSubmit = async (data: NewsletterFormData) => {
     const result = await subscribeToNewsletter(data)
-
-    console.log({ result, errors })
 
     if (result.success) {
       toast.success('Welcome to Arcabuco', {
@@ -60,38 +56,36 @@ export function NewsletterForm() {
 
 
   return (
-    <form
+    <Form
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-8"
       noValidate
     >
       <div className="flex gap-6">
-        <Form.Field className="flex-1">
-          <Form.Label htmlFor="newsletter-name">Name</Form.Label>
+        <Form.Field className="flex-1" hasError={!!errors.name}>
+          <Form.Label>Name</Form.Label>
           <Form.Input
-            id="newsletter-name"
             type="text"
             autoComplete="name"
             placeholder="Your full name"
-            hasError={!!errors.name}
             {...register('name')}
           />
+          {errors.name && <Form.Error>{errors.name.message}</Form.Error>}
         </Form.Field>
-        <Form.Field className="flex-1">
-          <Form.Label htmlFor="newsletter-email">Email</Form.Label>
+        <Form.Field className="flex-1" hasError={!!errors.email}>
+          <Form.Label>Email</Form.Label>
           <Form.Input
-            id="newsletter-email"
             type="email"
             autoComplete="email"
             placeholder="your@email.com"
-            hasError={!!errors.email}
             {...register('email')}
           />
+          {errors.email && <Form.Error>{errors.email.message}</Form.Error>}
         </Form.Field>
       </div>
 
       {/* Terms checkbox */}
-      <div className="flex flex-col gap-2 select-none">
+      <Form.Field className="gap-2 select-none" hasError={!!errors.acceptTerms}>
         <Form.Checkbox
           hasError={!!errors.acceptTerms}
           {...register('acceptTerms')}
@@ -113,17 +107,10 @@ export function NewsletterForm() {
             Privacy Policy
           </UnderlineLink>
         </Form.Checkbox>
-      </div>
-
-      {hasErrors && (
-        <div className="flex flex-col gap-1">
-          {errors.name && <Form.Error>{errors.name.message}</Form.Error>}
-          {errors.email && <Form.Error>{errors.email.message}</Form.Error>}
-          {errors.acceptTerms && (
-            <Form.Error>{errors.acceptTerms.message}</Form.Error>
-          )}
-        </div>
-      )}
+        {errors.acceptTerms && (
+          <Form.Error>{errors.acceptTerms.message}</Form.Error>
+        )}
+      </Form.Field>
 
       {/* Submit */}
       <UnderlineButton
@@ -136,6 +123,6 @@ export function NewsletterForm() {
       >
         <Text preset="cta">{isSubmitting ? 'Sending…' : 'Subscribe'}</Text>
       </UnderlineButton>
-    </form>
+    </Form>
   )
 }

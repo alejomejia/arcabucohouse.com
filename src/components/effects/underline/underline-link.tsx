@@ -2,17 +2,15 @@
 
 import type { MouseEvent } from "react"
 
-import { Link, type LinkProps } from "@/components/ui/link"
+import { Link } from "@/components/ui/link"
 import { cn } from "@/lib/utils/helpers"
 
 import { useIsExternal } from "./hooks/use-is-external"
 import { useUnderlineAnimation } from "./hooks/use-underline-animation"
 import { useUnderlineCursor } from "./hooks/use-underline-cursor"
+import type { UnderlineLinkProps } from "./underline.types"
 
-export type UnderlineLinkProps = LinkProps & {
-  /** When true, the custom cursor is not used on hover (default: false) */
-  disableCursor?: boolean
-}
+export type { UnderlineLinkProps }
 
 /**
  * Renders a link with animated underline and custom cursor on hover.

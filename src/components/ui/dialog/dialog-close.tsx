@@ -2,13 +2,13 @@
 
 import { XMarkIcon } from "@heroicons/react/24/outline"
 
-import { useCursor } from "@/components/effects/cursor/context"
+import { useCursor } from "@/components/effects/cursor/cursor.context"
 import { CURSOR_MEDIUM } from "@/components/effects/cursor/cursor-states"
 import { FOCUS_RING_ON_DARK_BG } from "@/lib/styles/const"
 import { cn } from "@/lib/utils/helpers"
 
-import { useDialogContext } from "./context"
-import type { DialogCloseProps } from "./types"
+import { useDialogContext } from "./dialog.context"
+import type { DialogCloseProps } from "./dialog.types"
 
 /**
  * Dialog close button component.

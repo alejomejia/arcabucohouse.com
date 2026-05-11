@@ -1,3 +1,5 @@
+'use client'
+
 import { DeleteFromCartButton } from '@/components/features/cart/delete-from-cart-button'
 import { EditItemQuantityButton } from '@/components/features/cart/edit-item-quantity-button'
 import type { UpdateType } from '@/components/features/cart/types'
@@ -9,7 +11,7 @@ import type { CartItem } from '@/lib/integrations/shopify/types'
 import { FOCUS_RING_ON_DARK_BG } from '@/lib/styles/const'
 
 import { AnimatedNumber } from '@/components/effects/animated-number'
-import { useCursor } from '@/components/effects/cursor/context'
+import { useCursor } from '@/components/effects/cursor/cursor.context'
 import { CURSOR_MEDIUM } from '@/components/effects/cursor/cursor-states'
 import { useUnderlineAnimation } from '@/components/effects/underline/hooks/use-underline-animation'
 import { cn } from '@/lib/utils/helpers'

@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils/helpers"
 
-import { useDialogContext } from "./context"
-import type { DialogTitleProps } from "./types"
+import { useDialogContext } from "./dialog.context"
+import type { DialogTitleProps } from "./dialog.types"
 
 /**
  * Dialog title component.

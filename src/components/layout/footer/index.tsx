@@ -7,6 +7,28 @@ import { FOOTER_COLUMN_HEADING_CLASSNAME, FOOTER_COLUMNS, START_YEAR } from "./c
 import { CurrentYear } from "./current-year";
 import { FooterClient } from "./footer.client";
 
+/**
+ * Site-wide footer. Intentionally split server/client:
+ *
+ * - **`Footer` (this file, server component)** owns the static content —
+ *   the columns, links, and copyright line. Keeps the heavy markup out
+ *   of the client bundle since none of it needs interactivity.
+ * - **`FooterClient`** is the thin `'use client'` wrapper that owns DOM
+ *   refs and drives the GSAP reveal animation via `useFooterAnimation`.
+ *
+ * This split is the right shape for layout primitives that animate on
+ * scroll — do **not** force the cinema-scroll convention here, which
+ * would require `'use client'` on the whole tree and ship the static
+ * markup to the client.
+ *
+ * @example
+ * ```tsx
+ * <body>
+ *   {children}
+ *   <Footer />
+ * </body>
+ * ```
+ */
 export async function Footer() {
   return (
     <FooterClient>

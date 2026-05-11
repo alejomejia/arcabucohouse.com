@@ -1,16 +1,14 @@
 "use client"
 
-import type { ButtonHTMLAttributes, MouseEvent } from "react"
+import type { MouseEvent } from "react"
 
 import { cn } from "@/lib/utils/helpers"
 
 import { useUnderlineAnimation } from "./hooks/use-underline-animation"
 import { useUnderlineCursor } from "./hooks/use-underline-cursor"
+import type { UnderlineButtonProps } from "./underline.types"
 
-export type UnderlineButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  /** When true, the custom cursor is not used on hover (default: false) */
-  disableCursor?: boolean
-}
+export type { UnderlineButtonProps }
 
 /**
  * Renders a button with animated underline and custom cursor on hover.

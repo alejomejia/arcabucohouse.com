@@ -2,33 +2,43 @@
 
 import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
-import {
-  type AnchorHTMLAttributes,
-  type ComponentProps,
-  type MouseEvent,
-  useEffect,
-  useState,
-} from 'react'
+import { type ComponentProps, useEffect, useState } from 'react'
 
-export type LinkProps = Omit<
-  AnchorHTMLAttributes<HTMLAnchorElement>,
-  keyof ComponentProps<typeof NextLink> | 'href'
-> &
-  Omit<ComponentProps<typeof NextLink>, 'href'> & {
-    href: string
-    onClick?: (e: MouseEvent<HTMLElement>) => void
-    scroll?: boolean
-  }
+import { isExternalByPattern } from './link.helpers'
+import type { LinkProps } from './link.types'
+import { useLinkPrefetch } from './use-link-prefetch'
 
+/**
+ * Anchor primitive that picks the right element for the destination:
+ *
+ * - **External URLs** (absolute `http(s):`, protocol-relative `//`, or any
+ *   resolved URL whose host differs from `window.location.host`) render a
+ *   plain `<a>` with `target="_blank"` and `rel="noopener noreferrer"`.
+ * - **Internal routes** render `next/link` with `data-active` reflecting
+ *   the current pathname and **adaptive prefetching** — prefetch is
+ *   disabled on slow or Data-Saver connections via {@link useLinkPrefetch},
+ *   falling back to enabled when the Network Information API isn't
+ *   available.
+ *
+ * `scroll` defaults to `false` to avoid `next/link`'s scroll-restoration
+ * warnings on pages with fixed/sticky elements.
+ *
+ * @example
+ * ```tsx
+ * <Link href="/category/curtains">Curtains</Link>
+ * <Link href="https://shopify.com">Shopify</Link>
+ * <Link href="mailto:hello@arcabucohouse.com">hello@arcabucohouse.com</Link>
+ * ```
+ */
 export function Link({
   href,
   children,
   onClick,
-  scroll = false, // Default to false to prevent scroll restoration warnings with fixed/sticky elements
+  scroll = false,
   ...props
 }: LinkProps) {
   const pathname = usePathname()
-  const [shouldPrefetch, setShouldPrefetch] = useState(false)
+  const shouldPrefetch = useLinkPrefetch()
 
   const {
     prefetch: prefetchProp,
@@ -39,42 +49,25 @@ export function Link({
     ...restProps
   } = props
 
-  // Determine if link is external synchronously to avoid hydration mismatches
-  const isExternalByPattern =
-    href.startsWith('http://') ||
-    href.startsWith('https://') ||
-    href.startsWith('//')
-
-  const [isExternal, setIsExternal] = useState(isExternalByPattern)
+  // Seed with the SSR-safe pattern check so the first render matches the
+  // server output and avoids a hydration mismatch on absolute-URL hrefs.
+  const [isExternal, setIsExternal] = useState(isExternalByPattern(href))
 
   useEffect(() => {
-    if (!isExternalByPattern) {
-      if (href.startsWith('mailto:')) {
-        setIsExternal(false)
-        return
-      }
+    if (isExternalByPattern(href)) return
 
-      try {
-        const url = new URL(href, window.location.href)
-        setIsExternal(url.host !== window.location.host)
-      } catch {
-        setIsExternal(false)
-      }
+    if (href.startsWith('mailto:')) {
+      setIsExternal(false)
+      return
     }
 
-    const connection = (
-      navigator as Navigator & {
-        connection?: { effectiveType: string; saveData: boolean }
-      }
-    ).connection
-
-    if (connection) {
-      const { effectiveType, saveData } = connection
-      setShouldPrefetch(effectiveType === '4g' && !saveData)
-    } else {
-      setShouldPrefetch(true)
+    try {
+      const url = new URL(href, window.location.href)
+      setIsExternal(url.host !== window.location.host)
+    } catch {
+      setIsExternal(false)
     }
-  }, [href, isExternalByPattern])
+  }, [href])
 
   const isActive = pathname === href
 
@@ -110,3 +103,5 @@ export function Link({
     </NextLink>
   )
 }
+
+export type * from './link.types'
