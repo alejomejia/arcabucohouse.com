@@ -6,7 +6,7 @@ import { config } from '@/lib/utils/config'
 
 import type { Collection, Product } from '../integrations/shopify/types'
 
-const siteName = config.siteName ?? 'Arcabuco House'
+const siteName = config.siteName ?? 'Arcabuco'
 
 // ---------------------------------------------------------------------------
 // Product metadata & JSON-LD
@@ -94,7 +94,6 @@ export function generateProductJsonLd(product: Product) {
     image: featuredImage?.url,
     brand: {
       '@type': 'Brand',
-      // TODO: Replace with actual brand name once confirmed (may differ per product)
       name: siteName,
     },
     offers:
