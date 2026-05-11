@@ -27,13 +27,16 @@ export async function generateMetadata(props: { params: CategoryHandleParams }):
 
 export default async function CategoryPage(props: { params: CategoryHandleParams }) {
   const params = await props.params
-  const category = await getCategory({ collection: 'category-' + params.handle, sortKey: "BEST_SELLING", reverse: false })
+  const collectionHandle = 'category-' + params.handle
+
+  const [category, collection] = await Promise.all([
+    getCategory({ collection: collectionHandle, sortKey: "BEST_SELLING", reverse: false }),
+    getCollection(collectionHandle),
+  ])
 
   // For created categories, title is required
   if (!category?.title) return notFound()
 
-  // We need the Collection shape for breadcrumb (getCollection returns Collection with seo + handle)
-  const collection = await getCollection('category-' + params.handle)
   const breadcrumbJsonLd = collection ? generateCategoryBreadcrumbJsonLd(collection) : null
 
   return (
