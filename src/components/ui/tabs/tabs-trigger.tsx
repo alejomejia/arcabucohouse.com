@@ -37,6 +37,10 @@ export function TabsTrigger({ id, children, icon, className }: TabsTriggerProps)
       role="tab"
       id={`${TABS_TRIGGER_ID_PREFIX}-${id}`}
       aria-selected={isTabOpen}
+      // In `multiple` mode the trigger behaves like a disclosure button —
+      // expose `aria-expanded` so accordion-style usage is announced to
+      // assistive tech. `aria-selected` is kept as the tabs-pattern fallback.
+      aria-expanded={mode === 'multiple' ? isTabOpen : undefined}
       aria-controls={`${TABS_PANEL_ID_PREFIX}-${id}`}
       onClick={() => toggleTab(id)}
       className={cn(

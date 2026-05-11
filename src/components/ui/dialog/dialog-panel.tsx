@@ -7,18 +7,27 @@ import type { DialogPanelProps } from "./dialog.types"
 import { useDialogAnimation } from "./hooks/use-dialog-animation"
 
 /**
- * Dialog panel component.
- * Contains the main dialog content and handles slide animations.
+ * Dialog panel component. Contains the main dialog content, handles
+ * slide animations, and carries `role="dialog"` + `aria-modal="true"`.
+ *
+ * **Accessibility invariant**: every `Dialog.Panel` must contain a
+ * `Dialog.Title` so the `aria-labelledby` chain resolves to a real label.
+ * The panel renders with `aria-labelledby={`${dialogId}-title`}`; when no
+ * `Dialog.Title` is rendered, that id has no match and assistive tech
+ * announces the dialog without a name.
+ *
+ * If a visible title isn't appropriate, render an `sr-only`
+ * `Dialog.Title` to keep the chain valid.
  *
  * @example
  * ```tsx
  * <Dialog isOpen={isOpen} onClose={handleClose}>
- *   <DialogOverlay />
- *   <DialogPanel position="right" className="w-full md:w-96">
- *     <DialogTitle>My Dialog</DialogTitle>
+ *   <Dialog.Overlay />
+ *   <Dialog.Panel position="right" className="w-full md:w-96">
+ *     <Dialog.Title>My Dialog</Dialog.Title>
  *     <p>Content here...</p>
- *     <DialogClose />
- *   </DialogPanel>
+ *     <Dialog.Close />
+ *   </Dialog.Panel>
  * </Dialog>
  * ```
  */
