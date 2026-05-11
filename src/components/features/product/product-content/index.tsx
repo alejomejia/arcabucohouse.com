@@ -17,7 +17,12 @@ export function ProductContent({ product }: ProductDescriptionProps) {
       <div>
         <div className="mb-8">
           <ProductPrice product={product} />
-          <VariantSelector options={product.options} variants={product.variants} category={product.category?.handle} />
+          <VariantSelector
+            options={product.options}
+            variants={product.variants}
+            category={product.category?.handle}
+            productHandle={product.handle}
+          />
         </div>
         {product.descriptionHtml ? (
           <Prose

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Suspense, type ReactNode } from "react";
 
 import { CursorProvider } from "@/components/effects/cursor";
-import { PageTransitionProvider } from "@/components/effects/page-transition-provider";
 import { GSAPRuntime } from "@/components/effects/gsap";
+import { PageTransitionProvider } from "@/components/effects/page-transition-provider";
 import { CartProvider } from "@/components/features/cart/context";
 import { Header } from "@/components/layout/header";
 import { Lenis } from "@/components/layout/lenis";
@@ -12,6 +12,7 @@ import { PortalRoot } from "@/components/ui/portal/portal-root";
 import { PreloaderProvider } from "@/components/ui/preloader/hooks/preloader-context";
 import { PreloaderGate } from "@/components/ui/preloader/preloader-gate";
 import { getCart } from "@/lib/integrations/shopify/cart";
+import { UmamiScript } from "@/lib/integrations/umami/script";
 import { baseUrl } from "@/lib/integrations/utils";
 import { generateOrganizationJsonLd, generateWebSiteJsonLd } from "@/lib/seo/metadata";
 import { PORTAL_IDS } from "@/lib/styles/const";
@@ -62,6 +63,7 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
         />
+        <UmamiScript />
         <PortalRoot id={PORTAL_IDS.bodyTop} />
         <Suspense>
           <Toaster closeButton />

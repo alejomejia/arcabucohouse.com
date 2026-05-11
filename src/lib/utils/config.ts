@@ -14,7 +14,7 @@ export const config = {
   mailchimpServerPrefix: process.env.MAILCHIMP_SERVER_PREFIX,
   mailchimpAudienceId: process.env.MAILCHIMP_AUDIENCE_ID,
   // ANALYTICS
-  umamiWebsiteId: process.env.UMAMI_WEBSITE_ID,
+  umamiWebsiteId: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID,
 }
 
 export const isDev = config.env === "development";

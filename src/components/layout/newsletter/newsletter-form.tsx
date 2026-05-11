@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 
 import { UnderlineButton } from '@/components/effects/underline/underline-button'
 import { Form } from '@/components/ui/form'
+import { trackNewsletterSubscribe } from '@/lib/integrations/umami/events'
 import { cn } from '@/lib/utils/helpers'
 
 import { UnderlineLink } from '@/components/effects/underline'
@@ -37,6 +38,7 @@ export function NewsletterForm() {
     const result = await subscribeToNewsletter(data)
 
     if (result.success) {
+      trackNewsletterSubscribe({ source: 'footer' })
       toast.success('Welcome to Arcabuco', {
         description:
           'You will now receive early access to new collections and design insights.',

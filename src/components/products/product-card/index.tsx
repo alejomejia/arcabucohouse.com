@@ -1,9 +1,10 @@
 "use client"
 
-import { useCursor } from "@/components/effects/cursor/cursor.context"
 import { CURSOR_MEDIUM } from "@/components/effects/cursor/cursor-states"
+import { useCursor } from "@/components/effects/cursor/cursor.context"
 import { Link } from "@/components/ui/link"
 import { Text } from "@/components/ui/text"
+import { trackProductClick } from "@/lib/integrations/umami/events"
 import { cn } from "@/lib/utils/helpers"
 
 import { ProductCardImage } from "./product-card-image"
@@ -22,16 +23,26 @@ import type { ProductCardProps } from "./product-card.types"
  * ```
  */
 function ProductCardRoot({ product, className }: ProductCardProps) {
-  const { title, handle, images } = product
+  const { title, handle, images, priceRange } = product
   const [coverImage, backgroundImage] = images ?? []
   const { setHover, setDefault } = useCursor()
 
   if (!coverImage?.url) return null
 
+  const handleClick = () => {
+    trackProductClick({
+      handle,
+      title,
+      price: priceRange?.minVariantPrice?.amount,
+      currency: priceRange?.minVariantPrice?.currencyCode,
+    })
+  }
+
   return (
     <Link
       href={`/product/${handle}`}
       className={cn(className)}
+      onClick={handleClick}
       onMouseEnter={() => setHover(CURSOR_MEDIUM)}
       onMouseLeave={() => setDefault()}
     >

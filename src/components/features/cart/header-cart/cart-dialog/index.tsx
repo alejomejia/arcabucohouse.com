@@ -4,6 +4,8 @@ import { useCart } from '@/components/features/cart/hooks/use-cart'
 import { redirectToCheckout } from '@/components/features/cart/server/actions'
 import type { UpdateType } from '@/components/features/cart/types'
 import { Dialog } from '@/components/ui/dialog'
+import type { Cart } from '@/lib/integrations/shopify/types'
+import { trackCheckoutBegin } from '@/lib/integrations/umami/events'
 import { cn } from '@/lib/utils/helpers'
 
 import { CartEmptyState } from '../cart-empty-state'
@@ -12,12 +14,20 @@ import { CartSummary } from '../cart-summary'
 import { CheckoutButton } from './checkout-button'
 
 /**
- * Wrapper function for redirectToCheckout that matches the form action signature.
- * React form actions must return void | Promise<void>, but redirectToCheckout
- * can return a string error. This wrapper discards any return value.
+ * Builds the checkout form action. Captures cart at submission time so the
+ * tracked total reflects what the user actually saw when they clicked.
  */
-async function handleCheckout(_formData: FormData): Promise<void> {
-  await redirectToCheckout()
+function makeHandleCheckout(cart: Cart | undefined) {
+  return async function handleCheckout(_formData: FormData): Promise<void> {
+    if (cart) {
+      trackCheckoutBegin({
+        itemCount: cart.totalQuantity,
+        cartTotal: cart.cost.totalAmount.amount,
+        currency: cart.cost.totalAmount.currencyCode,
+      })
+    }
+    await redirectToCheckout()
+  }
 }
 
 type CartDialogProps = {
@@ -37,6 +47,7 @@ type CartDialogProps = {
 export function CartDialog({ isOpen, onClose, onUpdateItem }: CartDialogProps) {
   const { cart } = useCart()
   const isEmpty = !cart || cart.lines.length === 0
+  const handleCheckout = makeHandleCheckout(cart)
 
   return (
     <Dialog className="cart-dialog" isOpen={isOpen} onClose={onClose}>

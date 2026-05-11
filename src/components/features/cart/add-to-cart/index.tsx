@@ -1,10 +1,11 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useMemo } from 'react'
 
 import { addItem } from '@/components/features/cart/server/actions'
 import { useSelectedVariant } from '@/components/features/product/hooks/use-selected-variant'
-import type { Product } from '@/lib/integrations/shopify/types'
+import type { Product, ProductVariant } from '@/lib/integrations/shopify/types'
+import { trackCartAdd } from '@/lib/integrations/umami/events'
 
 import { useCart } from '../hooks/use-cart'
 import { SubmitButton } from './submit-button'
@@ -38,10 +39,11 @@ export function AddToCart({ product }: AddToCartProps) {
   const { variants, availableForSale } = product
 
   const { addCartItem } = useCart()
-  const [message, formAction] = useActionState(addItem, null)
-
   const selectedVariant = useSelectedVariant(variants)
   const selectedVariantId = selectedVariant?.id
+
+  const trackedAddItem = useMemo(() => withCartAddTracking(product, selectedVariant), [product, selectedVariant])
+  const [message, formAction] = useActionState(trackedAddItem, null)
   const addItemAction = formAction.bind(null, selectedVariantId)
 
   return (
@@ -59,4 +61,28 @@ export function AddToCart({ product }: AddToCartProps) {
       </output>
     </form>
   )
+}
+
+/**
+ * Wraps `addItem` so a `cart_add` event fires only when the server action
+ * resolves without returning an error string.
+ */
+function withCartAddTracking(product: Product, selectedVariant: ProductVariant | undefined) {
+  return async function addItemTracked(prevState: unknown, variantId: string | undefined) {
+    const result = await addItem(prevState, variantId)
+
+    if (!result && selectedVariant) {
+      trackCartAdd({
+        handle: product.handle,
+        title: product.title,
+        variantId: selectedVariant.id,
+        variantTitle: selectedVariant.title,
+        price: selectedVariant.price.amount,
+        currency: selectedVariant.price.currencyCode,
+        quantity: 1,
+      })
+    }
+
+    return result
+  }
 }

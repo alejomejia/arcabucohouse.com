@@ -17,6 +17,7 @@ type VariantSelectorProps = {
   options: ProductOption[]
   variants: ProductVariant[]
   category?: string
+  productHandle: string
 }
 
 /** Returns true when every non-empty value in an option parses as a finite number. */
@@ -52,7 +53,7 @@ function getUnitCategory(handle?: string): UnitCategory | null {
  * />
  * ```
  */
-export function VariantSelector({ options, variants, category }: VariantSelectorProps) {
+export function VariantSelector({ options, variants, category, productHandle }: VariantSelectorProps) {
   const combinations = useMemo(() => getCombinations(variants), [variants])
   const unitCategory = getUnitCategory(category)
   const [unit, setUnit, units] = useUnit(unitCategory ?? 'lighting')
@@ -95,6 +96,7 @@ export function VariantSelector({ options, variants, category }: VariantSelector
                 value={value}
                 combinations={combinations}
                 unit={numeric ? unit : undefined}
+                productHandle={productHandle}
               />
             ))}
           </dd>

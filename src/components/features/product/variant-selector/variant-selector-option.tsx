@@ -6,6 +6,7 @@ import { CursorTrigger } from "@/components/effects/cursor/cursor-trigger"
 import { useProduct } from "@/components/features/product/hooks/use-product"
 import { useUpdateURL } from "@/components/features/product/hooks/use-update-url"
 import type { Unit } from "@/lib/hooks/use-unit"
+import { trackVariantClick } from "@/lib/integrations/umami/events"
 
 import { Combination } from "./helpers"
 
@@ -44,6 +45,7 @@ type VariantSelectorOptionProps = {
   combinations: Combination[]
   /** Active measurement unit; when provided numeric values are formatted accordingly. */
   unit?: Unit
+  productHandle: string
 }
 
 /**
@@ -56,7 +58,7 @@ type VariantSelectorOptionProps = {
  * @param unit         - Measurement unit used to format numeric dimension values.
  * @returns The VariantSelectorOption component.
  */
-export function VariantSelectorOption({ option, options, value, combinations, unit = 'mm' }: VariantSelectorOptionProps) {
+export function VariantSelectorOption({ option, options, value, combinations, unit = 'mm', productHandle }: VariantSelectorOptionProps) {
   const { state, updateOption, removeOption } = useProduct()
   const updateURL = useUpdateURL()
 
@@ -89,11 +91,21 @@ export function VariantSelectorOption({ option, options, value, combinations, un
   const displayValue = formatValue(value, unit)
   const title = `${option.name} ${displayValue}${!isAvailableForSale ? ' [Out of Stock]' : ''}`
 
+  const handleClick = () => {
+    trackVariantClick({
+      handle: productHandle,
+      optionName: option.name,
+      value,
+      available: !!isAvailableForSale,
+    })
+  }
+
   return (
     <CursorTrigger config={isAvailableForSale && !isActive ? CURSOR_MEDIUM : CURSOR_SMALL}>
       <button
         key={value}
         formAction={formAction}
+        onClick={handleClick}
         title={title}
         className={cn(
           "flex items-center justify-center",
