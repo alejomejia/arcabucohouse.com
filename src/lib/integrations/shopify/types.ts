@@ -1,3 +1,22 @@
+/*
+ * Codegen decision (2026-05): hand-typed for now.
+ *
+ * Reviewed graphql-codegen + Shopify Storefront schema as an alternative.
+ * Deferred because:
+ * - The surface area touched is small (~10 query/mutation operations) and
+ *   the Storefront schema is stable across minor API versions.
+ * - Codegen adds a build step + lockfile + watch-mode tax that's not yet
+ *   justified by the drift we're actually seeing.
+ *
+ * Revisit if any of these become true:
+ * - We hit a real production bug caused by a hand-typed shape diverging
+ *   from the live schema.
+ * - The number of operations grows past ~25 (manual upkeep starts to hurt).
+ * - We bump to a new Storefront API version with field-level changes.
+ *
+ * Tracking: re-evaluate at the next major Shopify API version bump.
+ */
+
 export type Maybe<T> = T | null;
 
 export type Connection<T> = {

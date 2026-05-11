@@ -246,10 +246,15 @@ export function generateProductBreadcrumbJsonLd(product: Product) {
  * Generate Schema.org Organization JSON-LD.
  * Helps search engines understand the business behind the site.
  *
- * TODO: Fill in the following with actual values once confirmed:
- *   - logo: upload an OG/logo image to /public and reference it here
- *   - contactPoint.telephone: store phone number
- *   - sameAs: social media URLs (Instagram, Facebook, etc.)
+ * TODO(seo): replace the placeholder `logo`, omitted `telephone`, and
+ *   empty `sameAs` with confirmed business assets. Today's output will
+ *   fail Google Rich Results validation for any business that ships a
+ *   Logo schema — the linked /logo.png must exist and be ≥ 112×112.
+ *
+ * Required before launch:
+ * - `/public/logo.png` (or move to `/images/logo.png` and update path).
+ * - Customer-service phone number (uncomment + fill `telephone`).
+ * - Social profile URLs (Instagram / Facebook / Pinterest etc.) in `sameAs`.
  *
  * @see https://schema.org/Organization
  */
@@ -259,16 +264,16 @@ export function generateOrganizationJsonLd() {
     '@type': 'Organization',
     name: siteName,
     url: baseUrl,
-    // TODO: Replace with actual logo URL (e.g. `${baseUrl}/images/logo.png`)
+    // TODO(seo): point at the real logo asset (≥ 112×112, prefer a 1:1 PNG).
     logo: `${baseUrl}/logo.png`,
-    // TODO: Add actual contact details
     contactPoint: {
       '@type': 'ContactPoint',
+      // TODO(seo): set the real customer-service phone number.
       // telephone: '+57-XXX-XXX-XXXX',
       contactType: 'customer service',
       availableLanguage: ['Spanish', 'English'],
     },
-    // TODO: Add social media profile URLs
+    // TODO(seo): list verified social profile URLs.
     sameAs: [
       // 'https://www.instagram.com/arcabucohouse',
       // 'https://www.facebook.com/arcabucohouse',

@@ -4,20 +4,20 @@ import { AboutArcabucoSection } from "./_components/about-arcabuco";
 import { HeroSection } from "./_components/hero";
 import { InteriorShowcaseSection } from "./_components/interior-showcase";
 
-// TODO: Replace with a compelling, keyword-rich description of the store
-// Focus on: what you sell, who it's for, and the key differentiator (handcrafted, Latin American artisans)
+// TODO(seo): Validate the description copy with marketing — current draft
+//   covers what we sell, audience, and the handcrafted/Latin-American
+//   differentiator. Replace if a tighter line is approved.
+// TODO(seo): Add `openGraph.images` once a 1200×630 social card is produced
+//   (target path: /public/og-image.jpg). Once added, also set
+//   `twitter.site` to the brand handle.
 export const metadata: Metadata = {
   description:
     'Discover handcrafted home décor and artisan goods from Latin America. Curated rugs, lighting, furniture, and decorative objects made by skilled Latin American artisans. Shop Arcabuco House.',
   openGraph: {
     type: 'website',
-    // TODO: Add a high-quality OG image (1200×630px) for social sharing
-    // images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Arcabuco House' }],
   },
   twitter: {
     card: 'summary_large_image',
-    // TODO: Add @twitterhandle once confirmed
-    // site: '@arcabucohouse',
   },
 }
 
