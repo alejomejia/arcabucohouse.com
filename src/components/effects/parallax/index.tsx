@@ -6,7 +6,6 @@ import { type ReactNode, useRef, type VideoHTMLAttributes } from 'react'
 
 import { Image, type ImageProps } from '@/components/ui/image'
 import { Video } from '@/components/ui/video'
-import { getRandomNumber } from '@/lib/utils/numbers'
 
 type ParallaxProps = {
   children: ReactNode
@@ -14,11 +13,9 @@ type ParallaxProps = {
 
 /**
  * Wraps `children` in a clipped container that translates vertically as
- * the user scrolls past it. The translation range is randomized per
- * mount (`-10%` → `[10%, 20%]`) so identical components on the same page
- * don't move in lock-step.
+ * the user scrolls past it (`-5%` → `10%`).
  *
- * The inner content is scaled `1.1×` so the parallax shift never exposes
+ * The inner content is scaled `1.25×` so the parallax shift never exposes
  * a transparent gap at the top or bottom of the container.
  *
  * @example
@@ -35,16 +32,14 @@ export function Parallax({ children }: ParallaxProps) {
   useGSAP(() => {
     if (!containerRef.current || !contentRef.current) return
 
-    const randomNumber = getRandomNumber(10, 20)
-
     gsap.set(contentRef.current, {
-      yPercent: -10
+      yPercent: -5
     })
 
-    const from = { yPercent: -10 }
+    const from = { yPercent: -5 }
 
     const to = {
-      yPercent: randomNumber,
+      yPercent: 10,
       scrollTrigger: {
         trigger: containerRef.current,
         start: 'top bottom',
@@ -58,7 +53,7 @@ export function Parallax({ children }: ParallaxProps) {
 
   return (
     <div ref={containerRef} className="w-full h-full flex items-center justify-center overflow-hidden">
-      <div ref={contentRef} className="w-full h-full scale-110">
+      <div ref={contentRef} className="w-full h-full scale-125">
         {children}
       </div>
     </div>
