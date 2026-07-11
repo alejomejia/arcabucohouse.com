@@ -7,7 +7,6 @@ export const config = {
   shopifyStoreDomain: process.env.SHOPIFY_STORE_DOMAIN,
   shopifyStorefrontAccessToken: process.env.SHOPIFY_STOREFRONT_ACCESS_API_TOKEN,
   shopifyRevalidationSecret: process.env.SHOPIFY_REVALIDATION_SECRET,
-  shopifyCustomerAccountApiToken: process.env.SHOPIFY_CUSTOMER_ACCOUNT_API_TOKEN,
   shopifyCdnBaseUrl: process.env.NEXT_PUBLIC_SHOPIFY_CDN_BASE_URL,
   // MAILCHIMP
   mailchimpApiKey: process.env.MAILCHIMP_API_KEY,
@@ -29,10 +28,10 @@ export const REQUIRED_ENV_VARS = [
   'SHOPIFY_STORE_DOMAIN',
   'SHOPIFY_STOREFRONT_ACCESS_API_TOKEN',
   'SHOPIFY_REVALIDATION_SECRET',
-  'SHOPIFY_CUSTOMER_ACCOUNT_API_TOKEN',
   'MAILCHIMP_API_KEY',
   'MAILCHIMP_SERVER_PREFIX',
   'MAILCHIMP_AUDIENCE_ID',
+  'NEXT_PUBLIC_UMAMI_WEBSITE_ID'
 ] as const;
 
 /**
